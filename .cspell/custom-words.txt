@@ -1,2 +1,4 @@
 esbuild
 Pinia
+tailwindcss
+nprogress

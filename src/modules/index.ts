@@ -1,0 +1,1 @@
+export { withNProgress } from "./nprogress"

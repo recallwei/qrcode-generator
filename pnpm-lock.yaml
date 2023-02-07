@@ -7,6 +7,7 @@ specifiers:
   '@types/jsdom': ^20.0.1
   '@types/node': ^18.11.19
   '@types/nprogress': ^0.2.0
+  '@types/qrcode': ^1.5.0
   '@typescript-eslint/parser': ^5.50.0
   '@vicons/fa': ^0.12.0
   '@vitejs/plugin-vue': ^4.0.0
@@ -63,6 +64,7 @@ devDependencies:
   '@types/jsdom': 20.0.1
   '@types/node': 18.11.19
   '@types/nprogress': 0.2.0
+  '@types/qrcode': 1.5.0
   '@typescript-eslint/parser': 5.50.0_4vsywjlpuriuw3tl5oq6zy5a64
   '@vicons/fa': 0.12.0
   '@vitejs/plugin-vue': 4.0.0_vite@4.1.1+vue@3.2.47
@@ -961,6 +963,12 @@ packages:
 
   /@types/nprogress/0.2.0:
     resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
+    dev: true
+
+  /@types/qrcode/1.5.0:
+    resolution: {integrity: sha512-x5ilHXRxUPIMfjtM+1vf/GPTRWZ81nqscursm5gMznJeK9M0YnZ1c3bEvRLQ0zSSgedLx1J6MGL231ObQGGhaA==}
+    dependencies:
+      '@types/node': 18.11.19
     dev: true
 
   /@types/semver/7.3.13:

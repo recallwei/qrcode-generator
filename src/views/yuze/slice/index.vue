@@ -3,14 +3,14 @@ import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-const navToCenter = () => {
-  router.push("/center")
+const navToHome = () => {
+  router.push("/")
 }
 </script>
 
 <template>
   <main>
-    <div @click="navToCenter">Go to Center</div>
+    <div @click="navToHome">切片</div>
   </main>
 </template>
 

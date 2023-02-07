@@ -1,1 +1,1 @@
-export {}
+export type { SideMenuActiveKey } from "./sideMenu"

@@ -10,7 +10,7 @@ const navToHome = () => {
 
 <template>
   <main>
-    <div @click="navToHome">Go to Home</div>
+    <div @click="navToHome">拉晶</div>
   </main>
 </template>
 

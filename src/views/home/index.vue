@@ -22,7 +22,6 @@ const testJson = ref({
   remark: "aaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbb/ccccccccccccccccccccccc"
 })
 
-testJson.value = ""
 const img = ref("")
 
 onMounted(async () => {

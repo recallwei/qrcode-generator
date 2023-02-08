@@ -1,1 +1,1 @@
-export { default as routerData } from "./routerData"
+export * from "./routerData"

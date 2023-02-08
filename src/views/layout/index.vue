@@ -2,8 +2,10 @@
 import { RouterView } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
+import { useSiteMetaData } from "@/hooks"
 import { sideMenuOptions } from "./model"
 
+const { AppName } = useSiteMetaData()
 const sideMenuStore = useSideMenuStore()
 </script>
 
@@ -17,7 +19,7 @@ const sideMenuStore = useSideMenuStore()
         class="flex h-16 items-center py-2 px-8"
         bordered
       >
-        <div class="text-lg font-bold">二维码生成工具</div>
+        <div class="text-lg font-bold">{{ AppName }}</div>
       </n-layout-header>
       <n-layout
         class="flex h-[calc(100%-64px)] w-full"
@@ -40,7 +42,7 @@ const sideMenuStore = useSideMenuStore()
         </n-layout-sider>
         <n-layout-content
           class="grow"
-          content-style="padding: 24px;"
+          :content-style="{ minHeight: '100%', position: 'relative', padding: '24px' }"
           :native-scrollbar="false"
         >
           <RouterView v-slot="{ Component }">
@@ -62,7 +64,6 @@ const sideMenuStore = useSideMenuStore()
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

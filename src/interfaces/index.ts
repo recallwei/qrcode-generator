@@ -1,1 +1,2 @@
-export type { SideMenuActiveKey } from "./sideMenu"
+export * from "./sideMenu"
+export * from "./siteMetaData"

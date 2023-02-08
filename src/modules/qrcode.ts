@@ -13,7 +13,7 @@ const generateQRCode = (data: string | object) => {
       {
         margin: 0,
         width: 200,
-        errorCorrectionLevel: "low" // 纠错等级
+        errorCorrectionLevel: "low"
       },
       (err, url) => {
         if (err) {

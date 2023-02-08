@@ -1,5 +1,5 @@
 import type { MenuOption } from "naive-ui"
-import { Qrcode, ExternalLinkAlt, BuildingRegular, ShippingFast, Box } from "@vicons/fa"
+import { Qrcode, BuildingRegular, ShippingFast, Box, Users, UserTie, BoxOpen } from "@vicons/fa"
 import { Naive } from "@/modules"
 
 const sideMenuOptions: MenuOption[] = [
@@ -13,23 +13,45 @@ const sideMenuOptions: MenuOption[] = [
     icon: Naive.renderIcon(BuildingRegular),
     children: [
       {
-        // label: "拉晶",
-        label: Naive.getRouterLinkNode("/crystal", "拉晶"),
-        key: "crystal",
-        icon: Naive.renderIcon(ShippingFast)
-        // disabled: true
+        label: "拉晶",
+        // label: Naive.getRouterLinkNode("/yuze/crystal", "拉晶"),
+        key: "yuze-crystal",
+        icon: Naive.renderIcon(ShippingFast),
+        disabled: true
       },
       {
-        label: Naive.getRouterLinkNode("/slice", "切片"),
-        key: "slice",
-        icon: Naive.renderIcon(Box)
+        label: "切片",
+        // label: Naive.getRouterLinkNode("/yuze/slice", "切片"),
+        key: "yuze-slice",
+        icon: Naive.renderIcon(Box),
+        children: [
+          {
+            label: "内部",
+            // label: Naive.getRouterLinkNode("/yuze/slice/inner", "内部"),
+            key: "yuze-slice-inner",
+            icon: Naive.renderIcon(Users),
+            disabled: true
+          },
+          {
+            label: Naive.getRouterLinkNode("/yuze/slice/outer", "外部"),
+            key: "yuze-slice-outer",
+            icon: Naive.renderIcon(UserTie)
+          }
+        ]
       }
     ]
   },
   {
-    label: Naive.getOutsideLinkNode("https://baidu.com", "外链测试"),
-    key: "external",
-    icon: Naive.renderIcon(ExternalLinkAlt)
+    label: "其他工具",
+    key: "tools",
+    icon: Naive.renderIcon(BoxOpen),
+    children: [
+      {
+        label: Naive.getOutsideLinkNode("https://cli.im/deqr", "二维码解码"),
+        key: "deqr",
+        icon: Naive.renderIcon(Qrcode)
+      }
+    ]
   }
 ]
 

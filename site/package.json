@@ -1,0 +1,48 @@
+{
+  "name": "site",
+  "private": true,
+  "version": "0.0.1",
+  "author": "Bruce Song <recall4056@gmail.com>",
+  "license": "MIT",
+  "description": "Website for the project.",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p check:type build:fast",
+    "build:fast": "vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest --environment jsdom --root src/"
+  },
+  "dependencies": {
+    "@bruce/qrcode-manager": "workspace:0.0.1",
+    "@vueuse/core": "^9.12.0",
+    "axios": "^1.3.2",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "nprogress": "0.2.0",
+    "pinia": "^2.0.30",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.0",
+    "@types/node": "^18.13.0",
+    "@types/nprogress": "^0.2.0",
+    "@vicons/fa": "^0.12.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.0",
+    "@vue/test-utils": "^2.2.10",
+    "@vue/tsconfig": "^0.1.3",
+    "autoprefixer": "^10.4.13",
+    "jsdom": "^21.1.0",
+    "naive-ui": "^2.34.3",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.21",
+    "sass": "^1.58.0",
+    "tailwindcss": "^3.2.6",
+    "typescript": "~4.9.5",
+    "vfonts": "^0.0.3",
+    "vite": "^4.1.1",
+    "vitest": "^0.28.4",
+    "vue-tsc": "^1.0.24"
+  }
+}

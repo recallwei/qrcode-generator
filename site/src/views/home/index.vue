@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { NResult } from "naive-ui"
+import QRCodeManager from "@bruce/qrcode-manager"
+
+const qrcode = QRCodeManager
 </script>
 
 <template>

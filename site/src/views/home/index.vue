@@ -3,6 +3,7 @@ import { NResult } from "naive-ui"
 import QRCodeManager from "@bruce/qrcode-manager"
 
 const qrcode = QRCodeManager
+console.log(await qrcode.generateQRCode("123"))
 </script>
 
 <template>

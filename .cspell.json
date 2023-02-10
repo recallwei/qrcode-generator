@@ -12,7 +12,7 @@
     }
   ],
   "ignorePaths": [
-    "./dist",
+    "dist",
     "src/main.ts",
     "public/*",
     "src/assets/*",
@@ -24,6 +24,7 @@
     ".prettierrc.json",
     ".stylelintrc.json",
     "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
     "README.md",
     "custom-words.txt"
   ]

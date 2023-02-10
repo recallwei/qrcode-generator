@@ -2,3 +2,4 @@ esbuild
 Pinia
 tailwindcss
 nprogress
+qrcode

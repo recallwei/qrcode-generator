@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref } from "vue"
 import { NTabs, NTabPane, NDynamicInput, NInput } from "naive-ui"
-
-const materialList = ["金刚线"]
 
 // 1 - 水煮胶 2 - 粘棒板 3 - 粘棒胶（辅料用）
 // 4 - 金刚线 5 - 主辊
@@ -30,9 +28,8 @@ const onCreatePair = () => ({
 })
 
 const onUpdateCustomModel = (value: any) => {
-  console.log(value)
   customModel.value = value
-  const obj = {}
+  const obj: Record<string, any> = {}
   try {
     customModel.value.forEach((item: KV) => {
       if (Object.prototype.hasOwnProperty.call(obj, item.key)) {

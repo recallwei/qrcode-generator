@@ -6,7 +6,7 @@ import vueJsx from "@vitejs/plugin-vue-jsx"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/", // 应用的路径
+  base: "/",
   plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
@@ -19,9 +19,9 @@ export default defineConfig({
   },
   server: {
     host: true,
-    port: 4058, // 应用端口号
-    strictPort: true, // 端口被占用时，终止应用服务
-    open: false, // 是否自动打开浏览器，如果是字符串，则会被当作 URL 的路径名
+    port: 4058,
+    strictPort: true,
+    open: false,
     proxy: {
       "/api-prefix": {
         target: "localhost:5173",

@@ -2,4 +2,6 @@ esbuild
 Pinia
 tailwindcss
 nprogress
+vicons
 qrcode
+sider

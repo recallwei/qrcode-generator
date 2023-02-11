@@ -11,21 +11,21 @@ const sideMenuStore = useSideMenuStore()
 
 <template>
   <div class="h-screen w-screen">
-    <n-layout
+    <NLayout
       class="h-full w-full"
       embedded
     >
-      <n-layout-header
+      <NLayoutHeader
         class="flex h-16 items-center py-2 px-8"
         bordered
       >
         <div class="text-lg font-bold">{{ AppName }}</div>
-      </n-layout-header>
-      <n-layout
+      </NLayoutHeader>
+      <NLayout
         class="flex h-[calc(100%-64px)] w-full"
         has-sider
       >
-        <n-layout-sider
+        <NLayoutSider
           class="flex h-full w-44 flex-col items-center justify-start"
           :native-scrollbar="false"
           show-trigger="arrow-circle"
@@ -33,14 +33,14 @@ const sideMenuStore = useSideMenuStore()
           :collapsed-width="64"
           bordered
         >
-          <n-menu
+          <NMenu
             v-model:value="sideMenuStore.activeKey"
             :collapsed-width="64"
             :collapsed-icon-size="22"
             :options="sideMenuOptions"
           />
-        </n-layout-sider>
-        <n-layout-content
+        </NLayoutSider>
+        <NLayoutContent
           class="grow"
           :content-style="{ minHeight: '100%', position: 'relative', padding: '24px' }"
           :native-scrollbar="false"
@@ -53,9 +53,9 @@ const sideMenuStore = useSideMenuStore()
               <component :is="Component" />
             </Transition>
           </RouterView>
-        </n-layout-content>
-      </n-layout>
-    </n-layout>
+        </NLayoutContent>
+      </NLayout>
+    </NLayout>
   </div>
 </template>
 

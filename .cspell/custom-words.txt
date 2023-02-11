@@ -3,5 +3,9 @@ Pinia
 tailwindcss
 nprogress
 vicons
+vfonts
+FiraCode
 qrcode
 sider
+noopenner
+noreferrer

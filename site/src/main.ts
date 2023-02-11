@@ -7,7 +7,7 @@ import router from "./router"
 import "./assets/main.scss"
 import "vfonts/OpenSans.css" // Import OpenSans Font
 import "vfonts/FiraCode.css" // Import FiraCode Font
-import "nprogress/nprogress.css" // NPorgress Style
+import "nprogress/nprogress.css" // NProgress Style
 
 const app = createApp(App)
 

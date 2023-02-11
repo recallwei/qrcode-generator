@@ -11,13 +11,14 @@ const router = createRouter({
 
 NProgress.configure({ showSpinner: false }) // Hide the Spinner of NProgress
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, from, next) => {
   if (to.path !== from.path) {
     NProgress.start()
   }
   const sideMenuStore = useSideMenuStore() // Store must define in the router.beforeEach function
   sideMenuStore.changeActiveKey(to.name as SideMenuActiveKey) // Change the active key of side menu
   document.title = to.meta.title as string
+  next()
 })
 
 router.afterEach(() => NProgress.done())

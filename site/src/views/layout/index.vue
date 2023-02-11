@@ -3,6 +3,7 @@ import { RouterView } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
 import { useSiteMetaData } from "@/hooks"
+import { FallBack } from "@/components"
 import { sideMenuOptions } from "./model"
 
 const { AppName } = useSiteMetaData()
@@ -11,21 +12,21 @@ const sideMenuStore = useSideMenuStore()
 
 <template>
   <div class="h-screen w-screen">
-    <NLayout
+    <n-layout
       class="h-full w-full"
       embedded
     >
-      <NLayoutHeader
+      <n-layout-header
         class="flex h-16 items-center py-2 px-8"
         bordered
       >
         <div class="text-lg font-bold">{{ AppName }}</div>
-      </NLayoutHeader>
-      <NLayout
+      </n-layout-header>
+      <n-layout
         class="flex h-[calc(100%-64px)] w-full"
         has-sider
       >
-        <NLayoutSider
+        <n-layout-sider
           class="flex h-full w-44 flex-col items-center justify-start"
           :native-scrollbar="false"
           show-trigger="arrow-circle"
@@ -33,29 +34,36 @@ const sideMenuStore = useSideMenuStore()
           :collapsed-width="64"
           bordered
         >
-          <NMenu
+          <n-menu
             v-model:value="sideMenuStore.activeKey"
             :collapsed-width="64"
             :collapsed-icon-size="22"
             :options="sideMenuOptions"
           />
-        </NLayoutSider>
-        <NLayoutContent
+        </n-layout-sider>
+        <n-layout-content
           class="grow"
           :content-style="{ minHeight: '100%', position: 'relative', padding: '24px' }"
           :native-scrollbar="false"
         >
-          <RouterView v-slot="{ Component }">
-            <Transition
-              name="fade"
-              mode="out-in"
-            >
-              <component :is="Component" />
-            </Transition>
-          </RouterView>
-        </NLayoutContent>
-      </NLayout>
-    </NLayout>
+          <router-view v-slot="{ Component }">
+            <template v-if="Component">
+              <transition
+                name="fade"
+                mode="out-in"
+              >
+                <suspense timeout="0">
+                  <component :is="Component" />
+                  <template #fallback>
+                    <fall-back />
+                  </template>
+                </suspense>
+              </transition>
+            </template>
+          </router-view>
+        </n-layout-content>
+      </n-layout>
+    </n-layout>
   </div>
 </template>
 

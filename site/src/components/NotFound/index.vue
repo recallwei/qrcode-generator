@@ -5,27 +5,27 @@ import { useSiteMetaData } from "@/hooks"
 
 const router = useRouter()
 
-const { NotFound } = useSiteMetaData()
+const { NotFound } = useSiteMetaData().ErrorPage
 
 const navToHome = () => router.push("/")
 </script>
 
 <template>
   <main class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
-    <NResult
+    <n-result
       status="404"
       :title="NotFound.title"
       :description="NotFound.description"
     >
       <template #footer>
-        <NButton
+        <n-button
           type="primary"
           secondary
           @click="navToHome"
         >
           {{ NotFound.btnText }}
-        </NButton>
+        </n-button>
       </template>
-    </NResult>
+    </n-result>
   </main>
 </template>

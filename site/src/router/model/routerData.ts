@@ -35,7 +35,7 @@ export const routerData = [
       {
         path: "/:pathMatch(.*)*",
         name: "NotFound",
-        component: () => import("@/views/error/404"),
+        component: () => import("@/views/error/not-found"),
         meta: { title: `404 - ${AppName}` }
       }
     ]

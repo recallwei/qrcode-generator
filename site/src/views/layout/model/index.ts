@@ -10,14 +10,14 @@ const sideMenuOptions: MenuOption[] = [
   },
   {
     label: "云南宇泽",
+    key: "yuze",
     icon: Naive.renderIcon(BuildingRegular),
     children: [
       {
         label: "拉晶",
         // label: Naive.getRouterLinkNode("/yuze/crystal", "拉晶"),
         key: "yuze-crystal",
-        icon: Naive.renderIcon(ShippingFast),
-        disabled: true
+        icon: Naive.renderIcon(ShippingFast)
       },
       {
         label: "切片",
@@ -26,11 +26,10 @@ const sideMenuOptions: MenuOption[] = [
         icon: Naive.renderIcon(Box),
         children: [
           {
-            label: "内部",
-            // label: Naive.getRouterLinkNode("/yuze/slice/inner", "内部"),
+            // label: "内部",
+            label: Naive.getRouterLinkNode("/yuze/slice/inner", "内部"),
             key: "yuze-slice-inner",
-            icon: Naive.renderIcon(Users),
-            disabled: true
+            icon: Naive.renderIcon(Users)
           },
           {
             label: Naive.getRouterLinkNode("/yuze/slice/outer", "外部"),

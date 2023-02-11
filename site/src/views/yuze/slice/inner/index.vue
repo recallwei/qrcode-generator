@@ -4,22 +4,20 @@ import { NTabs, NTabPane } from "naive-ui"
 
 <template>
   <main>
-    <NTabs default-value="inner">
-      <NTabPane
+    <n-tabs default-value="inner">
+      <n-tab-pane
         name="inner"
         display-directive="show"
         tab="内部"
       >
-        <show-input />
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="outer"
         display-directive="show"
         tab="外部"
       >
-        <show-input />
-      </NTabPane>
-    </NTabs>
+      </n-tab-pane>
+    </n-tabs>
   </main>
 </template>
 

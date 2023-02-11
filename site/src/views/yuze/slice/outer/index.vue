@@ -46,16 +46,16 @@ const onUpdateCustomModel = (value: any) => {
 
 <template>
   <main>
-    <NTabs
+    <n-tabs
       type="line"
       animated
     >
-      <NTabPane
+      <n-tab-pane
         name="自定义"
         tab="自定义"
       >
         <div class="w-3/5">
-          <NDynamicInput
+          <n-dynamic-input
             v-model:value="customModel"
             class="my-2"
             :on-create="onCreatePair"
@@ -64,75 +64,75 @@ const onUpdateCustomModel = (value: any) => {
             <template #create-button-default> 添加键值对 </template>
             <template #default="{ value }">
               <div class="flex w-full items-center justify-between gap-2">
-                <NInput
+                <n-input
                   v-model:value="value.key"
                   type="text"
                 />
-                <NInput
+                <n-input
                   v-model:value="value.value"
                   type="text"
                 />
               </div>
             </template>
-          </NDynamicInput>
+          </n-dynamic-input>
           <pre class="py-2">{{ customModelJsonString }}</pre>
         </div>
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="水煮胶"
         tab="水煮胶"
       >
         水煮胶
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="粘棒板"
         tab="粘棒板"
       >
         粘棒板
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="粘棒胶"
         tab="粘棒胶"
       >
         粘棒胶
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="金刚线"
         tab="金刚线"
       >
         金刚线
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="主辊"
         tab="主辊"
       >
         主辊
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="切割液"
         tab="切割液"
       >
         切割液
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="清洗剂"
         tab="清洗剂"
       >
         清洗剂
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="双氧水"
         tab="双氧水"
       >
         双氧水
-      </NTabPane>
-      <NTabPane
+      </n-tab-pane>
+      <n-tab-pane
         name="氢氧化钠"
         tab="氢氧化钠"
       >
         氢氧化钠
-      </NTabPane>
-    </NTabs>
+      </n-tab-pane>
+    </n-tabs>
   </main>
 </template>
 

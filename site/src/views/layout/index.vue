@@ -52,12 +52,14 @@ const sideMenuStore = useSideMenuStore()
                 name="fade"
                 mode="out-in"
               >
-                <suspense timeout="0">
-                  <component :is="Component" />
-                  <template #fallback>
-                    <fall-back />
-                  </template>
-                </suspense>
+                <keep-alive>
+                  <suspense timeout="0">
+                    <component :is="Component" />
+                    <template #fallback>
+                      <fall-back />
+                    </template>
+                  </suspense>
+                </keep-alive>
               </transition>
             </template>
           </router-view>

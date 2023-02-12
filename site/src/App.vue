@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router"
-import { NConfigProvider, NGlobalStyle, NMessageProvider, zhCN, dateZhCN } from "naive-ui"
+import {
+  NConfigProvider,
+  NGlobalStyle,
+  NMessageProvider,
+  NLoadingBarProvider,
+  zhCN,
+  dateZhCN
+} from "naive-ui"
 import { FallBack } from "@/components"
 </script>
 
@@ -10,23 +17,27 @@ import { FallBack } from "@/components"
     :date-locale="dateZhCN"
     class="h-auto"
   >
-    <n-message-provider>
-      <router-view v-slot="{ Component }">
-        <template v-if="Component">
-          <transition
-            name="fade"
-            mode="out-in"
-          >
-            <suspense timeout="0">
-              <component :is="Component" />
-              <template #fallback>
-                <fall-back />
-              </template>
-            </suspense>
-          </transition>
-        </template>
-      </router-view>
-    </n-message-provider>
+    <n-loading-bar-provider>
+      <n-message-provider>
+        <router-view v-slot="{ Component }">
+          <template v-if="Component">
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <keep-alive>
+                <suspense timeout="0">
+                  <component :is="Component" />
+                  <template #fallback>
+                    <fall-back />
+                  </template>
+                </suspense>
+              </keep-alive>
+            </transition>
+          </template>
+        </router-view>
+      </n-message-provider>
+    </n-loading-bar-provider>
     <NGlobalStyle />
   </n-config-provider>
 </template>

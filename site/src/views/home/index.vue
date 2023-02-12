@@ -3,10 +3,13 @@ import { NResult } from "naive-ui"
 import QRCodeManager from "@bruce/qrcode-manager"
 
 const qrcode = QRCodeManager
-console.log(await qrcode.generateQRCode("123"))
+// console.log(await qrcode.generateQRCode("123"))
 
 const test = async () => {
-  throw new Error("Whoops!")
+  await new Promise((resolve) => {
+    setTimeout(resolve, 3000)
+  })
+  return 10
 }
 await test()
 </script>

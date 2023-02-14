@@ -1,13 +1,5 @@
 <script setup lang="ts">
 import { NResult } from "naive-ui"
-
-const test = async () => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 3000)
-  })
-  return 10
-}
-await test()
 </script>
 
 <template>

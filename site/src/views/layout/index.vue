@@ -55,7 +55,7 @@ const sideMenuStore = useSideMenuStore()
                 mode="out-in"
               >
                 <keep-alive>
-                  <suspense timeout="0">
+                  <suspense>
                     <component :is="Component" />
                     <template #fallback>
                       <fall-back />

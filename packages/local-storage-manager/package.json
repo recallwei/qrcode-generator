@@ -1,0 +1,24 @@
+{
+  "name": "@bruce/local-storage-manager",
+  "private": true,
+  "version": "0.0.1",
+  "author": "Bruce Song <recall4056@gmail.com>",
+  "license": "MIT",
+  "description": "Function for manage local storage.",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build:pkg": "pnpm run build:pkg:fast --dts",
+    "build:pkg:fast": "tsup src/index.ts --format cjs,esm"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

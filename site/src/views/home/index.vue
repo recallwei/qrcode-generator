@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import { NResult } from "naive-ui"
-import QRCodeManager from "@bruce/qrcode-manager"
-
-const qrcode = QRCodeManager
-// console.log(await qrcode.generateQRCode("123"))
 
 const test = async () => {
   await new Promise((resolve) => {

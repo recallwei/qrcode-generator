@@ -28,17 +28,19 @@ const sideMenuStore = useSideMenuStore()
       >
         <n-layout-sider
           class="flex h-full w-44 flex-col items-center justify-start"
-          :native-scrollbar="false"
           show-trigger="arrow-circle"
+          bordered
           collapse-mode="width"
           :collapsed-width="64"
-          bordered
+          :native-scrollbar="false"
+          :on-update:collapsed="sideMenuStore.changeCollapsed"
         >
           <n-menu
             v-model:value="sideMenuStore.activeKey"
             :collapsed-width="64"
             :collapsed-icon-size="22"
             :options="sideMenuOptions"
+            :collapsed="sideMenuStore.collapsed"
           />
         </n-layout-sider>
         <n-layout-content

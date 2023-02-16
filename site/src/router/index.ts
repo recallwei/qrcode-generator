@@ -15,9 +15,10 @@ router.beforeEach((to, from, next) => {
   if (to.path !== from.path) {
     NProgress.start()
   }
-  const sideMenuStore = useSideMenuStore() // Store must define in the router.beforeEach function
+  // NOTE: Store must define in the function `router.beforeEach`
+  const sideMenuStore = useSideMenuStore()
   sideMenuStore.changeActiveKey(to.name as SideMenuActiveKey) // Change the active key of side menu
-  document.title = to.meta.title as string
+  document.title = to.meta.title as string // Change the title of the document
   next()
 })
 

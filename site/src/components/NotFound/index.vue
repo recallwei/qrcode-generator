@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 import { NResult, NButton } from "naive-ui"
-import { useSiteMetaData } from "@/hooks"
+import { siteMetaData } from "@/constants"
 
 const router = useRouter()
 
-const { NotFound } = useSiteMetaData().ErrorPage
+const { NotFound } = siteMetaData.ErrorPage
 
 const navToHome = () => router.push("/")
 </script>

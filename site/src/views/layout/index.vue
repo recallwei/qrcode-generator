@@ -2,11 +2,11 @@
 import { RouterView } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
-import { useSiteMetaData } from "@/hooks"
+import { siteMetaData } from "@/constants"
 import { FallBack } from "@/components"
 import { sideMenuOptions } from "./model"
 
-const { AppName } = useSiteMetaData()
+const { AppName } = siteMetaData
 const sideMenuStore = useSideMenuStore()
 </script>
 

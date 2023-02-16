@@ -3,8 +3,8 @@ import { RouterView } from "vue-router"
 import {
   NConfigProvider,
   NGlobalStyle,
-  NMessageProvider,
   NLoadingBarProvider,
+  NMessageProvider,
   zhCN,
   dateZhCN
 } from "naive-ui"

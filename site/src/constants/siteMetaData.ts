@@ -1,6 +1,6 @@
 import type { SiteMetaData } from "@/interfaces"
 
-export const siteMetaData: SiteMetaData = {
+const siteMetaData: SiteMetaData = {
   AppName: "二维码生成工具",
   ErrorPage: {
     NotFound: {
@@ -15,3 +15,5 @@ export const siteMetaData: SiteMetaData = {
     }
   }
 }
+
+export { siteMetaData }

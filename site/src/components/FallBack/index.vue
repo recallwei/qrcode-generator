@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
 import { NResult, NButton } from "naive-ui"
-import { useSiteMetaData } from "@/hooks"
+import { siteMetaData } from "@/constants"
 
 const router = useRouter()
 
-const { FallBack } = useSiteMetaData().ErrorPage
+const { FallBack } = siteMetaData.ErrorPage
 
 const refresh = () => router.go(0)
 </script>

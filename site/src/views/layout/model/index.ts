@@ -1,11 +1,25 @@
 import type { MenuOption } from "naive-ui"
-import { Qrcode, BuildingRegular, ShippingFast, Box, Users, UserTie, BoxOpen } from "@vicons/fa"
+import {
+  Home,
+  Qrcode,
+  BuildingRegular,
+  ShippingFast,
+  Box,
+  Users,
+  UserTie,
+  BoxOpen
+} from "@vicons/fa"
 import { Naive } from "@/modules"
 
 const sideMenuOptions: MenuOption[] = [
   {
     label: Naive.getRouterLinkNode("/", "首页"),
     key: "home",
+    icon: Naive.renderIcon(Home)
+  },
+  {
+    label: Naive.getRouterLinkNode("/quick", "快捷建码"),
+    key: "quick",
     icon: Naive.renderIcon(Qrcode)
   },
   {

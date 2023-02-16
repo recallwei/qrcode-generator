@@ -1,2 +1,3 @@
-export * from "./siteMetaData"
-export * from "./testData"
+export { siteMetaData } from "./siteMetaData"
+
+export { testConsts } from "./testData"

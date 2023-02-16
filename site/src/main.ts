@@ -9,14 +9,11 @@ import "vfonts/OpenSans.css" // Import OpenSans Font
 import "vfonts/FiraCode.css" // Import FiraCode Font
 import "nprogress/nprogress.css" // NProgress Style
 
+import { faviconLoader, naiveUILoader } from "@/tools"
+
 const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia()).use(router).mount("#app")
 
-// Resolve the style conflict between Tailwind CSS and Naive UI
-const meta = document.createElement("meta")
-meta.name = "naive-ui-style"
-document.head.appendChild(meta)
-
-app.mount("#app")
+faviconLoader()
+naiveUILoader()

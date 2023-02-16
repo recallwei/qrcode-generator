@@ -11,6 +11,6 @@ type ErrorPage = {
 
 export type SiteMetaData = {
   AppName: string
-  Favicon: string
+  Favicon?: string
   ErrorPage: ErrorPage
 }

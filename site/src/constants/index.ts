@@ -1,3 +1,4 @@
+export { routerData } from "./router"
 export { siteMetaData } from "./siteMetaData"
 
-export { testConsts } from "./testData"
+export { testConsts } from "./testConsts"

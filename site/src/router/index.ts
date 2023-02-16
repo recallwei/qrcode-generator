@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import NProgress from "nprogress"
 import type { SideMenuActiveKey } from "@/interfaces"
 import { useSideMenuStore } from "@/store"
-import { routerData } from "./model"
+import { routerData } from "@/constants"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

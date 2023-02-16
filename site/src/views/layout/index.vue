@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router"
+import { RouterView, useRouter } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
 import { siteMetaData } from "@/constants"
@@ -7,7 +7,11 @@ import { FallBack } from "@/components"
 import { sideMenuOptions } from "./model"
 
 const { AppName, Favicon } = siteMetaData
+
+const router = useRouter()
 const sideMenuStore = useSideMenuStore()
+
+const navToHome = () => router.push("/")
 </script>
 
 <template>
@@ -20,13 +24,23 @@ const sideMenuStore = useSideMenuStore()
         class="flex h-16 items-center gap-2 py-2 px-8"
         bordered
       >
-        <img
-          width="40"
-          height="40"
-          :src="Favicon"
-          :alt="AppName"
-        />
-        <div class="text-lg font-bold">{{ AppName }}</div>
+        <div
+          class="flex select-none items-center gap-2 hover:cursor-pointer"
+          @click="navToHome"
+        >
+          <img
+            width="36"
+            height="36"
+            :src="Favicon"
+            :alt="AppName"
+          />
+          <div
+            class="text-xl font-semibold tracking-wide"
+            @click="navToHome"
+          >
+            {{ AppName }}
+          </div>
+        </div>
       </n-layout-header>
       <n-layout
         class="flex h-[calc(100%-64px)] w-full"

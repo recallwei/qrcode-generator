@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import NProgress from "nprogress"
-import type { SideMenuActiveKey } from "@/interfaces"
+import type { SideMenuActiveKey } from "@/types"
 import { useSideMenuStore } from "@/store"
 import { routerData } from "@/constants"
 

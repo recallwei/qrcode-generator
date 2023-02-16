@@ -1,7 +1,8 @@
-import type { SiteMetaData } from "@/interfaces"
+import type { SiteMetaData } from "@/types"
 
 export const siteMetaData: SiteMetaData = {
   AppName: "二维码生成工具",
+  Favicon: "qrcode-favicon.png",
   ErrorPage: {
     NotFound: {
       title: "404 页面不存在",

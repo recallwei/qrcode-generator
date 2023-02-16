@@ -1,6 +1,6 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import type { SideMenuActiveKey } from "@/interfaces"
+import type { SideMenuActiveKey } from "@/types"
 
 export const useSideMenuStore = defineStore("sideMenu", () => {
   // SideMenu Current Active Item

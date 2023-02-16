@@ -1,4 +1,4 @@
-import { siteMetaData } from "@/constants"
+import { siteMetaData } from "./siteMetaData"
 
 const { AppName } = siteMetaData
 

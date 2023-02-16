@@ -6,7 +6,7 @@ import { siteMetaData } from "@/constants"
 import { FallBack } from "@/components"
 import { sideMenuOptions } from "./model"
 
-const { AppName } = siteMetaData
+const { AppName, Favicon } = siteMetaData
 const sideMenuStore = useSideMenuStore()
 </script>
 
@@ -17,9 +17,15 @@ const sideMenuStore = useSideMenuStore()
       embedded
     >
       <n-layout-header
-        class="flex h-16 items-center py-2 px-8"
+        class="flex h-16 items-center gap-2 py-2 px-8"
         bordered
       >
+        <img
+          width="40"
+          height="40"
+          :src="Favicon"
+          :alt="AppName"
+        />
         <div class="text-lg font-bold">{{ AppName }}</div>
       </n-layout-header>
       <n-layout

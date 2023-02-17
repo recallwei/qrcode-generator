@@ -12,4 +12,4 @@ const longJson = {
   remark: "特斯拉特斯拉特斯拉特斯拉特斯拉特斯拉"
 }
 
-export const testConsts = { longJson }
+export const testDataConsts = { longJson }

@@ -2,9 +2,8 @@
 import { RouterView, useRouter } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
-import { siteMetaData } from "@/constants"
+import { siteMetaData, sideMenuOptions } from "@/constants"
 import { FallBack } from "@/components"
-import { sideMenuOptions } from "./model"
 
 const { AppName, Favicon } = siteMetaData
 

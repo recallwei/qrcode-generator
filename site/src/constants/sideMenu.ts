@@ -11,7 +11,7 @@ import {
 } from "@vicons/fa"
 import { Naive } from "@/modules"
 
-const sideMenuOptions: MenuOption[] = [
+export const sideMenuOptions: MenuOption[] = [
   {
     label: Naive.getRouterLinkNode("/", "首页"),
     key: "home",
@@ -67,5 +67,3 @@ const sideMenuOptions: MenuOption[] = [
     ]
   }
 ]
-
-export { sideMenuOptions }

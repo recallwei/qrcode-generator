@@ -7,9 +7,9 @@ enum Router {
   Quick = "quick"
 }
 
-const RouterMap = new Map([
+const routerMap = new Map([
   [Router.Home, { path: "/", name: Router.Home, title: `首页 - ${AppName}` }],
-  [Router.Quick, { path: "/quick", name: Router.Quick, title: `快捷建码 - ${AppName}` }]
+  [Router.Quick, { path: "/quick", name: Router.Quick, title: `快速建码 - ${AppName}` }]
 ])
 
 export const routerData = [

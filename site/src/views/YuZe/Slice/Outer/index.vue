@@ -32,7 +32,7 @@ const onUpdateCustomModel = (value: any) => {
   const obj: Record<string, any> = {}
   try {
     customModel.value.forEach((item: KV) => {
-      if (Object.prototype.hasOwnProperty.call(obj, item.key)) {
+      if (Object.hasOwn(obj, item.key)) {
         throw new Error("重复的key")
       }
       obj[item.key] = item.value

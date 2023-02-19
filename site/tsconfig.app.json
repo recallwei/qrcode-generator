@@ -3,6 +3,7 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "exclude": ["src/**/__tests__/*", "dist", "node_modules"],
   "compilerOptions": {
+    "lib": ["ESNext"],
     "target": "ESNext",
     "composite": true,
     "baseUrl": ".",

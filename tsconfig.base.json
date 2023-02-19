@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "target": "ESNext",
-    "lib": ["DOM", "ESNext"],
     "strict": true,
     "esModuleInterop": true,
     "jsx": "preserve",

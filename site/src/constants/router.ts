@@ -1,3 +1,4 @@
+import { Home as HomeIcon, Qrcode as QrcodeIcon, BoxOpen as BoxOpenIcon } from "@vicons/fa"
 import { siteMetaData } from "./siteMetaData"
 
 const { AppName } = siteMetaData
@@ -8,8 +9,30 @@ export enum Router {
 }
 
 export const routerMap = new Map([
-  [Router.Home, { path: "/", name: Router.Home, title: `首页 - ${AppName}` }],
-  [Router.Quick, { path: "/quick", name: Router.Quick, title: `快速建码 - ${AppName}` }]
+  [
+    Router.Home,
+    {
+      path: "/",
+      name: Router.Home,
+      title: `首页 - ${AppName}`,
+      sideMenu: {
+        title: "首页",
+        icon: HomeIcon
+      }
+    }
+  ],
+  [
+    Router.Quick,
+    {
+      path: "/quick",
+      name: Router.Quick,
+      title: `快速建码 - ${AppName}`,
+      sideMenu: {
+        title: "快速建码",
+        icon: QrcodeIcon
+      }
+    }
+  ]
 ])
 
 export const routerData = [
@@ -23,24 +46,6 @@ export const routerData = [
         name: "home",
         component: () => import("@/views/Home"),
         meta: { title: `首页 - ${AppName}` }
-      },
-      {
-        path: "/yuze/crystal",
-        name: "yuze-crystal",
-        component: () => import("@/views/YuZe/Crystal"),
-        meta: { title: "拉晶 - 云南宇泽" }
-      },
-      {
-        path: "/yuze/slice/inner",
-        name: "yuze-slice-inner",
-        component: () => import("@/views/YuZe/Slice/Inner"),
-        meta: { title: "切片 - 云南宇泽" }
-      },
-      {
-        path: "/yuze/slice/outer",
-        name: "yuze-slice-outer",
-        component: () => import("@/views/YuZe/Slice/Outer"),
-        meta: { title: "切片 - 云南宇泽" }
       },
       {
         path: "/:pathMatch(.*)*",

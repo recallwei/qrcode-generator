@@ -2,12 +2,12 @@ import { siteMetaData } from "./siteMetaData"
 
 const { AppName } = siteMetaData
 
-enum Router {
+export enum Router {
   Home = "home",
   Quick = "quick"
 }
 
-const routerMap = new Map([
+export const routerMap = new Map([
   [Router.Home, { path: "/", name: Router.Home, title: `首页 - ${AppName}` }],
   [Router.Quick, { path: "/quick", name: Router.Quick, title: `快速建码 - ${AppName}` }]
 ])

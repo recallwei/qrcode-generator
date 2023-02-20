@@ -20,7 +20,7 @@ const navToHome = () => router.push("/")
       embedded
     >
       <n-layout-header
-        class="flex h-16 items-center gap-2 py-2 px-8"
+        class="flex h-16 items-center gap-2 py-2 px-4"
         bordered
       >
         <div

@@ -19,13 +19,13 @@ export const routerData = [
         name: "quick",
         component: () => import("@/views/Quick"),
         meta: { title: `快速建码 - ${AppName}` }
-      },
-      {
-        path: "/:pathMatch(.*)*",
-        name: "NotFound",
-        component: () => import("@/views/Error/NotFound"),
-        meta: { title: `404 - ${AppName}` }
       }
     ]
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/views/Error/NotFound"),
+    meta: { title: `404 - ${AppName}` }
   }
 ]

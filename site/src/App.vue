@@ -15,7 +15,6 @@ import FallBack from "@/views/Error/FallBack/index.vue"
   <n-config-provider
     :locale="zhCN"
     :date-locale="dateZhCN"
-    class="h-auto"
   >
     <n-loading-bar-provider>
       <n-message-provider>

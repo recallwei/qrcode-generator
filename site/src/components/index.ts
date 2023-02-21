@@ -1,2 +1,1 @@
-export { default as FallBack } from "./FallBack"
-export { default as NotFound } from "./NotFound"
+export { default as MagicResult } from "./MagicResult/index.vue"

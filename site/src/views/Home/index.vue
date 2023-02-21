@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { NResult, NButton } from "naive-ui"
+import { MagicResult } from "@/components"
 
 const router = useRouter()
 
@@ -9,21 +9,12 @@ const navToQuick = () => router.push("/quick")
 
 <template>
   <main class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
-    <n-result
-      status="info"
+    <magic-result
       title="正在开发中..."
       description="预计上线时间 xxxx/xx/xx"
-    >
-      <template #footer>
-        <n-button
-          type="primary"
-          secondary
-          @click="navToQuick"
-        >
-          开始
-        </n-button>
-      </template>
-    </n-result>
+      btn-text="开始"
+      @click:btn="navToQuick"
+    />
   </main>
 </template>
 

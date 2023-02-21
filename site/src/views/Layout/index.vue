@@ -3,14 +3,16 @@ import { RouterView, useRouter } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
 import { siteMetaData, sideMenuOptions } from "@/constants"
-import { FallBack } from "@/components"
+import { MagicResult } from "@/components"
 
-const { AppName, Favicon } = siteMetaData
+const { AppName, Favicon, ErrorPage } = siteMetaData
+const { FallBackInfo } = ErrorPage
 
 const router = useRouter()
 const sideMenuStore = useSideMenuStore()
 
 const navToHome = () => router.push("/")
+const refresh = () => router.go(0)
 </script>
 
 <template>
@@ -77,7 +79,13 @@ const navToHome = () => router.push("/")
                   <suspense>
                     <component :is="Component" />
                     <template #fallback>
-                      <fall-back />
+                      <magic-result
+                        status="error"
+                        :title="FallBackInfo.title"
+                        :description="FallBackInfo.description"
+                        :btn-text="FallBackInfo.btnText"
+                        @click:btn="refresh"
+                      />
                     </template>
                   </suspense>
                 </keep-alive>

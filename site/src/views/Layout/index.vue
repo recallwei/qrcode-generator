@@ -52,10 +52,11 @@ const navToHome = () => router.push("/")
           collapse-mode="width"
           :collapsed-width="64"
           :native-scrollbar="false"
-          :on-update:collapsed="sideMenuStore.changeCollapsed"
+          @update:collapsed="sideMenuStore.changeCollapsed"
         >
           <n-menu
             v-model:value="sideMenuStore.activeKey"
+            class="tracking-[0.0625rem]"
             :collapsed-width="64"
             :collapsed-icon-size="22"
             :options="sideMenuOptions"

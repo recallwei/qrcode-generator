@@ -1,9 +1,11 @@
 import type { MenuOption } from "naive-ui"
-import { Qrcode as QrcodeIcon, BoxOpen as BoxOpenIcon } from "@vicons/fa"
+import { Qrcode as QuickIcon, BoxOpen as BoxOpenIcon } from "@vicons/fa"
+import { QrCodeScannerOutlined as DecodeIcon } from "@vicons/material"
 import { Naive } from "@/modules"
 
 enum SideMenu {
   Quick = "quick",
+  Decode = "decode",
   Tools = "tools"
 }
 
@@ -14,7 +16,16 @@ const sideMenuMap = new Map([
       path: "/quick",
       name: SideMenu.Quick,
       title: "快速建码",
-      icon: QrcodeIcon
+      icon: QuickIcon
+    }
+  ],
+  [
+    SideMenu.Decode,
+    {
+      path: "/decode",
+      name: SideMenu.Decode,
+      title: "解码工具",
+      icon: DecodeIcon
     }
   ],
   [
@@ -48,4 +59,7 @@ const mapToMenuOption = (sideMenu: SideMenu): MenuOption => {
 //   }
 // }
 
-export const sideMenuOptions: MenuOption[] = [mapToMenuOption(SideMenu.Quick)]
+export const sideMenuOptions: MenuOption[] = [
+  mapToMenuOption(SideMenu.Quick),
+  mapToMenuOption(SideMenu.Decode)
+]

@@ -19,6 +19,12 @@ export const routerData = [
         name: "quick",
         component: () => import("@/views/Quick"),
         meta: { title: `快速建码 - ${AppName}` }
+      },
+      {
+        path: "/decode",
+        name: "decode",
+        component: () => import("@/views/Decode"),
+        meta: { title: `解码工具 - ${AppName}` }
       }
     ]
   },

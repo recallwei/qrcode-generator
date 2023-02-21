@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView, useRouter } from "vue-router"
+import { RouterView } from "vue-router"
 import {
   NConfigProvider,
   NGlobalStyle,
@@ -8,14 +8,7 @@ import {
   zhCN,
   dateZhCN
 } from "naive-ui"
-import { siteMetaData } from "@/constants"
-import { MagicResult } from "@/components"
-
-const { FallBackInfo } = siteMetaData.ErrorPage
-
-const router = useRouter()
-
-const refresh = () => router.go(0)
+import FallBack from "@/views/Error/FallBack/index.vue"
 </script>
 
 <template>
@@ -36,13 +29,7 @@ const refresh = () => router.go(0)
                 <suspense>
                   <component :is="Component" />
                   <template #fallback>
-                    <magic-result
-                      status="error"
-                      :title="FallBackInfo.title"
-                      :description="FallBackInfo.description"
-                      :btn-text="FallBackInfo.btnText"
-                      @click:btn="refresh"
-                    />
+                    <fall-back />
                   </template>
                 </suspense>
               </keep-alive>

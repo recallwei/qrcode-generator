@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { NResult } from "naive-ui"
+import { useRouter } from "vue-router"
+import { NResult, NButton } from "naive-ui"
+
+const router = useRouter()
+
+const navToQuick = () => router.push("/quick")
 </script>
 
 <template>
@@ -9,6 +14,15 @@ import { NResult } from "naive-ui"
       title="正在开发中..."
       description="预计上线时间 xxxx/xx/xx"
     >
+      <template #footer>
+        <n-button
+          type="primary"
+          secondary
+          @click="navToQuick"
+        >
+          开始
+        </n-button>
+      </template>
     </n-result>
   </main>
 </template>

@@ -28,7 +28,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
 const handleFinishUpload = ({ file }: HandleFinishUpload) => {
   message.success("上传成功！")
   const fileRef = file
-  fileRef.name = `${file.name} -  result`
+  fileRef.name = `${file.name} - result`
   return file
 }
 </script>

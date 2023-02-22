@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { NCard, NUpload, NUploadDragger, NIcon, NText, NP, useMessage } from "naive-ui"
-import type { UploadFileInfo, UploadCustomRequestOptions } from "naive-ui"
+import type { UploadCustomRequestOptions } from "naive-ui"
 import { CloudUploadAlt as DecodeIcon } from "@vicons/fa"
-
-type UploadFileType = {
-  file: UploadFileInfo
-  fileList: UploadFileInfo[]
-}
+import type { UploadFileType, HandleFinishUpload } from "./interface"
 
 const supportedFileTypes = ["image/png", "image/jpg", "image/jpeg"]
 
@@ -26,15 +22,10 @@ const handleBeforeUpload = async (data: UploadFileType): Promise<boolean> => {
 
 const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
 
-type HandleFinishUpload = {
-  file: UploadFileInfo
-  event?: ProgressEvent
-}
-
 /**
  * @description Handle finish upload.
  */
-const handleFinishUpload = ({ file, event }: HandleFinishUpload) => {
+const handleFinishUpload = ({ file }: HandleFinishUpload) => {
   message.success("上传成功！")
   const fileRef = file
   fileRef.name = `${file.name} -  result`

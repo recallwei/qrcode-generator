@@ -1,6 +1,6 @@
 import QRCode from "qrcode"
 
-const generateQRCode = (data: string | object) => {
+const generateQRCode = (data: string | object): Promise<string> => {
   return new Promise((resolve, reject) => {
     let content
     if (typeof data === "object") {

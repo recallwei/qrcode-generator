@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NResult, NButton } from "naive-ui"
 
-export interface Props {
+type Props = {
   status?: "500" | "error" | "info" | "success" | "warning" | "404" | "403" | "418"
   title: string
   description: string

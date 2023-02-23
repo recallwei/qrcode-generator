@@ -1,7 +1,7 @@
 import type { SiteMetaData } from "@/types"
 
 export const siteMetaData: SiteMetaData = {
-  AppName: "二维码生成工具",
+  AppName: "二维码生成器",
   Favicon: "qrcode-favicon.png",
   ErrorPage: {
     NotFoundInfo: {

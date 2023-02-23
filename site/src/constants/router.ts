@@ -1,4 +1,4 @@
-import { siteMetaData } from "./siteMetaData"
+import { siteMetaData } from "../../site.config"
 
 const { AppName } = siteMetaData
 

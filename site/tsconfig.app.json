@@ -3,12 +3,15 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "site.config.ts"],
   "exclude": ["src/**/__tests__/*", "dist", "node_modules"],
   "compilerOptions": {
+    "types": ["node", "jsdom"],
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "target": "ESNext",
+    "module": "ESNext",
     "composite": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "declaration": false
   }
 }

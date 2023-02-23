@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NResult, NButton } from "naive-ui"
 
-type Props = {
+export interface Props {
   status?: "500" | "error" | "info" | "success" | "warning" | "404" | "403" | "418"
   title: string
   description: string
@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
   status: "info",
   btnFc: () => {}
 })
+
 const emit = defineEmits(["click:btn"])
 
 const onClickBtn = () => {

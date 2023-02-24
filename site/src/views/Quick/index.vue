@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import { NInput, NImage, NCard, NButton, useMessage } from "naive-ui"
+import { NInput, NImage, NCard, NButton, NIcon, useMessage } from "naive-ui"
+import { Download as DownloadIcon } from "@vicons/fa"
 import { useDebounceFn } from "@vueuse/core"
 import QRCodeManager from "@bruce/qrcode-manager"
 import type { ValidationStatus, WithUndefined } from "@/types"
-import { copyText } from "@/utils"
+import { setClipBoardText, downloadFile } from "@/utils"
 
 type Config = {
   textMaxLength: number
@@ -47,12 +48,21 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
 }, 300)
 
 const handleClickCopyBtn = () => {
-  if (copyText(userInput.value)) {
-    message.success("复制文字成功")
-  } else {
+  if (!userInput.value) {
     userInputStatus.value = "error"
     message.error("复制失败，没有输入文字内容！")
+    return
   }
+  setClipBoardText(userInput.value)
+  message.success("复制文字成功")
+}
+
+const handleClickDownloadBtn = () => {
+  if (!imgURL.value) {
+    message.error("没有生成二维码，无法下载！")
+    return
+  }
+  downloadFile(imgURL.value, "qrcode.png")
 }
 </script>
 
@@ -64,12 +74,11 @@ const handleClickCopyBtn = () => {
         embedded
         class="h-full w-full"
       >
-        <div class="flex h-full items-center justify-center">
+        <div class="flex h-full flex-col items-center justify-center gap-4">
           <n-image
             v-if="imgURL"
-            class="bg-white p-2 shadow-md"
+            class="h-200[px] w-[200px] bg-white p-2 shadow-md"
             show-toolbar-tooltip
-            width="200"
             :src="imgURL"
           />
           <div
@@ -78,10 +87,22 @@ const handleClickCopyBtn = () => {
           >
             此处预览生成的二维码
           </div>
+          <n-button
+            type="primary"
+            strong
+            secondary
+            @click="($event) => handleClickDownloadBtn()"
+          >
+            <template #icon>
+              <n-icon size="14">
+                <download-icon />
+              </n-icon>
+            </template>
+            下载
+          </n-button>
         </div>
       </n-card>
     </div>
-
     <n-card
       hoverable
       embedded

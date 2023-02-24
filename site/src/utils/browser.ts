@@ -1,7 +1,1 @@
-export const copyText = (text: string | undefined | null): boolean => {
-  if (!text) {
-    return false
-  }
-  navigator.clipboard.writeText(text)
-  return true
-}
+export const setClipBoardText = (text: string) => navigator.clipboard.writeText(text)

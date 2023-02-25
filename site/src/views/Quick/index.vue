@@ -2,31 +2,37 @@
 import { ref } from "vue"
 import { NInput, NImage, NCard, NButton, NIcon, useMessage } from "naive-ui"
 import { Download as DownloadIcon } from "@vicons/fa"
+import { RefreshFilled as ResetIcon } from "@vicons/material"
 import { useDebounceFn } from "@vueuse/core"
 import QRCodeManager from "@bruce/qrcode-manager"
-import type { ValidationStatus, WithUndefined } from "@/types"
 import { setClipBoardText, downloadFile } from "@/utils"
+import { useValidationStatus, useLoading } from "@/hooks"
 
 type Config = {
   textMaxLength: number
 }
 
 const message = useMessage()
+const [generateQRCodeLoading, generateQRCodeLoadingDispatcher] = useLoading()
+const [userInputStatus, userInputStatusDispatcher] = useValidationStatus()
 
 const config = ref<Config>({
   textMaxLength: 400
 })
 
 const userInput = ref("")
-const userInputStatus = ref<WithUndefined<ValidationStatus>>(undefined)
 const imgURL = ref("")
-const generateQRCodeLoading = ref(false)
 
-const onUserInput = () => {
-  userInputStatus.value = undefined
-}
+const onUserInput = () => userInputStatusDispatcher.clear()
 
 const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
+  /**
+   * 2023/2/24 Bruce Song <recall4056@gmail.com>
+   * NOTE:
+   * When regenerate the QRCode, the previous image should be removed.
+   */
+  generateQRCodeLoadingDispatcher.loading()
+  imgURL.value = ""
   try {
     if (!userInput.value) {
       throw new Error("文字内容不能为空！")
@@ -35,7 +41,7 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
     imgURL.value = qrcodeURL
     message.success("生成二维码成功")
   } catch (error: any) {
-    userInputStatus.value = "error"
+    userInputStatusDispatcher.setError()
     message.error(error.message)
     /**
      * 2023/2/23 Bruce Song <recall4056@gmail.com>
@@ -44,12 +50,12 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
      */
     // imgURL.value = ""
   }
-  generateQRCodeLoading.value = false
+  generateQRCodeLoadingDispatcher.loaded()
 }, 300)
 
 const handleClickCopyBtn = () => {
   if (!userInput.value) {
-    userInputStatus.value = "error"
+    userInputStatusDispatcher.setError()
     message.error("复制失败，没有输入文字内容！")
     return
   }
@@ -60,9 +66,17 @@ const handleClickCopyBtn = () => {
 const handleClickDownloadBtn = () => {
   if (!imgURL.value) {
     message.error("没有生成二维码，无法下载！")
+    userInputStatusDispatcher.setError()
     return
   }
   downloadFile(imgURL.value, "qrcode.png")
+}
+
+const handleClickResetBtn = () => {
+  userInput.value = ""
+  userInputStatusDispatcher.clear()
+  imgURL.value = ""
+  message.success("重置成功")
 }
 </script>
 
@@ -74,19 +88,33 @@ const handleClickDownloadBtn = () => {
         embedded
         class="h-full w-full"
       >
-        <div class="flex h-full flex-col items-center justify-center gap-4">
-          <n-image
-            v-if="imgURL"
-            class="h-200[px] w-[200px] bg-white p-2 shadow-md"
-            show-toolbar-tooltip
-            :src="imgURL"
-          />
-          <div
-            v-else
-            class="flex h-[200px] w-[200px] select-none items-center justify-center bg-white p-2 shadow-md"
+        <div class="absolute right-1 top-1">
+          <n-icon
+            class="rounded-full hover:cursor-pointer hover:bg-slate-300 hover:shadow-md active:bg-slate-200"
+            size="20"
+            @click="($event) => handleClickResetBtn()"
           >
-            此处预览生成的二维码
-          </div>
+            <reset-icon />
+          </n-icon>
+        </div>
+        <div class="flex h-full flex-col items-center justify-center gap-4">
+          <transition
+            name="img"
+            mode="out-in"
+          >
+            <n-image
+              v-if="imgURL"
+              class="h-200[px] w-[200px] bg-white p-2 shadow-md"
+              show-toolbar-tooltip
+              :src="imgURL"
+            />
+            <div
+              v-else
+              class="flex h-[200px] w-[200px] select-none items-center justify-center bg-white p-2 shadow-md"
+            >
+              此处预览生成的二维码
+            </div>
+          </transition>
           <n-button
             type="primary"
             strong
@@ -118,6 +146,7 @@ const handleClickDownloadBtn = () => {
           }"
           :maxlength="config.textMaxLength"
           :status="userInputStatus"
+          :loading="generateQRCodeLoading"
           placeholder="请输入文字内容"
           clearable
           show-count
@@ -153,4 +182,13 @@ const handleClickDownloadBtn = () => {
   </div> -->
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.img-enter-active,
+.img-leave-active {
+  transition: opacity 0.3s ease;
+}
+.img-enter-from,
+.img-leave-to {
+  opacity: 0;
+}
+</style>

@@ -1,3 +1,9 @@
-type SideMenuActiveKey = "home" | "crystal" | "slice"
+export type SideMenuActiveKey = "home" | "crystal" | "slice"
 
-export { type SideMenuActiveKey }
+export type SideMenuItem = {
+  path?: string
+  name?: string
+  title?: string
+  icon?: any
+  hidden?: boolean
+}

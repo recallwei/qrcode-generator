@@ -4,7 +4,7 @@ import { NInput, NImage, NCard, NButton, NIcon, useMessage } from "naive-ui"
 import { Download as DownloadIcon } from "@vicons/fa"
 import { RefreshFilled as ResetIcon } from "@vicons/material"
 import { useDebounceFn } from "@vueuse/core"
-import QRCodeManager from "@bruce/qrcode-manager"
+import QRCodeManager from "@package/qrcode-manager"
 import { setClipBoardText, downloadFile } from "@/utils"
 import { useValidationStatus, useLoading } from "@/hooks"
 

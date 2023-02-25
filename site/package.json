@@ -14,8 +14,8 @@
     "test:unit": "vitest --environment jsdom --root src/"
   },
   "dependencies": {
-    "@bruce/local-storage-manager": "workspace:0.0.1",
-    "@bruce/qrcode-manager": "workspace:0.0.1",
+    "@package/local-storage-manager": "workspace:0.0.1",
+    "@package/qrcode-manager": "workspace:0.0.1",
     "@vueuse/core": "^9.13.0",
     "axios": "^1.3.3",
     "lodash": "^4.17.21",

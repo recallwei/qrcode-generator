@@ -1,5 +1,5 @@
 {
-  "name": "@bruce/local-storage-manager",
+  "name": "@package/local-storage-manager",
   "private": true,
   "version": "0.0.1",
   "author": "Bruce Song <recall4056@gmail.com>",

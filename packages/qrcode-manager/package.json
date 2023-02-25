@@ -1,5 +1,5 @@
 {
-  "name": "@bruce/qrcode-manager",
+  "name": "@package/qrcode-manager",
   "private": true,
   "version": "0.0.1",
   "author": "Bruce Song <recall4056@gmail.com>",

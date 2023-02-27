@@ -81,7 +81,7 @@ const handleClickResetBtn = () => {
 </script>
 
 <template>
-  <div class="flex gap-4">
+  <div class="mb-4 flex gap-4">
     <div class="w-[300px]">
       <n-card
         hoverable
@@ -131,6 +131,7 @@ const handleClickResetBtn = () => {
         </div>
       </n-card>
     </div>
+
     <n-card
       hoverable
       embedded
@@ -173,13 +174,14 @@ const handleClickResetBtn = () => {
     </n-card>
   </div>
 
-  <!-- <div class="flex gap-4">
+  <div class="flex gap-4">
     <n-card
       hoverable
       embedded
     >
+      <div class="font-bold underline underline-offset-4">历史建码</div>
     </n-card>
-  </div> -->
+  </div>
 </template>
 
 <style scoped lang="scss">

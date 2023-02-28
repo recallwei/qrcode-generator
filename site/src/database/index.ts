@@ -3,12 +3,14 @@ import type { Table } from "dexie"
 
 export interface HistoryData {
   id?: number
-  name: string
-  age: number
+  text: string
+  src: string
+  createAt: string
+  updateAt: string
 }
 
 export class DexieWithTables extends Dexie {
-  history!: Table<HistoryData>
+  historyData!: Table<HistoryData>
 
   constructor() {
     super("MyDatabase")

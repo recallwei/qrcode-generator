@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue"
-import { NInput, NImage, NCard, NButton, NIcon, useMessage } from "naive-ui"
+import { ref, type Ref } from "vue"
+import { NInput, NImage, NCard, NButton, NIcon, NText, useMessage } from "naive-ui"
 import { Download as DownloadIcon } from "@vicons/fa"
-import { RefreshFilled as ResetIcon } from "@vicons/material"
+import {
+  RefreshFilled as ResetIcon,
+  DeleteForeverOutlined as DeleteIcon,
+  ContentCopyOutlined as CopyIcon
+} from "@vicons/material"
 import { useDebounceFn } from "@vueuse/core"
+import { useObservable } from "@vueuse/rxjs"
+import { liveQuery } from "dexie"
 import QRCodeManager from "@package/qrcode-manager"
-import { setClipBoardText, downloadFile } from "@/utils"
+import { setClipBoardText, downloadFile, formatCurrentTime } from "@/utils"
 import { useValidationStatus, useLoading } from "@/hooks"
+import { IndexDBInstance } from "@/database"
+import type { History } from "@/types"
 
 type Config = {
   textMaxLength: number
@@ -20,11 +28,18 @@ const config = ref<Config>({
   textMaxLength: 400
 })
 
+const historyList = useObservable(
+  liveQuery(() => IndexDBInstance.history.reverse().toArray()) as any
+) as Ref<History[]>
+
 const userInput = ref("")
 const imgURL = ref("")
 
 const onUserInput = () => userInputStatusDispatcher.clear()
 
+/**
+ * @description Generate QRCode event
+ */
 const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   /**
    * 2023/2/24 Bruce Song <recall4056@gmail.com>
@@ -39,6 +54,13 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
     }
     const qrcodeURL = await QRCodeManager.generateQRCode(userInput.value)
     imgURL.value = qrcodeURL
+    await IndexDBInstance.history.add({
+      text: "测试测试测试测试测试测试测试测试测试测试测试",
+      src: qrcodeURL,
+      content: userInput.value,
+      tags: ["group_1", "group_2"],
+      createAt: formatCurrentTime()
+    })
     message.success("生成二维码成功")
   } catch (error: any) {
     userInputStatusDispatcher.setError()
@@ -53,6 +75,9 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loaded()
 }, 300)
 
+/**
+ * @description Copy QRCode content event
+ */
 const handleClickCopyBtn = () => {
   if (!userInput.value) {
     userInputStatusDispatcher.setError()
@@ -63,6 +88,9 @@ const handleClickCopyBtn = () => {
   message.success("复制文字成功")
 }
 
+/**
+ * @description Download QRCode event
+ */
 const handleClickDownloadBtn = () => {
   if (!imgURL.value) {
     message.error("没有生成二维码，无法下载！")
@@ -72,6 +100,9 @@ const handleClickDownloadBtn = () => {
   downloadFile(imgURL.value, "qrcode.png")
 }
 
+/**
+ * @description Reset QRCode event
+ */
 const handleClickResetBtn = () => {
   userInput.value = ""
   userInputStatusDispatcher.clear()
@@ -82,6 +113,7 @@ const handleClickResetBtn = () => {
 
 <template>
   <div class="mb-4 flex gap-4">
+    <!-- QRCode Preview Section -->
     <div class="w-[300px]">
       <n-card
         hoverable
@@ -132,6 +164,7 @@ const handleClickResetBtn = () => {
       </n-card>
     </div>
 
+    <!-- User Input Section -->
     <n-card
       hoverable
       embedded
@@ -174,13 +207,68 @@ const handleClickResetBtn = () => {
     </n-card>
   </div>
 
+  <!-- History Section -->
+  <div
+    class="mb-4 flex items-center justify-center border-b-[1px] border-b-[#18A058] pb-1 text-base"
+  >
+    <n-text type="primary"> 历史建码 </n-text>
+  </div>
   <div class="flex gap-4">
-    <n-card
-      hoverable
-      embedded
-    >
-      <div class="font-bold underline underline-offset-4">历史建码</div>
-    </n-card>
+    <div class="flex w-full flex-col items-start justify-center gap-6">
+      <template
+        v-for="(item, index) in historyList"
+        :key="index"
+      >
+        <n-card
+          hoverable
+          embedded
+        >
+          <div class="flex gap-4">
+            <div class="flex w-[120px] flex-col items-center justify-center gap-1">
+              <n-image
+                v-if="item.src"
+                class="h-120[px] w-full bg-white p-2 shadow-md"
+                show-toolbar-tooltip
+                :src="item.src"
+              />
+              <n-text class="text-center">{{ item.text }}</n-text>
+            </div>
+            <div class="flex grow flex-col justify-between">
+              <div class="flex justify-between">
+                {{ item.content }}
+                <n-text> {{ `生成时间：${item.createAt}` }}</n-text>
+              </div>
+              <div class="flex items-center justify-end gap-4">
+                <n-button size="small">
+                  <template #icon>
+                    <n-icon size="20">
+                      <delete-icon />
+                    </n-icon>
+                  </template>
+                  删除
+                </n-button>
+                <n-button size="small">
+                  <template #icon>
+                    <n-icon size="14">
+                      <download-icon />
+                    </n-icon>
+                  </template>
+                  下载
+                </n-button>
+                <n-button size="small">
+                  <template #icon>
+                    <n-icon size="14">
+                      <copy-icon />
+                    </n-icon>
+                  </template>
+                  复制
+                </n-button>
+              </div>
+            </div>
+          </div>
+        </n-card>
+      </template>
+    </div>
   </div>
 </template>
 

@@ -12,3 +12,5 @@ noopenner
 noreferrer
 hoverable
 dexie
+indexdb
+rxjs

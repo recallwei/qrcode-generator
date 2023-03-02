@@ -1,25 +1,19 @@
 import Dexie from "dexie"
 import type { Table } from "dexie"
-
-export interface HistoryData {
-  id?: number
-  text: string
-  src: string
-  createAt: string
-  updateAt: string
-}
+import type { History } from "@/types"
 
 export class DexieWithTables extends Dexie {
-  historyData!: Table<HistoryData>
+  history!: Table<History>
 
   constructor() {
-    super("MyDatabase")
+    super("QRCode")
     this.version(1).stores({
-      historyData: "++id, text, src, createAt, updateAt, *tags, *categories, *groups"
+      history:
+        "++id, text, src, jsonString, jsonObject, *tags, *categories, *groups, createAt, updateAt"
     })
   }
 }
 
-const dbInstance = new DexieWithTables()
+const IndexDBInstance = new DexieWithTables()
 
-export default dbInstance
+export { IndexDBInstance }

@@ -2,6 +2,7 @@ esbuild
 Pinia
 tailwindcss
 nprogress
+vueuse
 vicons
 vfonts
 FiraCode
@@ -9,3 +10,5 @@ qrcode
 sider
 noopenner
 noreferrer
+hoverable
+dexie

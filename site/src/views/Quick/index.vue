@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import { ref, type Ref } from "vue"
-import { NInput, NImage, NCard, NButton, NIcon, NText, NCode, useMessage } from "naive-ui"
+import {
+  NInput,
+  NImage,
+  NCard,
+  NButton,
+  NIcon,
+  NText,
+  NTooltip,
+  NPopconfirm,
+  useMessage
+} from "naive-ui"
 import { Download as DownloadIcon } from "@vicons/fa"
 import {
   RefreshFilled as ResetIcon,
@@ -11,13 +21,14 @@ import { useDebounceFn } from "@vueuse/core"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import QRCodeManager from "@package/qrcode-manager"
-import { setClipBoardText, downloadFile, formatCurrentTime } from "@/utils"
+import { setClipBoardText, downloadFile, formatCurrentTime, withPlaceholder } from "@/utils"
 import { useValidationStatus, useLoading } from "@/hooks"
 import { IndexDBInstance } from "@/database"
 import type { History } from "@/types"
 
 type Config = {
-  textMaxLength: number
+  titleMaxLength: number
+  contentMaxLength: number
 }
 
 const message = useMessage()
@@ -25,21 +36,24 @@ const [generateQRCodeLoading, generateQRCodeLoadingDispatcher] = useLoading()
 const [userInputStatus, userInputStatusDispatcher] = useValidationStatus()
 
 const config = ref<Config>({
-  textMaxLength: 400
+  titleMaxLength: 16,
+  contentMaxLength: 400
 })
 
 const historyList = useObservable(
   liveQuery(() => IndexDBInstance.history.reverse().toArray()) as any
 ) as Ref<History[]>
 
-const userInput = ref("")
+const userInput = ref({
+  title: "",
+  content: ""
+})
 const imgURL = ref("")
+
+const focusedHistoryItemIndex = ref<number | null | undefined>(null)
 
 const onUserInput = () => userInputStatusDispatcher.clear()
 
-/**
- * @description Generate QRCode event
- */
 const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   /**
    * 2023/2/24 Bruce Song <recall4056@gmail.com>
@@ -49,16 +63,20 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loading()
   imgURL.value = ""
   try {
-    if (!userInput.value) {
+    if (!userInput.value.content) {
       throw new Error("文字内容不能为空")
     }
-    const qrcodeURL = await QRCodeManager.generateQRCode(userInput.value)
+    const qrcodeURL = await QRCodeManager.generateQRCode(userInput.value.content)
     imgURL.value = qrcodeURL
-    await IndexDBInstance.history.add({
+    const historyModel: History = {
       src: qrcodeURL,
-      content: userInput.value,
+      content: userInput.value.content,
       createAt: formatCurrentTime()
-    })
+    }
+    if (userInput.value.title) {
+      historyModel.title = userInput.value.title
+    }
+    await IndexDBInstance.history.add(historyModel)
     message.success("生成二维码成功")
   } catch (error: any) {
     userInputStatusDispatcher.setError()
@@ -73,36 +91,31 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loaded()
 }, 300)
 
-/**
- * @description Copy QRCode content event
- */
 const handleClickCopyBtn = () => {
-  if (!userInput.value) {
+  if (!userInput.value.content) {
     userInputStatusDispatcher.setError()
     message.error("复制失败，没有输入文字内容")
     return
   }
-  setClipBoardText(userInput.value)
-  message.success("复制文字成功")
+  setClipBoardText(userInput.value.content)
+  message.success("复制成功")
 }
 
-/**
- * @description Download QRCode event
- */
 const handleClickDownloadBtn = () => {
   if (!imgURL.value) {
     message.error("没有生成二维码，无法下载")
     userInputStatusDispatcher.setError()
     return
   }
-  downloadFile(imgURL.value, "qrcode.png")
+  downloadFile(
+    imgURL.value,
+    userInput.value.content ? `${userInput.value.content}.png` : "qrcode.png"
+  )
 }
 
-/**
- * @description Reset QRCode event
- */
 const handleClickResetBtn = () => {
-  userInput.value = ""
+  userInput.value.title = ""
+  userInput.value.content = ""
   userInputStatusDispatcher.clear()
   imgURL.value = ""
   message.success("重置成功")
@@ -118,6 +131,36 @@ const handleDeleteHistoryItem = async (id?: number) => {
   } catch (error: any) {
     message.error(error.message || "删除失败")
   }
+}
+
+const handleCopyItem = (item: History) => {
+  if (!item.content) {
+    message.error("复制失败")
+    return
+  }
+  setClipBoardText(item.content)
+  message.success("复制成功")
+}
+
+const handleDownloadItem = (item: History) => {
+  if (!item.src) {
+    message.error("下载失败")
+    return
+  }
+  downloadFile(item.src, item.title ? `${item.title}.png` : "qrcode.png")
+}
+
+const changeFocusedItem = (item: History) => {
+  focusedHistoryItemIndex.value = item.id
+}
+
+const clearFocusedItem = () => {
+  focusedHistoryItemIndex.value = null
+}
+
+const clearHistoryData = async () => {
+  await IndexDBInstance.history.clear()
+  message.success("已清空历史数据")
 }
 </script>
 
@@ -182,13 +225,20 @@ const handleDeleteHistoryItem = async (id?: number) => {
     >
       <div class="flex flex-col gap-3">
         <n-input
-          v-model:value="userInput"
+          v-model:value="userInput.title"
+          :maxlength="config.titleMaxLength"
+          clearable
+          show-count
+          placeholder="请输入标题【可选】，用于检索生成的二维码或作为下载的文件名"
+        />
+        <n-input
+          v-model:value="userInput.content"
           type="textarea"
           :autosize="{
             minRows: 10,
             maxRows: 10
           }"
-          :maxlength="config.textMaxLength"
+          :maxlength="config.contentMaxLength"
           :status="userInputStatus"
           :loading="generateQRCodeLoading"
           placeholder="请输入文字内容"
@@ -218,76 +268,119 @@ const handleDeleteHistoryItem = async (id?: number) => {
   </div>
 
   <!-- History Section -->
-  <div
-    class="mb-4 flex items-center justify-center border-b-[1px] border-b-[#18A058] pb-1 text-base"
-  >
-    <n-text type="primary"> 历史建码 </n-text>
-  </div>
-  <div class="flex gap-4">
-    <div class="flex w-full flex-col items-start justify-center gap-4">
-      <transition-group name="list">
-        <template
-          v-for="item in historyList"
-          :key="item.id"
+  <template v-if="historyList?.length > 0">
+    <div class="relative flex items-center justify-center py-4 text-sm">
+      <n-text type="primary"> 历史建码 </n-text>
+      <div class="absolute right-0 bottom-0 top-0 m-auto flex items-center">
+        <n-popconfirm
+          :positive-button-props="{ size: 'small' }"
+          :negative-button-props="{ size: 'small' }"
+          @positive-click="clearHistoryData"
         >
-          <n-card
-            hoverable
-            embedded
+          <template #trigger>
+            <n-button size="small">清空</n-button>
+          </template>
+          确认清空所有历史记录？
+        </n-popconfirm>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex w-full flex-col items-start justify-center gap-4">
+        <transition-group name="list">
+          <template
+            v-for="item in historyList"
+            :key="item.id"
           >
-            <div class="flex gap-4">
-              <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
-                <n-image
-                  v-if="item.src"
-                  class="h-120[px] w-full bg-white p-2 shadow-md"
-                  show-toolbar-tooltip
-                  :src="item.src"
-                />
-                <n-text class="text-center">{{ item.title }}</n-text>
-              </div>
-              <div class="flex grow flex-col justify-between gap-1">
-                <n-code>{{ item.content }}</n-code>
-                <div class="flex items-center justify-between gap-4">
-                  <n-text> {{ `生成时间：${item.createAt}` }}</n-text>
-                  <div class="flex items-center gap-4">
-                    <n-button
-                      size="small"
-                      @click="($event) => {}"
+            <n-card
+              hoverable
+              embedded
+            >
+              <div
+                class="flex gap-4"
+                @mouseenter="($event) => changeFocusedItem(item)"
+                @mouseleave="($event) => clearFocusedItem()"
+              >
+                <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
+                  <n-image
+                    v-if="item.src"
+                    class="h-120[px] w-full bg-white p-2 shadow-md"
+                    show-toolbar-tooltip
+                    :src="item.src"
+                  />
+                  <n-text class="text-center">{{ item.title }}</n-text>
+                </div>
+                <div class="flex grow flex-col justify-between gap-1">
+                  <div>
+                    <n-tooltip
+                      placement="bottom"
+                      trigger="hover"
                     >
-                      <template #icon>
-                        <n-icon size="14">
-                          <copy-icon />
-                        </n-icon>
+                      <template #trigger>
+                        <n-text
+                          class="hover:cursor-pointer"
+                          @click="($event) => handleCopyItem(item)"
+                        >
+                          {{ item.content }}
+                        </n-text>
                       </template>
-                      复制
-                    </n-button>
-                    <n-button size="small">
-                      <template #icon>
-                        <n-icon size="14">
-                          <download-icon />
-                        </n-icon>
-                      </template>
-                      下载
-                    </n-button>
-                    <n-button
-                      size="small"
-                      @click="($event) => handleDeleteHistoryItem(item.id)"
-                    >
-                      <template #icon>
-                        <n-icon size="20">
-                          <delete-icon />
-                        </n-icon>
-                      </template>
-                      删除
-                    </n-button>
+                      {{ item.content }}
+                    </n-tooltip>
                   </div>
+                  <n-text class="text-xs">
+                    {{ `生成时间：${withPlaceholder(item.createAt)}` }}</n-text
+                  >
+                  <transition name="operation">
+                    <div
+                      v-show="focusedHistoryItemIndex === item.id"
+                      class="absolute right-4 bottom-4 flex items-center gap-4"
+                    >
+                      <n-button
+                        size="small"
+                        tertiary
+                        @click="($event) => handleCopyItem(item)"
+                      >
+                        <template #icon>
+                          <n-icon size="14">
+                            <copy-icon />
+                          </n-icon>
+                        </template>
+                        复制
+                      </n-button>
+                      <n-button
+                        size="small"
+                        tertiary
+                        @click="($event) => handleDownloadItem(item)"
+                      >
+                        <template #icon>
+                          <n-icon size="14">
+                            <download-icon />
+                          </n-icon>
+                        </template>
+                        下载
+                      </n-button>
+                      <n-button
+                        size="small"
+                        type="error"
+                        tertiary
+                        @click="($event) => handleDeleteHistoryItem(item.id)"
+                      >
+                        <template #icon>
+                          <n-icon size="20">
+                            <delete-icon />
+                          </n-icon>
+                        </template>
+                        删除
+                      </n-button>
+                    </div>
+                  </transition>
                 </div>
               </div>
-            </div>
-          </n-card>
-        </template>
-      </transition-group>
+            </n-card>
+          </template>
+        </transition-group>
+      </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <style scoped lang="scss">
@@ -312,5 +405,15 @@ const handleDeleteHistoryItem = async (id?: number) => {
 }
 .list-leave-active {
   position: absolute;
+}
+
+.operation-enter-active,
+.operation-leave-active {
+  transition: all 0.3s ease;
+}
+.operation-enter-from,
+.operation-leave-to {
+  opacity: 0;
+  transform: translateX(-500px);
 }
 </style>

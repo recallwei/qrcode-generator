@@ -14,3 +14,4 @@ hoverable
 dexie
 indexdb
 rxjs
+popconfirm

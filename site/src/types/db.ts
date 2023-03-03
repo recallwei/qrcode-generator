@@ -1,12 +1,12 @@
 export interface History {
   id?: number
-  title?: string | null
+  title?: string
   src?: string
   content?: string
-  jsonContent?: object | null
+  jsonContent?: object
   tags?: string[]
   categories?: string[]
   groups?: string[]
-  createAt?: string | null
-  updateAt?: string | null
+  createAt?: string
+  updateAt?: string
 }

@@ -20,10 +20,7 @@ import FallBack from "@/views/Error/FallBack/index.vue"
       <n-message-provider>
         <router-view v-slot="{ Component }">
           <template v-if="Component">
-            <transition
-              name="fade"
-              mode="out-in"
-            >
+            <transition mode="out-in">
               <keep-alive>
                 <suspense>
                   <component :is="Component" />
@@ -42,12 +39,12 @@ import FallBack from "@/views/Error/FallBack/index.vue"
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
+.v-enter-active,
+.v-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from,
-.fade-leave-to {
+.v-enter-from,
+.v-leave-to {
   opacity: 0;
 }
 </style>

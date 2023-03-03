@@ -171,7 +171,7 @@ const clearHistoryData = async () => {
 </script>
 
 <template>
-  <div>
+  <main>
     <div class="mb-4 flex gap-4">
       <!-- QRCode Preview Section -->
       <div class="w-[300px]">
@@ -190,25 +190,23 @@ const clearHistoryData = async () => {
             </n-icon>
           </div>
           <div class="flex h-full flex-col items-center justify-center gap-4">
-            <!--
-          <transition
-            name="img"
-            mode="out-in"
-          >
-          -->
-            <n-image
-              v-if="imgURL"
-              class="h-200[px] w-[200px] bg-white p-2 shadow-md"
-              show-toolbar-tooltip
-              :src="imgURL"
-            />
-            <div
-              v-else
-              class="flex h-[200px] w-[200px] select-none items-center justify-center bg-white p-2 shadow-md"
+            <transition
+              name="img"
+              mode="out-in"
             >
-              此处预览生成的二维码
-            </div>
-            <!-- </transition> -->
+              <n-image
+                v-if="imgURL"
+                class="h-200[px] w-[200px] bg-white p-2 shadow-md"
+                show-toolbar-tooltip
+                :src="imgURL"
+              />
+              <div
+                v-else
+                class="flex h-[200px] w-[200px] select-none items-center justify-center bg-white p-2 shadow-md"
+              >
+                此处预览生成的二维码
+              </div>
+            </transition>
             <n-button
               type="primary"
               strong
@@ -295,129 +293,130 @@ const clearHistoryData = async () => {
       </div>
       <div class="flex gap-4">
         <div class="flex w-full flex-col items-start justify-center gap-4">
-          <!-- <transition-group name="history-list"> -->
-          <n-card
-            v-for="item in historyList"
-            :key="item.id"
-            hoverable
-            embedded
-            @mouseenter.passive="($event) => changeFocusedItem(item)"
-            @mouseleave.passive="($event) => clearFocusedItem()"
-          >
-            <div class="flex gap-4">
-              <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
-                <n-image
-                  class="h-120[px] w-full bg-white p-2 shadow-md"
-                  show-toolbar-tooltip
-                  :src="item.src"
-                />
-                <n-tooltip
-                  placement="bottom"
-                  trigger="hover"
-                >
-                  <template #trigger>
-                    <n-text
-                      class="cursor-pointer text-center"
-                      @click="($event) => handleCopyByItem(item, 'title')"
-                    >
-                      {{ item.title }}
-                    </n-text>
-                  </template>
-                  {{ item.title }}
-                </n-tooltip>
-              </div>
-              <div class="flex grow flex-col justify-between gap-1">
-                <div>
+          <transition-group name="history-list">
+            <n-card
+              v-for="item in historyList"
+              :key="item.id"
+              hoverable
+              embedded
+              @mouseenter.passive="($event) => changeFocusedItem(item)"
+              @mouseleave.passive="($event) => clearFocusedItem()"
+            >
+              <div class="flex gap-4">
+                <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
+                  <n-image
+                    class="h-120[px] w-full bg-white p-2 shadow-md"
+                    show-toolbar-tooltip
+                    :src="item.src"
+                  />
                   <n-tooltip
                     placement="bottom"
                     trigger="hover"
                   >
                     <template #trigger>
                       <n-text
-                        class="hover:cursor-pointer"
-                        @click="($event) => handleCopyByItem(item, 'content')"
+                        class="cursor-pointer text-center"
+                        @click="($event) => handleCopyByItem(item, 'title')"
                       >
-                        {{ item.content }}
+                        {{ item.title }}
                       </n-text>
                     </template>
-                    {{ item.content }}
+                    {{ item.title }}
                   </n-tooltip>
                 </div>
-                <div class="text-xs">
-                  <n-text class="select-none"> 生成时间：</n-text>
-                  <n-tooltip
-                    placement="bottom"
-                    trigger="hover"
-                  >
-                    <template #trigger>
-                      <n-text class="cursor-pointer">
-                        {{ withPlaceholder(formatTime(item.createAt as string, "MM-DD hh:mm")) }}
-                      </n-text>
-                    </template>
-                    {{ withPlaceholder(item.createAt as string) }}
-                  </n-tooltip>
-                </div>
-                <template v-if="focusedHistoryItemIndex === item.id">
-                  <!-- <transition name="operation"> -->
-                  <div class="absolute right-4 bottom-4 flex items-center gap-4">
-                    <n-button
-                      size="small"
-                      tertiary
-                      @click="($event) => handleCopyByItem(item, 'content')"
+                <div class="flex grow flex-col justify-between gap-1">
+                  <div>
+                    <n-tooltip
+                      placement="bottom"
+                      trigger="hover"
                     >
-                      <template #icon>
-                        <n-icon size="14">
-                          <copy-icon />
-                        </n-icon>
+                      <template #trigger>
+                        <n-text
+                          class="hover:cursor-pointer"
+                          @click="($event) => handleCopyByItem(item, 'content')"
+                        >
+                          {{ item.content }}
+                        </n-text>
                       </template>
-                      复制
-                    </n-button>
-                    <n-button
-                      size="small"
-                      tertiary
-                      @click="($event) => handleDownloadItem(item)"
-                    >
-                      <template #icon>
-                        <n-icon size="14">
-                          <download-icon />
-                        </n-icon>
-                      </template>
-                      下载
-                    </n-button>
-                    <n-button
-                      size="small"
-                      type="error"
-                      tertiary
-                      @click="($event) => handleDeleteHistoryItem(item.id)"
-                    >
-                      <template #icon>
-                        <n-icon size="20">
-                          <delete-icon />
-                        </n-icon>
-                      </template>
-                      删除
-                    </n-button>
+                      {{ item.content }}
+                    </n-tooltip>
                   </div>
-                  <!-- </transition> -->
-                </template>
+                  <div class="text-xs">
+                    <n-text class="select-none"> 生成时间：</n-text>
+                    <n-tooltip
+                      placement="bottom"
+                      trigger="hover"
+                    >
+                      <template #trigger>
+                        <n-text class="cursor-pointer">
+                          {{ withPlaceholder(formatTime(item.createAt as string, "MM-DD hh:mm")) }}
+                        </n-text>
+                      </template>
+                      {{ withPlaceholder(item.createAt as string) }}
+                    </n-tooltip>
+                  </div>
+                  <template v-if="focusedHistoryItemIndex === item.id">
+                    <transition name="operation">
+                      <div class="absolute right-4 bottom-4 flex items-center gap-4">
+                        <n-button
+                          size="small"
+                          tertiary
+                          @click="($event) => handleCopyByItem(item, 'content')"
+                        >
+                          <template #icon>
+                            <n-icon size="14">
+                              <copy-icon />
+                            </n-icon>
+                          </template>
+                          复制
+                        </n-button>
+                        <n-button
+                          size="small"
+                          tertiary
+                          @click="($event) => handleDownloadItem(item)"
+                        >
+                          <template #icon>
+                            <n-icon size="14">
+                              <download-icon />
+                            </n-icon>
+                          </template>
+                          下载
+                        </n-button>
+                        <n-button
+                          size="small"
+                          type="error"
+                          tertiary
+                          @click="($event) => handleDeleteHistoryItem(item.id)"
+                        >
+                          <template #icon>
+                            <n-icon size="20">
+                              <delete-icon />
+                            </n-icon>
+                          </template>
+                          删除
+                        </n-button>
+                      </div>
+                    </transition>
+                  </template>
+                </div>
               </div>
-            </div>
-          </n-card>
-          <!-- </transition-group> -->
+            </n-card>
+          </transition-group>
         </div>
       </div>
     </template>
-  </div>
+  </main>
 </template>
 
 <style scoped lang="scss">
 .img-enter-active,
 .img-leave-active {
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 .img-enter-from,
 .img-leave-to {
   opacity: 0;
+  transform: scale(0.9);
 }
 
 .history-list-move,

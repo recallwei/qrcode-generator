@@ -72,7 +72,9 @@ const navToHome = () => router.push("/")
               name="content"
               mode="out-in"
             >
-              <component :is="Component" />
+              <keep-alive>
+                <component :is="Component" />
+              </keep-alive>
             </transition>
           </router-view>
         </n-layout-content>

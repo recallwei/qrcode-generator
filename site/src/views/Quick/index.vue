@@ -86,7 +86,7 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
      * NOTE:
      * UX Related: Whether to remove the image if the QRCode fails to be generated.
      */
-    // imgURL.value = ""
+    imgURL.value = ""
   }
   generateQRCodeLoadingDispatcher.loaded()
 }, 300)

@@ -3,7 +3,6 @@ import { RouterView, useRouter } from "vue-router"
 import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
 import { useSideMenuStore } from "@/store"
 import { siteMetaData, sideMenuOptions } from "@/constants"
-import FallBack from "../Error/FallBack/index.vue"
 
 const { AppName, Favicon } = siteMetaData
 
@@ -70,23 +69,11 @@ const navToHome = () => router.push("/")
         >
           <router-view v-slot="{ Component }">
             <template v-if="Component">
-              <!--
-              * 2023/3/3 Bruce Song <recall4056@gmail.com>
-              * NOTE:
-              * Transition have a unexpected bug here.
-              -->
               <transition
                 name="content"
                 mode="out-in"
               >
-                <keep-alive>
-                  <suspense>
-                    <component :is="Component" />
-                    <template #fallback>
-                      <fall-back />
-                    </template>
-                  </suspense>
-                </keep-alive>
+                <component :is="Component" />
               </transition>
             </template>
           </router-view>
@@ -99,7 +86,7 @@ const navToHome = () => router.push("/")
 <style scoped lang="scss">
 .content-enter-active,
 .content-leave-active {
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 .content-enter-from,
 .content-leave-to {

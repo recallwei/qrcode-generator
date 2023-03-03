@@ -8,7 +8,6 @@ import {
   zhCN,
   dateZhCN
 } from "naive-ui"
-import FallBack from "@/views/Error/FallBack/index.vue"
 </script>
 
 <template>
@@ -19,32 +18,26 @@ import FallBack from "@/views/Error/FallBack/index.vue"
     <n-loading-bar-provider>
       <n-message-provider>
         <router-view v-slot="{ Component }">
-          <template v-if="Component">
-            <transition mode="out-in">
-              <keep-alive>
-                <suspense>
-                  <component :is="Component" />
-                  <template #fallback>
-                    <fall-back />
-                  </template>
-                </suspense>
-              </keep-alive>
-            </transition>
-          </template>
+          <transition
+            name="router"
+            mode="out-in"
+          >
+            <component :is="Component" />
+          </transition>
         </router-view>
       </n-message-provider>
     </n-loading-bar-provider>
-    <NGlobalStyle />
+    <n-global-style />
   </n-config-provider>
 </template>
 
 <style scoped lang="scss">
-.v-enter-active,
-.v-leave-active {
+.router-enter-active,
+.router-leave-active {
   transition: opacity 0.3s ease;
 }
-.v-enter-from,
-.v-leave-to {
+.router-enter-from,
+.router-leave-to {
   opacity: 0;
 }
 </style>

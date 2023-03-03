@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, type Ref } from "vue"
-import { NInput, NImage, NCard, NButton, NIcon, NText, useMessage } from "naive-ui"
+import { NInput, NImage, NCard, NButton, NIcon, NText, NCode, useMessage } from "naive-ui"
 import { Download as DownloadIcon } from "@vicons/fa"
 import {
   RefreshFilled as ResetIcon,
@@ -224,7 +224,7 @@ const handleDeleteHistoryItem = async (id?: number) => {
     <n-text type="primary"> 历史建码 </n-text>
   </div>
   <div class="flex gap-4">
-    <div class="flex w-full flex-col items-start justify-center gap-6">
+    <div class="flex w-full flex-col items-start justify-center gap-4">
       <transition-group name="list">
         <template
           v-for="item in historyList"
@@ -235,7 +235,7 @@ const handleDeleteHistoryItem = async (id?: number) => {
             embedded
           >
             <div class="flex gap-4">
-              <div class="flex w-[120px] flex-col items-center justify-center gap-1">
+              <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
                 <n-image
                   v-if="item.src"
                   class="h-120[px] w-full bg-white p-2 shadow-md"
@@ -244,42 +244,42 @@ const handleDeleteHistoryItem = async (id?: number) => {
                 />
                 <n-text class="text-center">{{ item.title }}</n-text>
               </div>
-              <div class="flex grow flex-col justify-between">
-                <div class="flex justify-between">
-                  {{ item.content }}
+              <div class="flex grow flex-col justify-between gap-1">
+                <n-code>{{ item.content }}</n-code>
+                <div class="flex items-center justify-between gap-4">
                   <n-text> {{ `生成时间：${item.createAt}` }}</n-text>
-                </div>
-                <div class="flex items-center justify-end gap-4">
-                  <n-button
-                    size="small"
-                    @click="($event) => {}"
-                  >
-                    <template #icon>
-                      <n-icon size="14">
-                        <copy-icon />
-                      </n-icon>
-                    </template>
-                    复制
-                  </n-button>
-                  <n-button size="small">
-                    <template #icon>
-                      <n-icon size="14">
-                        <download-icon />
-                      </n-icon>
-                    </template>
-                    下载
-                  </n-button>
-                  <n-button
-                    size="small"
-                    @click="($event) => handleDeleteHistoryItem(item.id)"
-                  >
-                    <template #icon>
-                      <n-icon size="20">
-                        <delete-icon />
-                      </n-icon>
-                    </template>
-                    删除
-                  </n-button>
+                  <div class="flex items-center gap-4">
+                    <n-button
+                      size="small"
+                      @click="($event) => {}"
+                    >
+                      <template #icon>
+                        <n-icon size="14">
+                          <copy-icon />
+                        </n-icon>
+                      </template>
+                      复制
+                    </n-button>
+                    <n-button size="small">
+                      <template #icon>
+                        <n-icon size="14">
+                          <download-icon />
+                        </n-icon>
+                      </template>
+                      下载
+                    </n-button>
+                    <n-button
+                      size="small"
+                      @click="($event) => handleDeleteHistoryItem(item.id)"
+                    >
+                      <template #icon>
+                        <n-icon size="20">
+                          <delete-icon />
+                        </n-icon>
+                      </template>
+                      删除
+                    </n-button>
+                  </div>
                 </div>
               </div>
             </div>

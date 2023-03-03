@@ -75,23 +75,20 @@ const navToHome = () => router.push("/")
               * NOTE:
               * Transition have a unexpected bug here.
               -->
-              <!--
-                <transition
-                  name="fade"
-                  mode="out-in"
-                >
-              -->
-              <keep-alive>
-                <suspense>
-                  <component :is="Component" />
-                  <template #fallback>
-                    <fall-back />
-                  </template>
-                </suspense>
-              </keep-alive>
-              <!--
-                </transition>
-              -->
+
+              <transition
+                name="content"
+                mode="out-in"
+              >
+                <keep-alive>
+                  <suspense>
+                    <component :is="Component" />
+                    <template #fallback>
+                      <fall-back />
+                    </template>
+                  </suspense>
+                </keep-alive>
+              </transition>
             </template>
           </router-view>
         </n-layout-content>
@@ -101,12 +98,12 @@ const navToHome = () => router.push("/")
 </template>
 
 <style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
+.content-enter-active,
+.content-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from,
-.fade-leave-to {
+.content-enter-from,
+.content-leave-to {
   opacity: 0;
 }
 </style>

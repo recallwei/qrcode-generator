@@ -31,8 +31,8 @@ const sideMenuMap = new Map<SideMenu, SideMenuItem>([
       path: "/decode",
       name: SideMenu.Decode,
       title: "解码工具",
-      icon: DecodeIcon,
-      disabled: true
+      icon: DecodeIcon
+      // disabled: true
       // hidden: true
     }
   ],

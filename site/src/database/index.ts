@@ -9,7 +9,7 @@ export class DexieWithTables extends Dexie {
     super("QRCode")
     this.version(1).stores({
       history:
-        "++id, text, src, jsonString, jsonObject, *tags, *categories, *groups, createAt, updateAt"
+        "++id, title, src, jsonString, jsonObject, *tags, *categories, *groups, createAt, updateAt"
     })
   }
 }

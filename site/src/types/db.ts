@@ -1,6 +1,6 @@
 export interface History {
   id?: number
-  text?: string | null
+  title?: string | null
   src?: string
   content?: string
   jsonContent?: object | null

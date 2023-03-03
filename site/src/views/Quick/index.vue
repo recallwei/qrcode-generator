@@ -50,15 +50,13 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   imgURL.value = ""
   try {
     if (!userInput.value) {
-      throw new Error("文字内容不能为空！")
+      throw new Error("文字内容不能为空")
     }
     const qrcodeURL = await QRCodeManager.generateQRCode(userInput.value)
     imgURL.value = qrcodeURL
     await IndexDBInstance.history.add({
-      text: "测试测试测试测试测试测试测试测试测试测试测试",
       src: qrcodeURL,
       content: userInput.value,
-      tags: ["group_1", "group_2"],
       createAt: formatCurrentTime()
     })
     message.success("生成二维码成功")
@@ -81,7 +79,7 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
 const handleClickCopyBtn = () => {
   if (!userInput.value) {
     userInputStatusDispatcher.setError()
-    message.error("复制失败，没有输入文字内容！")
+    message.error("复制失败，没有输入文字内容")
     return
   }
   setClipBoardText(userInput.value)
@@ -93,7 +91,7 @@ const handleClickCopyBtn = () => {
  */
 const handleClickDownloadBtn = () => {
   if (!imgURL.value) {
-    message.error("没有生成二维码，无法下载！")
+    message.error("没有生成二维码，无法下载")
     userInputStatusDispatcher.setError()
     return
   }
@@ -108,6 +106,18 @@ const handleClickResetBtn = () => {
   userInputStatusDispatcher.clear()
   imgURL.value = ""
   message.success("重置成功")
+}
+
+const handleDeleteHistoryItem = async (id?: number) => {
+  try {
+    if (!id) {
+      throw new Error("删除失败，没有找到对应的历史记录")
+    }
+    await IndexDBInstance.history.delete(id)
+    message.success("删除成功")
+  } catch (error: any) {
+    message.error(error.message || "删除失败")
+  }
 }
 </script>
 
@@ -215,59 +225,67 @@ const handleClickResetBtn = () => {
   </div>
   <div class="flex gap-4">
     <div class="flex w-full flex-col items-start justify-center gap-6">
-      <template
-        v-for="(item, index) in historyList"
-        :key="index"
-      >
-        <n-card
-          hoverable
-          embedded
+      <transition-group name="list">
+        <template
+          v-for="item in historyList"
+          :key="item.id"
         >
-          <div class="flex gap-4">
-            <div class="flex w-[120px] flex-col items-center justify-center gap-1">
-              <n-image
-                v-if="item.src"
-                class="h-120[px] w-full bg-white p-2 shadow-md"
-                show-toolbar-tooltip
-                :src="item.src"
-              />
-              <n-text class="text-center">{{ item.text }}</n-text>
-            </div>
-            <div class="flex grow flex-col justify-between">
-              <div class="flex justify-between">
-                {{ item.content }}
-                <n-text> {{ `生成时间：${item.createAt}` }}</n-text>
+          <n-card
+            hoverable
+            embedded
+          >
+            <div class="flex gap-4">
+              <div class="flex w-[120px] flex-col items-center justify-center gap-1">
+                <n-image
+                  v-if="item.src"
+                  class="h-120[px] w-full bg-white p-2 shadow-md"
+                  show-toolbar-tooltip
+                  :src="item.src"
+                />
+                <n-text class="text-center">{{ item.title }}</n-text>
               </div>
-              <div class="flex items-center justify-end gap-4">
-                <n-button size="small">
-                  <template #icon>
-                    <n-icon size="20">
-                      <delete-icon />
-                    </n-icon>
-                  </template>
-                  删除
-                </n-button>
-                <n-button size="small">
-                  <template #icon>
-                    <n-icon size="14">
-                      <download-icon />
-                    </n-icon>
-                  </template>
-                  下载
-                </n-button>
-                <n-button size="small">
-                  <template #icon>
-                    <n-icon size="14">
-                      <copy-icon />
-                    </n-icon>
-                  </template>
-                  复制
-                </n-button>
+              <div class="flex grow flex-col justify-between">
+                <div class="flex justify-between">
+                  {{ item.content }}
+                  <n-text> {{ `生成时间：${item.createAt}` }}</n-text>
+                </div>
+                <div class="flex items-center justify-end gap-4">
+                  <n-button
+                    size="small"
+                    @click="($event) => {}"
+                  >
+                    <template #icon>
+                      <n-icon size="14">
+                        <copy-icon />
+                      </n-icon>
+                    </template>
+                    复制
+                  </n-button>
+                  <n-button size="small">
+                    <template #icon>
+                      <n-icon size="14">
+                        <download-icon />
+                      </n-icon>
+                    </template>
+                    下载
+                  </n-button>
+                  <n-button
+                    size="small"
+                    @click="($event) => handleDeleteHistoryItem(item.id)"
+                  >
+                    <template #icon>
+                      <n-icon size="20">
+                        <delete-icon />
+                      </n-icon>
+                    </template>
+                    删除
+                  </n-button>
+                </div>
               </div>
             </div>
-          </div>
-        </n-card>
-      </template>
+          </n-card>
+        </template>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -280,5 +298,19 @@ const handleClickResetBtn = () => {
 .img-enter-from,
 .img-leave-to {
   opacity: 0;
+}
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.list-leave-active {
+  position: absolute;
 }
 </style>

@@ -300,12 +300,10 @@ const clearHistoryData = async () => {
             <n-card
               hoverable
               embedded
+              @mouseenter="($event) => changeFocusedItem(item)"
+              @mouseleave="($event) => clearFocusedItem()"
             >
-              <div
-                class="flex gap-4"
-                @mouseenter="($event) => changeFocusedItem(item)"
-                @mouseleave="($event) => clearFocusedItem()"
-              >
+              <div class="flex gap-4">
                 <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
                   <n-image
                     class="h-120[px] w-full bg-white p-2 shadow-md"

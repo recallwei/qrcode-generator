@@ -6,4 +6,5 @@ export type SideMenuItem = {
   title?: string
   icon?: any
   hidden?: boolean
+  disabled?: boolean
 }

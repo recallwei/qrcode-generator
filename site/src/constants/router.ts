@@ -25,6 +25,12 @@ export const routerData = [
         name: "decode",
         component: () => import("@/views/Decode"),
         meta: { title: `解码工具 - ${AppName}` }
+      },
+      {
+        path: "/config",
+        name: "config",
+        component: () => import("@/views/Config"),
+        meta: { title: `格式配置 - ${AppName}` }
       }
     ]
   },

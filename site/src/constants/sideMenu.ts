@@ -1,12 +1,17 @@
 import type { MenuOption } from "naive-ui"
-import { Qrcode as QuickIcon, BoxOpen as BoxOpenIcon } from "@vicons/fa"
-import { QrCodeScannerOutlined as DecodeIcon } from "@vicons/material"
+import { BoxOpen as BoxOpenIcon } from "@vicons/fa"
+import {
+  QrCode2Outlined as QuickIcon,
+  QrCodeScannerOutlined as DecodeIcon,
+  SettingsOutlined as ConfigIcon
+} from "@vicons/material"
 import { Naive } from "@/modules"
 import type { SideMenuItem } from "@/types"
 
 enum SideMenu {
   Quick = "quick",
   Decode = "decode",
+  Config = "config",
   Tools = "tools"
 }
 
@@ -27,7 +32,17 @@ const sideMenuMap = new Map<SideMenu, SideMenuItem>([
       name: SideMenu.Decode,
       title: "解码工具",
       icon: DecodeIcon,
-      hidden: true
+      disabled: true
+      // hidden: true
+    }
+  ],
+  [
+    SideMenu.Config,
+    {
+      path: "/config",
+      name: SideMenu.Config,
+      title: "格式配置",
+      icon: ConfigIcon
     }
   ],
   [
@@ -39,14 +54,15 @@ const sideMenuMap = new Map<SideMenu, SideMenuItem>([
 ])
 
 const mapToMenuOption = (sideMenu: SideMenu): MenuOption => {
-  const { path, name, title, icon, hidden } = sideMenuMap.get(sideMenu) ?? {}
+  const { path, name, title, icon, hidden, disabled } = sideMenuMap.get(sideMenu) ?? {}
   if (!path) throw new Error("Invalid router: router should have a path.")
   if (!name) throw new Error("Invalid router: router should have a name as key.")
   return {
-    label: Naive.getRouterLinkNode(path, title ?? ""),
+    label: disabled ? title : Naive.getRouterLinkNode(path, title ?? ""),
     key: name,
     icon: icon && Naive.renderIcon(icon),
-    show: !hidden
+    show: !hidden,
+    disabled
   }
 }
 
@@ -69,5 +85,6 @@ const mapToMenuOption = (sideMenu: SideMenu): MenuOption => {
 
 export const sideMenuOptions: MenuOption[] = [
   mapToMenuOption(SideMenu.Quick),
-  mapToMenuOption(SideMenu.Decode)
+  mapToMenuOption(SideMenu.Decode),
+  mapToMenuOption(SideMenu.Config)
 ]

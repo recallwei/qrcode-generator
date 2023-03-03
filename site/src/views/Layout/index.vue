@@ -75,7 +75,6 @@ const navToHome = () => router.push("/")
               * NOTE:
               * Transition have a unexpected bug here.
               -->
-
               <transition
                 name="content"
                 mode="out-in"

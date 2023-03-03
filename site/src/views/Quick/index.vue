@@ -21,7 +21,13 @@ import { useDebounceFn } from "@vueuse/core"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import QRCodeManager from "@package/qrcode-manager"
-import { setClipBoardText, downloadFile, formatCurrentTime, withPlaceholder } from "@/utils"
+import {
+  setClipBoardText,
+  downloadFile,
+  formatCurrentTime,
+  withPlaceholder,
+  formatTime
+} from "@/utils"
 import { useValidationStatus, useLoading } from "@/hooks"
 import { IndexDBInstance } from "@/database"
 import type { History } from "@/types"
@@ -133,12 +139,12 @@ const handleDeleteHistoryItem = async (id?: number) => {
   }
 }
 
-const handleCopyItem = (item: History) => {
-  if (!item.content) {
+const handleCopyByItem = (item: History, key: keyof History) => {
+  if (!item[key]) {
     message.error("复制失败")
     return
   }
-  setClipBoardText(item.content)
+  setClipBoardText(item[key] as string)
   message.success("复制成功")
 }
 
@@ -302,12 +308,24 @@ const clearHistoryData = async () => {
               >
                 <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
                   <n-image
-                    v-if="item.src"
                     class="h-120[px] w-full bg-white p-2 shadow-md"
                     show-toolbar-tooltip
                     :src="item.src"
                   />
-                  <n-text class="text-center">{{ item.title }}</n-text>
+                  <n-tooltip
+                    placement="bottom"
+                    trigger="hover"
+                  >
+                    <template #trigger>
+                      <n-text
+                        class="cursor-pointer text-center"
+                        @click="($event) => handleCopyByItem(item, 'title')"
+                      >
+                        {{ item.title }}
+                      </n-text>
+                    </template>
+                    {{ item.title }}
+                  </n-tooltip>
                 </div>
                 <div class="flex grow flex-col justify-between gap-1">
                   <div>
@@ -318,7 +336,7 @@ const clearHistoryData = async () => {
                       <template #trigger>
                         <n-text
                           class="hover:cursor-pointer"
-                          @click="($event) => handleCopyItem(item)"
+                          @click="($event) => handleCopyByItem(item, 'content')"
                         >
                           {{ item.content }}
                         </n-text>
@@ -326,18 +344,29 @@ const clearHistoryData = async () => {
                       {{ item.content }}
                     </n-tooltip>
                   </div>
-                  <n-text class="text-xs">
-                    {{ `生成时间：${withPlaceholder(item.createAt)}` }}</n-text
-                  >
+                  <div class="text-xs">
+                    <n-text class="select-none"> 生成时间：</n-text>
+                    <n-tooltip
+                      placement="bottom"
+                      trigger="hover"
+                    >
+                      <template #trigger>
+                        <n-text class="cursor-pointer">
+                          {{ withPlaceholder(formatTime(item.createAt as string, "MM-DD hh:mm")) }}
+                        </n-text>
+                      </template>
+                      {{ withPlaceholder(item.createAt as string) }}
+                    </n-tooltip>
+                  </div>
                   <transition name="operation">
                     <div
-                      v-show="focusedHistoryItemIndex === item.id"
+                      v-if="focusedHistoryItemIndex === item.id"
                       class="absolute right-4 bottom-4 flex items-center gap-4"
                     >
                       <n-button
                         size="small"
                         tertiary
-                        @click="($event) => handleCopyItem(item)"
+                        @click="($event) => handleCopyByItem(item, 'content')"
                       >
                         <template #icon>
                           <n-icon size="14">

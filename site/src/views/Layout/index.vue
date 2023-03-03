@@ -70,19 +70,28 @@ const navToHome = () => router.push("/")
         >
           <router-view v-slot="{ Component }">
             <template v-if="Component">
-              <transition
-                name="fade"
-                mode="out-in"
-              >
-                <keep-alive>
-                  <suspense>
-                    <component :is="Component" />
-                    <template #fallback>
-                      <fall-back />
-                    </template>
-                  </suspense>
-                </keep-alive>
-              </transition>
+              <!--
+              * 2023/3/3 Bruce Song <recall4056@gmail.com>
+              * NOTE:
+              * Transition have a unexpected bug here.
+              -->
+              <!--
+                <transition
+                  name="fade"
+                  mode="out-in"
+                >
+              -->
+              <keep-alive>
+                <suspense>
+                  <component :is="Component" />
+                  <template #fallback>
+                    <fall-back />
+                  </template>
+                </suspense>
+              </keep-alive>
+              <!--
+                </transition>
+              -->
             </template>
           </router-view>
         </n-layout-content>

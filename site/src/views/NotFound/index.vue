@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
-import { MagicResult } from "@/components"
+import { NResult, NButton } from "naive-ui"
 import { siteMetaData } from "@/constants"
 
 const { NotFoundInfo } = siteMetaData.ErrorPage
@@ -11,15 +11,23 @@ const navToHome = () => router.push("/")
 </script>
 
 <template>
-  <main>
-    <magic-result
+  <div class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
+    <n-result
       status="404"
       :title="NotFoundInfo.title"
       :description="NotFoundInfo.description"
-      :btn-text="NotFoundInfo.btnText"
-      @click:btn="navToHome"
-    />
-  </main>
+    >
+      <template #footer>
+        <n-button
+          type="primary"
+          secondary
+          @click="navToHome"
+        >
+          {{ NotFoundInfo.btnText }}
+        </n-button>
+      </template>
+    </n-result>
+  </div>
 </template>
 
 <style scoped lang="scss"></style>

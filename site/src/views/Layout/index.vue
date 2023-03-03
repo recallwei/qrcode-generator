@@ -68,14 +68,12 @@ const navToHome = () => router.push("/")
           :native-scrollbar="false"
         >
           <router-view v-slot="{ Component }">
-            <template v-if="Component">
-              <transition
-                name="content"
-                mode="out-in"
-              >
-                <component :is="Component" />
-              </transition>
-            </template>
+            <transition
+              name="content"
+              mode="out-in"
+            >
+              <component :is="Component" />
+            </transition>
           </router-view>
         </n-layout-content>
       </n-layout>
@@ -86,7 +84,7 @@ const navToHome = () => router.push("/")
 <style scoped lang="scss">
 .content-enter-active,
 .content-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 .content-enter-from,
 .content-leave-to {

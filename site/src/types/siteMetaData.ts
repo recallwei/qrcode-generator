@@ -6,7 +6,6 @@ type ErrorPageInfo = {
 
 type ErrorPage = {
   NotFoundInfo: ErrorPageInfo
-  FallBackInfo: ErrorPageInfo
 }
 
 export type SiteMetaData = {

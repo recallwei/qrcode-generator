@@ -8,10 +8,10 @@ const navToQuick = () => router.push("/quick")
 </script>
 
 <template>
-  <main>
+  <main class="h-screen w-screen">
     <magic-result
-      title="正在开发中..."
-      description="预计上线时间 xxxx/xx/xx"
+      title="🚀正在努力开发中..."
+      description="预计上线时间 2023/03/10"
       btn-text="开始"
       @click:btn="navToQuick"
     />

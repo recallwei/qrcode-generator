@@ -2,8 +2,6 @@
 
 <template>
   <div>
-    <div>Test Page</div>
+    <div>格式配置</div>
   </div>
 </template>
-
-<style scoped lang="scss"></style>

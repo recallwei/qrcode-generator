@@ -60,7 +60,7 @@ const focusedHistoryItemIndex = ref<number | null | undefined>(null)
 
 const onUserInput = () => userInputStatusDispatcher.clear()
 
-const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
+const handleGenerateQRCode = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loading()
   imgURL.value = ""
   try {
@@ -87,7 +87,7 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loaded()
 }, 300)
 
-const handleClickCopyBtn = () => {
+const handleCopyContent = () => {
   if (!userInput.value.content) {
     userInputStatusDispatcher.setError()
     message.error("复制失败，没有输入文字内容")
@@ -97,7 +97,7 @@ const handleClickCopyBtn = () => {
   message.success("复制成功")
 }
 
-const handleClickDownloadBtn = () => {
+const handleDownloadQRCode = () => {
   if (!imgURL.value) {
     message.error("没有生成二维码，无法下载")
     userInputStatusDispatcher.setError()
@@ -109,7 +109,7 @@ const handleClickDownloadBtn = () => {
   )
 }
 
-const handleClickResetBtn = () => {
+const handleReset = () => {
   userInput.value.title = ""
   userInput.value.content = ""
   userInputStatusDispatcher.clear()
@@ -117,7 +117,7 @@ const handleClickResetBtn = () => {
   message.success("重置成功")
 }
 
-const handleDeleteHistoryItem = async (id?: number) => {
+const handleDeleteHistoryRecord = async (id?: number) => {
   try {
     if (!id) {
       throw new Error("删除失败，没有找到对应的历史记录")
@@ -129,7 +129,7 @@ const handleDeleteHistoryItem = async (id?: number) => {
   }
 }
 
-const handleCopyByItem = (item: History, key: keyof History) => {
+const handleCopyByHistoryRecord = (item: History, key: keyof History) => {
   if (!item[key]) {
     message.error("复制失败")
     return
@@ -138,7 +138,7 @@ const handleCopyByItem = (item: History, key: keyof History) => {
   message.success("复制成功")
 }
 
-const handleDownloadItem = (item: History) => {
+const handleDownloadByHistoryRecord = (item: History) => {
   if (!item.src) {
     message.error("下载失败")
     return
@@ -146,15 +146,15 @@ const handleDownloadItem = (item: History) => {
   downloadFile(item.src, item.title ? `${item.title}.png` : "qrcode.png")
 }
 
-const changeFocusedItem = (item: History) => {
+const changeFocusedHistoryRecord = (item: History) => {
   focusedHistoryItemIndex.value = item.id
 }
 
-const clearFocusedItem = () => {
+const clearFocusedHistoryRecord = () => {
   focusedHistoryItemIndex.value = null
 }
 
-const clearHistoryData = async () => {
+const clearAllHistoryRecord = async () => {
   await IndexDBInstance.history.clear()
   message.success("已清空历史数据")
 }
@@ -174,7 +174,7 @@ const clearHistoryData = async () => {
             <n-icon
               class="rounded-full hover:cursor-pointer hover:bg-slate-300 hover:shadow-md active:bg-slate-200"
               size="20"
-              @click="($event) => handleClickResetBtn()"
+              @click="() => handleReset()"
             >
               <reset-icon />
             </n-icon>
@@ -201,7 +201,7 @@ const clearHistoryData = async () => {
               type="primary"
               strong
               secondary
-              @click="($event) => handleClickDownloadBtn()"
+              @click="() => handleDownloadQRCode()"
             >
               <template #icon>
                 <n-icon size="14">
@@ -248,14 +248,14 @@ const clearHistoryData = async () => {
               type="primary"
               strong
               secondary
-              @click="($event) => handleClickCopyBtn()"
+              @click="() => handleCopyContent()"
             >
               复制文字
             </n-button>
             <n-button
               type="primary"
               strong
-              @click="($event) => handleClickGenerateQRCodeBtn()"
+              @click="() => handleGenerateQRCode()"
             >
               生成二维码
             </n-button>
@@ -272,7 +272,7 @@ const clearHistoryData = async () => {
           <n-popconfirm
             :positive-button-props="{ size: 'small' }"
             :negative-button-props="{ size: 'small' }"
-            @positive-click="clearHistoryData"
+            @positive-click="clearAllHistoryRecord"
           >
             <template #trigger>
               <n-button size="small">清空</n-button>
@@ -289,8 +289,8 @@ const clearHistoryData = async () => {
               :key="item.id"
               hoverable
               embedded
-              @mouseenter.passive="($event) => changeFocusedItem(item)"
-              @mouseleave.passive="($event) => clearFocusedItem()"
+              @mouseenter.passive="() => changeFocusedHistoryRecord(item)"
+              @mouseleave.passive="() => clearFocusedHistoryRecord()"
             >
               <div class="flex gap-4">
                 <div class="flex w-[120px] shrink-0 flex-col items-center justify-center gap-1">
@@ -306,7 +306,7 @@ const clearHistoryData = async () => {
                     <template #trigger>
                       <n-text
                         class="cursor-pointer text-center"
-                        @click="($event) => handleCopyByItem(item, 'title')"
+                        @click="() => handleCopyByHistoryRecord(item, 'title')"
                       >
                         {{ item.title }}
                       </n-text>
@@ -323,7 +323,7 @@ const clearHistoryData = async () => {
                       <template #trigger>
                         <n-text
                           class="hover:cursor-pointer"
-                          @click="($event) => handleCopyByItem(item, 'content')"
+                          @click="() => handleCopyByHistoryRecord(item, 'content')"
                         >
                           {{ item.content }}
                         </n-text>
@@ -351,7 +351,7 @@ const clearHistoryData = async () => {
                         <n-button
                           size="small"
                           tertiary
-                          @click="($event) => handleCopyByItem(item, 'content')"
+                          @click="() => handleCopyByHistoryRecord(item, 'content')"
                         >
                           <template #icon>
                             <n-icon size="14">
@@ -363,7 +363,7 @@ const clearHistoryData = async () => {
                         <n-button
                           size="small"
                           tertiary
-                          @click="($event) => handleDownloadItem(item)"
+                          @click="() => handleDownloadByHistoryRecord(item)"
                         >
                           <template #icon>
                             <n-icon size="14">
@@ -376,7 +376,7 @@ const clearHistoryData = async () => {
                           size="small"
                           type="error"
                           tertiary
-                          @click="($event) => handleDeleteHistoryItem(item.id)"
+                          @click="() => handleDeleteHistoryRecord(item.id)"
                         >
                           <template #icon>
                             <n-icon size="20">

@@ -14,7 +14,7 @@ const notice = ref({
 </script>
 
 <template>
-  <div class="h-screen w-screen">
+  <main class="h-screen w-screen">
     <div class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
       <n-result
         status="info"
@@ -32,5 +32,5 @@ const notice = ref({
         </template>
       </n-result>
     </div>
-  </div>
+  </main>
 </template>

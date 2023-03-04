@@ -11,7 +11,7 @@ const navToHome = () => router.push("/")
 </script>
 
 <template>
-  <div class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
+  <main class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
     <n-result
       status="404"
       :title="NotFoundInfo.title"
@@ -27,7 +27,7 @@ const navToHome = () => router.push("/")
         </n-button>
       </template>
     </n-result>
-  </div>
+  </main>
 </template>
 
 <style scoped lang="scss"></style>

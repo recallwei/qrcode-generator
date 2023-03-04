@@ -51,7 +51,7 @@ const navToHome = () => router.push("/")
           collapse-mode="width"
           :collapsed-width="64"
           :native-scrollbar="false"
-          @update:collapsed="sideMenuStore.changeCollapsed"
+          @update:collapsed="(value) => sideMenuStore.changeCollapsed(value)"
         >
           <n-menu
             v-model:value="sideMenuStore.activeKey"

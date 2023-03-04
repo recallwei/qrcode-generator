@@ -34,7 +34,7 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
 </script>
 
 <template>
-  <div>
+  <main>
     <n-card
       hoverable
       embedded
@@ -66,7 +66,7 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
         </n-upload-dragger>
       </n-upload>
     </n-card>
-  </div>
+  </main>
 </template>
 
 <style scoped lang="scss"></style>

@@ -1,10 +1,16 @@
-type CustomField = {
-  keyName: string
-  keyText: string
-  valueType: "string" | "number" | "boolean" | "object" | "array"
+export type ValueType = "string" | "number" | "boolean" | "object" | "array"
+
+export type CustomFieldProperty = {
+  keyCode: string
+  valueType: ValueType
   require: boolean
   enableValueLengthLimit: boolean
-  valueLengthLimit?: number
+  valueLengthLimit: number
+}
+
+export type CustomField = {
+  customFieldName: string
+  customFieldProperties: CustomFieldProperty[]
 }
 
 export type CustomConfig = {

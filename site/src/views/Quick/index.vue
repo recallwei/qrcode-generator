@@ -61,11 +61,6 @@ const focusedHistoryItemIndex = ref<number | null | undefined>(null)
 const onUserInput = () => userInputStatusDispatcher.clear()
 
 const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
-  /**
-   * 2023/2/24 Bruce Song <recall4056@gmail.com>
-   * NOTE:
-   * When regenerate the QRCode, the previous image should be removed.
-   */
   generateQRCodeLoadingDispatcher.loading()
   imgURL.value = ""
   try {
@@ -87,11 +82,6 @@ const handleClickGenerateQRCodeBtn = useDebounceFn(async () => {
   } catch (error: any) {
     userInputStatusDispatcher.setError()
     message.error(error.message)
-    /**
-     * 2023/2/23 Bruce Song <recall4056@gmail.com>
-     * NOTE:
-     * UX Related: Whether to remove the image if the QRCode fails to be generated.
-     */
     imgURL.value = ""
   }
   generateQRCodeLoadingDispatcher.loaded()
@@ -236,7 +226,7 @@ const clearHistoryData = async () => {
             :maxlength="config.titleMaxLength"
             clearable
             show-count
-            placeholder="请输入标题【可选】，用于检索生成的二维码或作为下载的文件名"
+            placeholder="请输入标题【可选】，可用于检索生成的二维码或作为下载的文件名"
           />
           <n-input
             v-model:value="userInput.content"
@@ -355,8 +345,8 @@ const clearHistoryData = async () => {
                       {{ withPlaceholder(item.createAt as string) }}
                     </n-tooltip>
                   </div>
-                  <template v-if="focusedHistoryItemIndex === item.id">
-                    <transition name="operation">
+                  <transition name="operation">
+                    <template v-if="focusedHistoryItemIndex === item.id">
                       <div class="absolute right-4 bottom-4 flex items-center gap-4">
                         <n-button
                           size="small"
@@ -396,8 +386,8 @@ const clearHistoryData = async () => {
                           删除
                         </n-button>
                       </div>
-                    </transition>
-                  </template>
+                    </template>
+                  </transition>
                 </div>
               </div>
             </n-card>
@@ -440,6 +430,8 @@ const clearHistoryData = async () => {
 .operation-enter-from,
 .operation-leave-to {
   opacity: 0;
+}
+.operation-enter-from {
   transform: translateX(-500px);
 }
 </style>

@@ -1,6 +1,6 @@
 export type ValueType = "string" | "number" | "boolean" | "object" | "array"
 
-export type CustomFieldProperty = {
+export type CustomProperty = {
   keyCode: string
   valueType: ValueType
   require: boolean
@@ -9,8 +9,8 @@ export type CustomFieldProperty = {
 }
 
 export type CustomField = {
-  customFieldName: string
-  customFieldProperties: CustomFieldProperty[]
+  name: string
+  customProperties: CustomProperty[]
 }
 
 export type CustomConfig = {

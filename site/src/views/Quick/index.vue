@@ -166,9 +166,9 @@ const clearAllHistoryRecord = async () => {
       <!-- QRCode Preview Section -->
       <div class="w-[300px]">
         <n-card
-          hoverable
-          embedded
           class="h-full w-full"
+          embedded
+          hoverable
         >
           <div class="absolute right-1 top-1">
             <n-icon
@@ -216,13 +216,14 @@ const clearAllHistoryRecord = async () => {
 
       <!-- User Input Section -->
       <n-card
-        hoverable
         embedded
+        hoverable
         content-style="padding: 12px 16px"
       >
         <div class="flex flex-col gap-3">
           <n-input
             v-model:value="userInput.title"
+            type="text"
             :maxlength="config.titleMaxLength"
             clearable
             show-count
@@ -238,9 +239,9 @@ const clearAllHistoryRecord = async () => {
             :maxlength="config.contentMaxLength"
             :status="userInputStatus"
             :loading="generateQRCodeLoading"
-            placeholder="请输入文字内容"
             clearable
             show-count
+            placeholder="请输入文字内容"
             @input="onUserInput"
           />
           <div class="flex items-center justify-center gap-4">
@@ -287,8 +288,8 @@ const clearAllHistoryRecord = async () => {
             <n-card
               v-for="item in historyList"
               :key="item.id"
-              hoverable
               embedded
+              hoverable
               @mouseenter.passive="() => changeFocusedHistoryRecord(item)"
               @mouseleave.passive="() => clearFocusedHistoryRecord()"
             >

@@ -251,11 +251,11 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
           >
             <n-grid
               :cols="24"
-              :x-gap="24"
+              :x-gap="12"
             >
               <n-form-item-grid-item
                 label="属性编码"
-                :span="5"
+                :span="6"
                 :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyCode`"
                 :rule="{
                   required: true,
@@ -266,7 +266,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                 <n-input
                   v-model:value="customFieldProperty.keyCode"
                   type="text"
-                  placeholder="请输入属性编码"
+                  placeholder="请输入内容"
                   clearable
                 />
               </n-form-item-grid-item>
@@ -288,7 +288,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               </n-form-item-grid-item>
 
               <n-form-item-grid-item
-                label="是否必填"
+                label="必填项"
                 :span="3"
                 :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].require`"
               >
@@ -299,9 +299,9 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               </n-form-item-grid-item>
 
               <n-form-item-grid-item
-                label="是否启用长度限制"
+                label="启用长度限制"
                 :span="4"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].require`"
+                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].enableValueLengthLimit`"
               >
                 <n-switch v-model:value="customFieldProperty.enableValueLengthLimit">
                   <template #checked> 是 </template>
@@ -310,26 +310,29 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               </n-form-item-grid-item>
 
               <n-form-item-grid-item
-                v-if="customFieldProperty.enableValueLengthLimit"
-                label="长度限制"
-                :span="5"
+                :span="4"
                 :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueLengthLimit`"
                 :rule="{
                   required: true,
-                  message: '请输入长度限制',
+                  message: '请输入最大值',
                   trigger: ['input', 'blur'],
                   type: 'number'
                 }"
               >
                 <n-input-number
+                  v-if="customFieldProperty.enableValueLengthLimit"
                   v-model:value="customFieldProperty.valueLengthLimit"
-                  placeholder="请输入最大字符长度限制"
+                  placeholder="请输入最大值"
                   clearable
                   :min="1"
                   :max="60"
                 />
               </n-form-item-grid-item>
-              <n-form-item-grid-item :span="1">
+
+              <n-form-item-grid-item
+                :span="2"
+                class="flex items-center justify-end"
+              >
                 <n-button
                   size="small"
                   type="error"

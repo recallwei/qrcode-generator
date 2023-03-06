@@ -8,7 +8,7 @@ const router = useRouter()
 const navToQuick = () => router.push("/quick")
 
 const notice = ref({
-  title: "🚀正在努力开发中...",
+  title: "🚀正在开发中...",
   description: "预计上线时间 2023/03/10"
 })
 </script>

@@ -38,7 +38,7 @@ const form = ref<CustomConfig>({
 })
 
 const rules: FormRules = {
-  name: [{ required: true, message: "请输入名称", trigger: ["input", "blur"] }]
+  name: [{ required: true, message: "请输入配置文件名称", trigger: ["input", "blur"] }]
 }
 
 const addCustomField = () => {

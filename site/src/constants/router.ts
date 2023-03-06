@@ -40,11 +40,11 @@ export const routes = [
         }
       },
       {
-        path: "/format-config",
-        name: "format-config",
-        component: () => import("@/views/FormatConfig"),
+        path: "/config-files",
+        name: "config-files",
+        component: () => import("@/views/ConfigFiles"),
         meta: {
-          title: "格式配置",
+          title: "配置文件",
           icon: ConfigIcon
         }
       }

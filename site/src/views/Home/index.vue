@@ -2,6 +2,9 @@
 import { ref } from "vue"
 import { useRouter } from "vue-router"
 import { NResult, NButton } from "naive-ui"
+import { siteMetaData } from "@/constants"
+
+const { AppName, Favicon } = siteMetaData
 
 const router = useRouter()
 
@@ -21,6 +24,14 @@ const notice = ref({
         :title="notice.title"
         :description="notice.description"
       >
+        <template #icon>
+          <img
+            width="80"
+            height="80"
+            :src="Favicon"
+            :alt="AppName"
+          />
+        </template>
         <template #footer>
           <n-button
             type="primary"

@@ -37,14 +37,20 @@ type OperateMode = "noAction" | "create" | "edit" | "readOnly"
 
 const DEFAULT_MAX_LENGTH_LIMIT = 16
 const rules: FormRules = {
-  name: [{ required: true, message: "请输入配置文件名称", trigger: ["input", "blur"] }]
+  name: [
+    {
+      required: true,
+      message: "请输入配置文件名称",
+      trigger: ["input", "blur"]
+    }
+  ]
 }
 
 const message = useMessage()
 
-const configList = useObservable(
-  liveQuery(() => IndexDBInstance.config.reverse().toArray()) as any
-) as Ref<Config[]>
+const configList = useObservable(liveQuery(() => IndexDBInstance.config.toArray()) as any) as Ref<
+  Config[]
+>
 
 const formRef = ref<FormInst | null>(null)
 const form = ref<Config>({
@@ -58,8 +64,18 @@ const operateMode = ref<OperateMode>("noAction")
 
 const selectConfig = async (id: number) => {
   try {
+    if (form.value.id === id) {
+      form.value = {
+        id: undefined,
+        name: "",
+        description: "",
+        customFields: []
+      }
+      operateMode.value = "noAction"
+      return
+    }
     const json = await IndexDBInstance.config.get(id)
-    form.value = json as Config
+    form.value = { ...form.value, ...json }
     operateMode.value = "readOnly"
   } catch {
     message.error("获取配置文件失败")
@@ -67,18 +83,31 @@ const selectConfig = async (id: number) => {
 }
 
 const addConfig = () => {
-  form.value = { id: undefined, name: "", description: "", customFields: [] }
+  form.value = {
+    id: undefined,
+    name: "",
+    description: "",
+    customFields: []
+  }
   operateMode.value = "create"
 }
 
 const deleteConfig = async (id: number) => {
   try {
+    if (form.value.id === id) {
+      form.value = {
+        id: undefined,
+        name: "",
+        description: "",
+        customFields: []
+      }
+    }
+    operateMode.value = "noAction"
     await IndexDBInstance.config.delete(id)
+    message.success("删除成功")
   } catch {
     message.error("删除失败")
-    return
   }
-  message.success("删除成功")
 }
 
 const addCustomField = () => {
@@ -97,7 +126,7 @@ const addCustomField = () => {
   form.value.customFields?.unshift(customField)
 }
 
-const deleteCustomField = (index: number) => form.value?.customFields?.splice(index, 1)
+const deleteCustomField = (index: number) => form.value.customFields?.splice(index, 1)
 
 const clearAllCustomFields = () => {
   form.value.customFields = []
@@ -146,9 +175,17 @@ const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
 
 const saveConfig = (e: MouseEvent) => {
   e.preventDefault()
+
   formRef.value?.validate(async (errors) => {
     if (errors) {
       message.error("内容填写不完整")
+    } else if (form.value.id) {
+      message.loading("正在保存配置文件")
+      console.log(form.value)
+      await IndexDBInstance.config.put(form.value)
+      await nextTick()
+      message.destroyAll()
+      message.success("配置文件保存成功")
     } else {
       message.loading("正在导出配置文件")
       const jsonString = JSON.stringify(form.value)
@@ -157,6 +194,7 @@ const saveConfig = (e: MouseEvent) => {
       await nextTick()
       message.destroyAll()
       message.success("配置文件下载成功")
+      IndexDBInstance.config.add(form.value)
     }
   })
 }
@@ -172,7 +210,6 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
         hoverable
       >
         <n-space
-          class="mb-2"
           justify="space-between"
           align="center"
         >
@@ -200,52 +237,65 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
             </n-upload>
           </n-space>
         </n-space>
-        <n-list
-          hoverable
-          clickable
+
+        <div
+          v-if="configList.length > 0"
+          class="mt-2"
         >
-          <n-list-item
-            v-for="config in configList"
-            :key="config.id"
-            :class="form.id === config.id && 'bg-[#F3F3F5]'"
-            @click="() => selectConfig(config.id as number)"
+          <n-list
+            hoverable
+            clickable
+            show-divider
+            bordered
           >
-            <div class="flex items-center justify-between gap-2">
-              <div class="flex items-center justify-center gap-2">
-                <n-icon size="20">
-                  <folder-icon />
-                </n-icon>
+            <template
+              v-for="config in configList"
+              :key="config.id"
+            >
+              <n-list-item
+                :class="{ 'bg-[#F3F3F5]': form.id === config.id }"
+                @click="() => selectConfig(config.id as number)"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center justify-center gap-2">
+                    <n-icon size="20">
+                      <folder-icon />
+                    </n-icon>
 
-                <n-text class="w-24 overflow-hidden text-ellipsis whitespace-nowrap">
-                  {{ config.name }}
-                </n-text>
-
-                <n-divider vertical />
-
-                <n-tooltip trigger="hover">
-                  <template #trigger>
-                    <n-text class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
-                      {{ config.description }}
+                    <n-text class="w-24 overflow-hidden text-ellipsis whitespace-nowrap">
+                      {{ config.name }}
                     </n-text>
-                  </template>
-                  {{ config.description }}
-                </n-tooltip>
-              </div>
 
-              <div class="flex items-center">
-                <n-icon
-                  size="20"
-                  :depth="2"
-                  color="red"
-                  class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
-                  @click="() => deleteConfig(config.id as number)"
-                >
-                  <close-icon />
-                </n-icon>
-              </div>
-            </div>
-          </n-list-item>
-        </n-list>
+                    <n-divider vertical />
+
+                    <n-tooltip trigger="hover">
+                      <template #trigger>
+                        <n-text
+                          class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
+                        >
+                          {{ config.description }}
+                        </n-text>
+                      </template>
+                      {{ config.description }}
+                    </n-tooltip>
+                  </div>
+
+                  <div class="flex items-center">
+                    <n-icon
+                      size="20"
+                      :depth="2"
+                      color="red"
+                      class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                      @click="() => deleteConfig(config.id as number)"
+                    >
+                      <close-icon />
+                    </n-icon>
+                  </div>
+                </div>
+              </n-list-item>
+            </template>
+          </n-list>
+        </div>
       </n-card>
     </div>
 

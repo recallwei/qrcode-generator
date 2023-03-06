@@ -13,7 +13,7 @@ export interface History {
   updateAt?: string
 }
 
-export interface FormatConfig {
+export interface Config {
   id?: number
   name?: string
   description?: string

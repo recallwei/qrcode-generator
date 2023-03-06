@@ -12,9 +12,3 @@ export type CustomField = {
   name: string
   customProperties: CustomProperty[]
 }
-
-export type CustomConfig = {
-  name: string
-  description: string
-  customFields: CustomField[]
-}

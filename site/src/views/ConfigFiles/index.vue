@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick } from "vue"
+import { ref, nextTick, type Ref } from "vue"
 import {
   NForm,
   NFormItem,
@@ -14,31 +14,71 @@ import {
   NSpace,
   NIcon,
   NUpload,
+  NList,
+  NListItem,
+  NText,
+  NTooltip,
+  NDivider,
   useMessage,
   type FormInst,
   type FormRules,
   type UploadCustomRequestOptions,
   type UploadFileInfo
 } from "naive-ui"
-import { DeleteForeverOutlined as DeleteIcon } from "@vicons/material"
-import type { CustomConfig, CustomField } from "@/types"
+import { FolderOpenOutlined as FolderIcon, CloseOutlined as CloseIcon } from "@vicons/material"
+import { useObservable } from "@vueuse/rxjs"
+import { liveQuery } from "dexie"
+import type { CustomField, Config } from "@/types"
+import { IndexDBInstance } from "@/database"
 import { valueTypeCandidates } from "@/constants"
 import { downloadFile } from "@/utils"
 
+type OperateMode = "noAction" | "create" | "edit" | "readOnly"
+
 const DEFAULT_MAX_LENGTH_LIMIT = 16
+const rules: FormRules = {
+  name: [{ required: true, message: "请输入配置文件名称", trigger: ["input", "blur"] }]
+}
 
 const message = useMessage()
 
-const formRef = ref<FormInst | null>(null)
+const configList = useObservable(
+  liveQuery(() => IndexDBInstance.config.reverse().toArray()) as any
+) as Ref<Config[]>
 
-const form = ref<CustomConfig>({
+const formRef = ref<FormInst | null>(null)
+const form = ref<Config>({
+  id: undefined,
   name: "",
   description: "",
   customFields: []
 })
 
-const rules: FormRules = {
-  name: [{ required: true, message: "请输入配置文件名称", trigger: ["input", "blur"] }]
+const operateMode = ref<OperateMode>("noAction")
+
+const selectConfig = async (id: number) => {
+  try {
+    const json = await IndexDBInstance.config.get(id)
+    form.value = json as Config
+    operateMode.value = "readOnly"
+  } catch {
+    message.error("获取配置文件失败")
+  }
+}
+
+const addConfig = () => {
+  form.value = { id: undefined, name: "", description: "", customFields: [] }
+  operateMode.value = "create"
+}
+
+const deleteConfig = async (id: number) => {
+  try {
+    await IndexDBInstance.config.delete(id)
+  } catch {
+    message.error("删除失败")
+    return
+  }
+  message.success("删除成功")
 }
 
 const addCustomField = () => {
@@ -54,10 +94,10 @@ const addCustomField = () => {
       }
     ]
   }
-  form.value.customFields.unshift(customField)
+  form.value.customFields?.unshift(customField)
 }
 
-const deleteCustomField = (index: number) => form.value.customFields.splice(index, 1)
+const deleteCustomField = (index: number) => form.value?.customFields?.splice(index, 1)
 
 const clearAllCustomFields = () => {
   form.value.customFields = []
@@ -78,12 +118,27 @@ const deleteCustomProperty = (index: number, customField: CustomField) =>
 const clearAllCustomProperties = (customField: CustomField) =>
   customField.customProperties.splice(0, customField.customProperties.length)
 
-const uploadFinish = ({ file }: { file: UploadFileInfo }) => {
+const uploadFileValidation = async ({ file }: { file: UploadFileInfo }) => {
+  const fileNameWithoutSuffix = file.name.split(".")[0]
+  if (
+    (await IndexDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) > 0
+  ) {
+    message.error("无法导入重名文件，若要替换配置文件，请尝试删除旧文件")
+    return false
+  }
+  return true
+}
+
+const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
   const fileReader = new FileReader()
-  fileReader.onload = () => {
-    const json = JSON.parse(fileReader.result as string)
-    message.success("导入配置成功")
-    form.value = json
+  fileReader.onload = async () => {
+    try {
+      const json = JSON.parse(fileReader.result as string)
+      message.success("导入配置文件成功")
+      await IndexDBInstance.config.add(json)
+    } catch {
+      message.error("导入配置文件失败，文件内容格式存在问题")
+    }
   }
   fileReader.readAsText(file.file as any)
   return file
@@ -111,7 +166,91 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
 
 <template>
   <main>
+    <div class="mb-4">
+      <n-card
+        embedded
+        hoverable
+      >
+        <n-space
+          class="mb-2"
+          justify="space-between"
+          align="center"
+        >
+          配置列表
+
+          <n-space
+            align="center"
+            justify="space-between"
+          >
+            <n-button
+              size="small"
+              @click="() => addConfig()"
+            >
+              新建
+            </n-button>
+
+            <n-upload
+              accept="application/json"
+              :show-file-list="false"
+              :custom-request="handleUpload"
+              @before-upload="uploadFileValidation"
+              @finish="uploadFileToList"
+            >
+              <n-button size="small"> 导入配置 </n-button>
+            </n-upload>
+          </n-space>
+        </n-space>
+        <n-list
+          hoverable
+          clickable
+        >
+          <n-list-item
+            v-for="config in configList"
+            :key="config.id"
+            :class="form.id === config.id && 'bg-[#F3F3F5]'"
+            @click="() => selectConfig(config.id as number)"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center justify-center gap-2">
+                <n-icon size="20">
+                  <folder-icon />
+                </n-icon>
+
+                <n-text class="w-24 overflow-hidden text-ellipsis whitespace-nowrap">
+                  {{ config.name }}
+                </n-text>
+
+                <n-divider vertical />
+
+                <n-tooltip trigger="hover">
+                  <template #trigger>
+                    <n-text class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
+                      {{ config.description }}
+                    </n-text>
+                  </template>
+                  {{ config.description }}
+                </n-tooltip>
+              </div>
+
+              <div class="flex items-center">
+                <n-icon
+                  size="20"
+                  :depth="2"
+                  color="red"
+                  class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                  @click="() => deleteConfig(config.id as number)"
+                >
+                  <close-icon />
+                </n-icon>
+              </div>
+            </div>
+          </n-list-item>
+        </n-list>
+      </n-card>
+    </div>
+
     <n-form
+      v-if="operateMode !== 'noAction'"
       ref="formRef"
       :model="form"
       :rules="rules"
@@ -175,29 +314,13 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               </n-button>
             </n-space>
 
-            <n-space align="center">
-              <n-upload
-                accept="application/json"
-                :show-file-list="false"
-                :custom-request="handleUpload"
-                @finish="uploadFinish"
-              >
-                <n-button
-                  size="small"
-                  secondary
-                >
-                  导入配置
-                </n-button>
-              </n-upload>
-
-              <n-button
-                size="small"
-                type="primary"
-                @click="($event) => saveConfig($event)"
-              >
-                保存配置
-              </n-button>
-            </n-space>
+            <n-button
+              size="small"
+              type="primary"
+              @click="($event) => saveConfig($event)"
+            >
+              保存配置
+            </n-button>
           </n-space>
         </n-card>
 
@@ -331,21 +454,17 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
 
               <n-form-item-grid-item
                 :span="2"
-                class="flex items-center justify-end"
+                class="flex cursor-pointer items-center justify-end"
               >
-                <n-button
-                  size="small"
-                  type="error"
-                  tertiary
+                <n-icon
+                  size="20"
+                  :depth="2"
+                  color="red"
+                  class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                   @click="() => deleteCustomProperty(customFieldPropertyIndex, customField)"
                 >
-                  <template #icon>
-                    <n-icon size="20">
-                      <delete-icon />
-                    </n-icon>
-                  </template>
-                  删除
-                </n-button>
+                  <close-icon />
+                </n-icon>
               </n-form-item-grid-item>
             </n-grid>
           </n-space>

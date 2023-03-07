@@ -119,6 +119,23 @@ const deleteConfig = async (id: number) => {
   }
 }
 
+const editConfig = (config: Config) => {
+  operateMode.value = "edit"
+  form.value = config
+}
+
+const downloadConfig = async (config: Config) => {
+  const { name, description, customFields } = config
+  const configData = { name, description, customFields }
+  message.loading("正在下载配置文件")
+  const jsonString = JSON.stringify(configData)
+  const jsonDataURL = `data:,${jsonString}`
+  downloadFile(jsonDataURL, `${configData.name}.json`)
+  await nextTick()
+  message.destroyAll()
+  message.success("配置文件下载成功")
+}
+
 const addCustomField = () => {
   const customField: CustomField = {
     name: "",
@@ -184,11 +201,11 @@ const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
 
 const saveConfig = (e: MouseEvent) => {
   e.preventDefault()
-
   formRef.value?.validate(async (errors) => {
     if (errors) {
       message.error("内容填写不完整")
-    } else if (operateMode.value === "edit") {
+    }
+    if (operateMode.value === "edit") {
       message.loading("正在保存配置文件")
       await IndexDBInstance.config.put(form.value)
       await nextTick()
@@ -293,22 +310,26 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                       size="20"
                       :depth="2"
                       class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                      @click.stop="() => editConfig(config)"
                     >
                       <edit-icon />
                     </n-icon>
+
                     <n-icon
                       size="20"
                       :depth="2"
                       class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                      @click.stop="() => downloadConfig(config)"
                     >
                       <download-icon />
                     </n-icon>
+
                     <n-icon
                       size="20"
                       :depth="2"
                       color="red"
                       class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
-                      @click="() => deleteConfig(config.id as number)"
+                      @click.stop="() => deleteConfig(config.id as number)"
                     >
                       <close-icon />
                     </n-icon>

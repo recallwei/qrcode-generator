@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NCard, NUpload, NUploadDragger, NIcon, NText, NP, useMessage } from "naive-ui"
 import type { UploadCustomRequestOptions } from "naive-ui"
-import { CloudUploadAlt as DecodeIcon } from "@vicons/fa"
+import { CloudUploadOutlined as UploadIcon } from "@vicons/material"
 import type { UploadFileType, HandleFinishUpload } from "./interface"
 
 const supportedFileTypes = ["image/png", "image/jpg", "image/jpeg"]
@@ -53,7 +53,7 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
               size="48"
               :depth="3"
             >
-              <decode-icon />
+              <upload-icon />
             </n-icon>
           </div>
           <n-text style="font-size: 18px"> 点击或者拖动图片到该区域来上传 </n-text>

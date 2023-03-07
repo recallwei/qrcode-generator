@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, nextTick, type Ref } from "vue"
+import { ref, computed, nextTick, type Ref } from "vue"
 import {
   NForm,
   NFormItem,
@@ -25,7 +25,12 @@ import {
   type UploadCustomRequestOptions,
   type UploadFileInfo
 } from "naive-ui"
-import { FolderOpenOutlined as FolderIcon, CloseOutlined as CloseIcon } from "@vicons/material"
+import {
+  FolderOpenOutlined as FolderIcon,
+  CloseOutlined as CloseIcon,
+  EditNoteOutlined as EditIcon,
+  FileDownloadOutlined as DownloadIcon
+} from "@vicons/material"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import type { CustomField, Config } from "@/types"
@@ -61,6 +66,10 @@ const form = ref<Config>({
 })
 
 const operateMode = ref<OperateMode>("noAction")
+
+const showEditableArea = computed(
+  () => operateMode.value === "create" || operateMode.value === "edit"
+)
 
 const selectConfig = async (id: number) => {
   try {
@@ -179,14 +188,13 @@ const saveConfig = (e: MouseEvent) => {
   formRef.value?.validate(async (errors) => {
     if (errors) {
       message.error("内容填写不完整")
-    } else if (form.value.id) {
+    } else if (operateMode.value === "edit") {
       message.loading("正在保存配置文件")
-      console.log(form.value)
       await IndexDBInstance.config.put(form.value)
       await nextTick()
       message.destroyAll()
       message.success("配置文件保存成功")
-    } else {
+    } else if (operateMode.value === "create") {
       message.loading("正在导出配置文件")
       const jsonString = JSON.stringify(form.value)
       const jsonDataURL = `data:,${jsonString}`
@@ -280,7 +288,21 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                     </n-tooltip>
                   </div>
 
-                  <div class="flex items-center">
+                  <div class="flex items-center gap-4">
+                    <n-icon
+                      size="20"
+                      :depth="2"
+                      class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                    >
+                      <edit-icon />
+                    </n-icon>
+                    <n-icon
+                      size="20"
+                      :depth="2"
+                      class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                    >
+                      <download-icon />
+                    </n-icon>
                     <n-icon
                       size="20"
                       :depth="2"
@@ -299,227 +321,230 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
       </n-card>
     </div>
 
-    <n-form
-      v-if="operateMode !== 'noAction'"
-      ref="formRef"
-      :model="form"
-      :rules="rules"
-      label-placement="left"
-      require-mark-placement="right-hanging"
-    >
-      <div class="flex flex-col gap-4">
-        <n-card
-          embedded
-          hoverable
-        >
-          <n-form-item
-            label="名称"
-            path="name"
+    <template v-if="showEditableArea">
+      <n-form
+        ref="formRef"
+        :model="form"
+        :rules="rules"
+        label-placement="left"
+        require-mark-placement="right-hanging"
+      >
+        <div class="flex flex-col gap-4">
+          <n-card
+            embedded
+            hoverable
           >
-            <n-input
-              v-model:value="form.name"
-              type="text"
-              :maxlength="16"
-              clearable
-              show-count
-              placeholder="请输入配置文件名称"
-            />
-          </n-form-item>
+            <n-form-item
+              label="名称"
+              path="name"
+            >
+              <n-input
+                v-model:value="form.name"
+                type="text"
+                :maxlength="16"
+                clearable
+                show-count
+                placeholder="请输入配置文件名称"
+              />
+            </n-form-item>
 
-          <n-form-item
-            label="描述"
-            path="description"
-          >
-            <n-input
-              v-model:value="form.description"
-              type="textarea"
-              :autosize="{
-                minRows: 6,
-                maxRows: 6
-              }"
-              :maxlength="400"
-              clearable
-              show-count
-              placeholder="请输入配置文件描述"
-            />
-          </n-form-item>
+            <n-form-item
+              label="描述"
+              path="description"
+            >
+              <n-input
+                v-model:value="form.description"
+                type="textarea"
+                :autosize="{
+                  minRows: 6,
+                  maxRows: 6
+                }"
+                :maxlength="400"
+                clearable
+                show-count
+                placeholder="请输入配置文件描述"
+              />
+            </n-form-item>
 
-          <n-space
-            justify="space-between"
-            align="center"
-          >
-            <n-space align="center">
+            <n-space
+              justify="space-between"
+              align="center"
+            >
+              <n-space align="center">
+                <n-button
+                  size="small"
+                  @click="() => addCustomField()"
+                >
+                  添加字段
+                </n-button>
+
+                <n-button
+                  size="small"
+                  @click="() => clearAllCustomFields()"
+                >
+                  清空字段
+                </n-button>
+              </n-space>
+
               <n-button
                 size="small"
-                @click="() => addCustomField()"
+                type="primary"
+                @click="($event) => saveConfig($event)"
               >
-                添加字段
+                保存配置
+              </n-button>
+            </n-space>
+          </n-card>
+
+          <n-card
+            v-for="(customField, customFieldIndex) in form.customFields"
+            :key="customFieldIndex"
+            embedded
+            hoverable
+            closable
+            @close="() => deleteCustomField(customFieldIndex)"
+          >
+            <n-form-item
+              label="字段名称"
+              :path="`customFields[${customFieldIndex}].name`"
+              :rule="{
+                required: true,
+                message: '请输入字段名称',
+                trigger: ['input', 'blur']
+              }"
+            >
+              <n-input
+                v-model:value="customField.name"
+                type="text"
+                placeholder="请输入字段名称"
+                clearable
+              />
+            </n-form-item>
+
+            <n-space
+              align="center"
+              class="mb-4"
+            >
+              <n-button
+                size="small"
+                @click="() => addCustomProperty(customField)"
+              >
+                添加属性
               </n-button>
 
               <n-button
                 size="small"
-                @click="() => clearAllCustomFields()"
+                @click="() => clearAllCustomProperties(customField)"
               >
-                清空字段
+                清空属性
               </n-button>
             </n-space>
 
-            <n-button
-              size="small"
-              type="primary"
-              @click="($event) => saveConfig($event)"
+            <n-space
+              v-for="(
+                customFieldProperty, customFieldPropertyIndex
+              ) in customField.customProperties"
+              :key="customFieldPropertyIndex"
             >
-              保存配置
-            </n-button>
-          </n-space>
-        </n-card>
-
-        <n-card
-          v-for="(customField, customFieldIndex) in form.customFields"
-          :key="customFieldIndex"
-          embedded
-          hoverable
-          closable
-          @close="() => deleteCustomField(customFieldIndex)"
-        >
-          <n-form-item
-            label="字段名称"
-            :path="`customFields[${customFieldIndex}].name`"
-            :rule="{
-              required: true,
-              message: '请输入字段名称',
-              trigger: ['input', 'blur']
-            }"
-          >
-            <n-input
-              v-model:value="customField.name"
-              type="text"
-              placeholder="请输入字段名称"
-              clearable
-            />
-          </n-form-item>
-
-          <n-space
-            align="center"
-            class="mb-4"
-          >
-            <n-button
-              size="small"
-              @click="() => addCustomProperty(customField)"
-            >
-              添加属性
-            </n-button>
-
-            <n-button
-              size="small"
-              @click="() => clearAllCustomProperties(customField)"
-            >
-              清空属性
-            </n-button>
-          </n-space>
-
-          <n-space
-            v-for="(customFieldProperty, customFieldPropertyIndex) in customField.customProperties"
-            :key="customFieldPropertyIndex"
-          >
-            <n-grid
-              :cols="24"
-              :x-gap="12"
-            >
-              <n-form-item-grid-item
-                label="属性编码"
-                :span="6"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyCode`"
-                :rule="{
-                  required: true,
-                  message: '请输入属性编码',
-                  trigger: ['input', 'blur']
-                }"
+              <n-grid
+                :cols="24"
+                :x-gap="12"
               >
-                <n-input
-                  v-model:value="customFieldProperty.keyCode"
-                  type="text"
-                  placeholder="请输入内容"
-                  clearable
-                />
-              </n-form-item-grid-item>
-
-              <n-form-item-grid-item
-                label="数值类型"
-                :span="5"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueType`"
-                :rule="{
-                  required: true,
-                  message: '请选择数值类型',
-                  trigger: ['input', 'blur']
-                }"
-              >
-                <n-select
-                  v-model:value="customFieldProperty.valueType"
-                  :options="valueTypeCandidates"
-                />
-              </n-form-item-grid-item>
-
-              <n-form-item-grid-item
-                label="必填项"
-                :span="3"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].require`"
-              >
-                <n-switch v-model:value="customFieldProperty.require">
-                  <template #checked> 是 </template>
-                  <template #unchecked> 否 </template>
-                </n-switch>
-              </n-form-item-grid-item>
-
-              <n-form-item-grid-item
-                label="启用长度限制"
-                :span="4"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].enableValueLengthLimit`"
-              >
-                <n-switch v-model:value="customFieldProperty.enableValueLengthLimit">
-                  <template #checked> 是 </template>
-                  <template #unchecked> 否 </template>
-                </n-switch>
-              </n-form-item-grid-item>
-
-              <n-form-item-grid-item
-                :span="4"
-                :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueLengthLimit`"
-                :rule="{
-                  required: true,
-                  message: '请输入最大值',
-                  trigger: ['input', 'blur'],
-                  type: 'number'
-                }"
-              >
-                <n-input-number
-                  v-if="customFieldProperty.enableValueLengthLimit"
-                  v-model:value="customFieldProperty.valueLengthLimit"
-                  placeholder="请输入最大值"
-                  clearable
-                  :min="1"
-                  :max="60"
-                />
-              </n-form-item-grid-item>
-
-              <n-form-item-grid-item
-                :span="2"
-                class="flex cursor-pointer items-center justify-end"
-              >
-                <n-icon
-                  size="20"
-                  :depth="2"
-                  color="red"
-                  class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
-                  @click="() => deleteCustomProperty(customFieldPropertyIndex, customField)"
+                <n-form-item-grid-item
+                  label="属性编码"
+                  :span="6"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyCode`"
+                  :rule="{
+                    required: true,
+                    message: '请输入属性编码',
+                    trigger: ['input', 'blur']
+                  }"
                 >
-                  <close-icon />
-                </n-icon>
-              </n-form-item-grid-item>
-            </n-grid>
-          </n-space>
-        </n-card>
-      </div>
-    </n-form>
+                  <n-input
+                    v-model:value="customFieldProperty.keyCode"
+                    type="text"
+                    placeholder="请输入内容"
+                    clearable
+                  />
+                </n-form-item-grid-item>
+
+                <n-form-item-grid-item
+                  label="数值类型"
+                  :span="5"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueType`"
+                  :rule="{
+                    required: true,
+                    message: '请选择数值类型',
+                    trigger: ['input', 'blur']
+                  }"
+                >
+                  <n-select
+                    v-model:value="customFieldProperty.valueType"
+                    :options="valueTypeCandidates"
+                  />
+                </n-form-item-grid-item>
+
+                <n-form-item-grid-item
+                  label="必填项"
+                  :span="3"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].require`"
+                >
+                  <n-switch v-model:value="customFieldProperty.require">
+                    <template #checked> 是 </template>
+                    <template #unchecked> 否 </template>
+                  </n-switch>
+                </n-form-item-grid-item>
+
+                <n-form-item-grid-item
+                  label="启用长度限制"
+                  :span="4"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].enableValueLengthLimit`"
+                >
+                  <n-switch v-model:value="customFieldProperty.enableValueLengthLimit">
+                    <template #checked> 是 </template>
+                    <template #unchecked> 否 </template>
+                  </n-switch>
+                </n-form-item-grid-item>
+
+                <n-form-item-grid-item
+                  :span="4"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueLengthLimit`"
+                  :rule="{
+                    required: true,
+                    message: '请输入最大值',
+                    trigger: ['input', 'blur'],
+                    type: 'number'
+                  }"
+                >
+                  <n-input-number
+                    v-if="customFieldProperty.enableValueLengthLimit"
+                    v-model:value="customFieldProperty.valueLengthLimit"
+                    placeholder="请输入最大值"
+                    clearable
+                    :min="1"
+                    :max="60"
+                  />
+                </n-form-item-grid-item>
+
+                <n-form-item-grid-item
+                  :span="2"
+                  class="flex cursor-pointer items-center justify-end"
+                >
+                  <n-icon
+                    size="20"
+                    :depth="2"
+                    color="red"
+                    class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                    @click="() => deleteCustomProperty(customFieldPropertyIndex, customField)"
+                  >
+                    <close-icon />
+                  </n-icon>
+                </n-form-item-grid-item>
+              </n-grid>
+            </n-space>
+          </n-card>
+        </div>
+      </n-form>
+    </template>
   </main>
 </template>

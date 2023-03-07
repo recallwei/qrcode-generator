@@ -11,8 +11,8 @@ import {
   NPopconfirm,
   useMessage
 } from "naive-ui"
-import { Download as DownloadIcon } from "@vicons/fa"
 import {
+  FileDownloadOutlined as DownloadIcon,
   RefreshFilled as ResetIcon,
   DeleteForeverOutlined as DeleteIcon,
   ContentCopyOutlined as CopyIcon
@@ -204,7 +204,7 @@ const clearAllHistoryRecord = async () => {
               @click="() => handleDownloadQRCode()"
             >
               <template #icon>
-                <n-icon size="14">
+                <n-icon size="20">
                   <download-icon />
                 </n-icon>
               </template>

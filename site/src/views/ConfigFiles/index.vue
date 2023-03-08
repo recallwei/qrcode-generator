@@ -141,6 +141,7 @@ const addCustomField = () => {
     name: "",
     customProperties: [
       {
+        keyName: "",
         keyCode: "",
         valueType: "string",
         require: true,
@@ -160,6 +161,7 @@ const clearAllCustomFields = () => {
 
 const addCustomProperty = (customField: CustomField) =>
   customField.customProperties.unshift({
+    keyName: "",
     keyCode: "",
     valueType: "string",
     require: true,
@@ -468,6 +470,24 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               :key="customFieldPropertyIndex"
             >
               <n-grid :x-gap="12">
+                <n-form-item-grid-item
+                  label="属性名称"
+                  :span="6"
+                  :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyName`"
+                  :rule="{
+                    required: true,
+                    message: '请输入属性名称',
+                    trigger: ['input', 'blur']
+                  }"
+                >
+                  <n-input
+                    v-model:value="customFieldProperty.keyName"
+                    type="text"
+                    placeholder="请输入内容"
+                    clearable
+                  />
+                </n-form-item-grid-item>
+
                 <n-form-item-grid-item
                   label="属性编码"
                   :span="6"

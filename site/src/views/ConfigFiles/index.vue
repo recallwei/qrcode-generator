@@ -467,10 +467,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
               ) in customField.customProperties"
               :key="customFieldPropertyIndex"
             >
-              <n-grid
-                :cols="24"
-                :x-gap="12"
-              >
+              <n-grid :x-gap="12">
                 <n-form-item-grid-item
                   label="属性编码"
                   :span="6"
@@ -528,6 +525,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                 </n-form-item-grid-item>
 
                 <n-form-item-grid-item
+                  v-if="customFieldProperty.enableValueLengthLimit"
                   :span="4"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueLengthLimit`"
                   :rule="{
@@ -538,7 +536,6 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                   }"
                 >
                   <n-input-number
-                    v-if="customFieldProperty.enableValueLengthLimit"
                     v-model:value="customFieldProperty.valueLengthLimit"
                     placeholder="请输入最大值"
                     clearable
@@ -548,7 +545,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
                 </n-form-item-grid-item>
 
                 <n-form-item-grid-item
-                  :span="2"
+                  :span="customFieldProperty.enableValueLengthLimit ? 2 : 6"
                   class="flex cursor-pointer items-center justify-end"
                 >
                   <n-icon

@@ -12,20 +12,19 @@
     }
   ],
   "ignorePaths": [
+    "site/public/*",
+    "site/src/assets/*",
+    "custom-words.txt",
     "dist",
-    "src/main.ts",
-    "public/*",
-    "src/assets/*",
     "node_modules",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
     "package.json",
     ".cspell.json",
     ".commitlintrc.json",
     ".eslintrc.js",
     ".prettierrc.json",
     ".stylelintrc.json",
-    "pnpm-lock.yaml",
-    "pnpm-workspace.yaml",
-    "README.md",
-    "custom-words.txt"
+    "README.md"
   ]
 }

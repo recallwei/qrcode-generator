@@ -77,6 +77,9 @@ const handleGenerateQRCode = useDebounceFn(async () => {
     if (userInput.value.title) {
       historyModel.title = userInput.value.title
     }
+    if ((await IndexDBInstance.history.count()) >= 400) {
+      throw new Error("可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试")
+    }
     await IndexDBInstance.history.add(historyModel)
     message.success("生成二维码成功")
   } catch (error: any) {

@@ -34,8 +34,8 @@ export const routes = [
         component: () => import("@/views/Decode"),
         meta: {
           title: "解码工具",
-          icon: DecodeIcon
-          // disabled: true
+          icon: DecodeIcon,
+          disabled: true
           // hidden: true
         }
       },

@@ -393,6 +393,7 @@ const handleReset = () => {
                 <n-icon
                   class="ml-2 hover:cursor-pointer"
                   size="16"
+                  depth="2"
                 >
                   <tip-icon />
                 </n-icon>

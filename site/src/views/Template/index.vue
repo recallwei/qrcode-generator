@@ -370,84 +370,86 @@ const handleReset = () => {
         embedded
         hoverable
       >
-        <n-form
-          ref="templateFormRef"
-          :model="templateForm"
-          label-width="80"
-          label-align="left"
-          label-placement="left"
-          require-mark-placement="right-hanging"
-        >
-          <n-form-item label="标题">
-            <n-input
-              v-model:value="userInput.title"
-              style="width: 38.5%"
-              type="text"
-              :maxlength="16"
-              clearable
-              show-count
-              placeholder="请输入标题【可选】"
-            />
-            <n-tooltip trigger="hover">
-              <template #trigger>
-                <n-icon
-                  class="ml-2 hover:cursor-pointer"
-                  size="16"
-                  depth="2"
-                >
-                  <tip-icon />
-                </n-icon>
-              </template>
-              标题可用于检索生成的二维码或作为下载的文件名。
-            </n-tooltip>
-          </n-form-item>
-
-          <template
-            v-for="(customProperty, customPropertyIndex) in templateForm"
-            :key="customPropertyIndex"
+        <div class="flex h-full flex-col justify-between">
+          <n-form
+            ref="templateFormRef"
+            :model="templateForm"
+            label-width="80"
+            label-align="left"
+            label-placement="left"
+            require-mark-placement="right-hanging"
           >
-            <n-form-item
-              :label="customProperty.keyName"
-              :path="`[${customPropertyIndex}].value`"
-              :rule="{
-                required: customProperty.require,
-                message: '请输入' + customProperty.keyName,
-                trigger: ['input', 'blur'],
-                type: customProperty.valueType
-              }"
-            >
-              <template v-if="customProperty.valueType === 'string'">
-                <n-input
-                  v-model:value="customProperty.value"
-                  style="width: 38.5%"
-                  type="text"
-                  :maxlength="
-                    customProperty.enableValueLengthLimit
-                      ? customProperty.valueLengthLimit
-                      : undefined
-                  "
-                  clearable
-                  show-count
-                  placeholder="请输入内容"
-                />
-              </template>
-              <template v-if="customProperty.valueType === 'number'">
-                <n-input-number
-                  v-model:value="customProperty.value"
-                  style="width: 38.5%"
-                  :min="0"
-                  :max="
-                    customProperty.enableValueLengthLimit
-                      ? customProperty.valueLengthLimit
-                      : undefined
-                  "
-                  clearable
-                  show-count
-                  placeholder="请输入内容"
-                />
-              </template>
+            <n-form-item label="标题">
+              <n-input
+                v-model:value="userInput.title"
+                style="width: 38.5%"
+                type="text"
+                :maxlength="16"
+                clearable
+                show-count
+                placeholder="请输入标题【可选】"
+              />
+              <n-tooltip trigger="hover">
+                <template #trigger>
+                  <n-icon
+                    class="ml-2 hover:cursor-pointer"
+                    size="16"
+                    depth="2"
+                  >
+                    <tip-icon />
+                  </n-icon>
+                </template>
+                标题可用于检索生成的二维码或作为下载的文件名。
+              </n-tooltip>
             </n-form-item>
-          </template>
+
+            <template
+              v-for="(customProperty, customPropertyIndex) in templateForm"
+              :key="customPropertyIndex"
+            >
+              <n-form-item
+                :label="customProperty.keyName"
+                :path="`[${customPropertyIndex}].value`"
+                :rule="{
+                  required: customProperty.require,
+                  message: '请输入' + customProperty.keyName,
+                  trigger: ['input', 'blur'],
+                  type: customProperty.valueType
+                }"
+              >
+                <template v-if="customProperty.valueType === 'string'">
+                  <n-input
+                    v-model:value="customProperty.value"
+                    style="width: 38.5%"
+                    type="text"
+                    :maxlength="
+                      customProperty.enableValueLengthLimit
+                        ? customProperty.valueLengthLimit
+                        : undefined
+                    "
+                    clearable
+                    show-count
+                    placeholder="请输入内容"
+                  />
+                </template>
+                <template v-if="customProperty.valueType === 'number'">
+                  <n-input-number
+                    v-model:value="customProperty.value"
+                    style="width: 38.5%"
+                    :min="0"
+                    :max="
+                      customProperty.enableValueLengthLimit
+                        ? customProperty.valueLengthLimit
+                        : undefined
+                    "
+                    clearable
+                    show-count
+                    placeholder="请输入内容"
+                  />
+                </template>
+              </n-form-item>
+            </template>
+          </n-form>
 
           <n-space align="center">
             <n-button
@@ -468,7 +470,7 @@ const handleReset = () => {
               生成二维码
             </n-button>
           </n-space>
-        </n-form>
+        </div>
       </n-card>
     </div>
   </main>

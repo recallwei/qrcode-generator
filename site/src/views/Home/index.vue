@@ -11,8 +11,8 @@ const router = useRouter()
 const navToQuick = () => router.push("/quick")
 
 const notice = ref({
-  title: "🍀二维码生成器",
-  description: "版本：v1.0.0 - alpha.1"
+  title: "🍀二维码生成器🍀",
+  description: "🚀 版本：v1.0.0 - alpha.1"
 })
 </script>
 

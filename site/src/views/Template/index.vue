@@ -26,7 +26,7 @@ import {
   QuestionMarkOutlined as TipIcon
 } from "@vicons/material"
 import QRCodeManager from "@package/qrcode-manager"
-import type { Config, CustomField, SelectorOption, WithNull, History, CommonObject } from "@/types"
+import type { Config, CustomField, SelectorOption, WithNull, History } from "@/types"
 import { IndexDBInstance } from "@/database"
 import { formatCurrentTime, downloadFile, setClipBoardText } from "@/utils"
 import type { TemplateForm } from "./private/types"
@@ -159,7 +159,7 @@ const generateQRCode = () => {
     if (errors) {
       message.error("内容填写不完整")
     } else {
-      const jsonContent: CommonObject<any> = {}
+      const jsonContent: Record<string, any> = {}
       templateForm.value?.forEach((customProperty) => {
         if (customProperty.value) {
           jsonContent[customProperty.keyCode] = customProperty.value

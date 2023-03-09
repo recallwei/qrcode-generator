@@ -320,6 +320,7 @@ const clearAllHistoryRecord = async () => {
                     <n-tooltip
                       placement="bottom"
                       trigger="hover"
+                      style="max-width: 800px"
                     >
                       <template #trigger>
                         <n-text

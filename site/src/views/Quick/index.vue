@@ -106,10 +106,7 @@ const handleDownloadQRCode = () => {
     userInputStatusDispatcher.setError()
     return
   }
-  downloadFile(
-    imgURL.value,
-    userInput.value.content ? `${userInput.value.content}.png` : "qrcode.png"
-  )
+  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : "qrcode.png")
 }
 
 const handleReset = () => {
@@ -189,13 +186,13 @@ const clearAllHistoryRecord = async () => {
             >
               <n-image
                 v-if="imgURL"
-                class="h-200[px] w-[200px] bg-white p-2 shadow-md"
+                class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
                 :src="imgURL"
               />
               <div
                 v-else
-                class="flex h-[200px] w-[200px] select-none items-center justify-center bg-white p-2 shadow-md"
+                class="flex h-[200px] w-[200px] select-none items-center justify-center p-2 shadow-md"
               >
                 此处预览生成的二维码
               </div>

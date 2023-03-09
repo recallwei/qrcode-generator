@@ -1,7 +1,8 @@
 import {
   QrCode2Outlined as QuickIcon,
   QrCodeScannerOutlined as DecodeIcon,
-  SettingsOutlined as ConfigIcon
+  SettingsOutlined as ConfigIcon,
+  ArticleOutlined as TemplateIcon
 } from "@vicons/material"
 import { siteMetaData } from "../../site.config"
 
@@ -29,6 +30,15 @@ export const routes = [
         }
       },
       {
+        path: "/template",
+        name: "template",
+        component: () => import("@/views/Template"),
+        meta: {
+          title: "模板建码",
+          icon: TemplateIcon
+        }
+      },
+      {
         path: "/decode",
         name: "decode",
         component: () => import("@/views/Decode"),
@@ -45,7 +55,8 @@ export const routes = [
         component: () => import("@/views/ConfigFiles"),
         meta: {
           title: "配置文件",
-          icon: ConfigIcon
+          icon: ConfigIcon,
+          hidden: import.meta.env.PROD
         }
       }
     ]

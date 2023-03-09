@@ -160,7 +160,7 @@ const clearAllCustomFields = () => {
 }
 
 const addCustomProperty = (customField: CustomField) =>
-  customField.customProperties.unshift({
+  customField.customProperties.push({
     keyName: "",
     keyCode: "",
     valueType: "string",

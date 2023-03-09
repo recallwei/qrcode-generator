@@ -6,7 +6,9 @@ import {
   NLoadingBarProvider,
   NMessageProvider,
   zhCN,
-  dateZhCN
+  dateZhCN,
+  lightTheme
+  // darkTheme
 } from "naive-ui"
 </script>
 
@@ -14,6 +16,7 @@ import {
   <n-config-provider
     :locale="zhCN"
     :date-locale="dateZhCN"
+    :theme="lightTheme"
   >
     <n-loading-bar-provider>
       <n-message-provider>

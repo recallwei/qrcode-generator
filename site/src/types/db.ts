@@ -1,4 +1,4 @@
-import type { CustomField } from "./dynamicFormatConfig"
+import type { CustomField } from "./dynamicTemplate"
 
 export interface History {
   id?: number

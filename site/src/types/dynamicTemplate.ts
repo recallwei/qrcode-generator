@@ -1,6 +1,6 @@
 export type ValueType = "string" | "number" | "boolean" | "object" | "array"
 
-export type CustomProperty = {
+export interface CustomProperty {
   keyName: string
   keyCode: string
   valueType: ValueType
@@ -9,7 +9,7 @@ export type CustomProperty = {
   valueLengthLimit: number
 }
 
-export type CustomField = {
+export interface CustomField {
   name: string
   customProperties: CustomProperty[]
 }

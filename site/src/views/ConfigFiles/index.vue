@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, type Ref } from "vue"
+import { ref, computed, nextTick, toRaw, type Ref } from "vue"
 import {
   NForm,
   NFormItem,
@@ -201,6 +201,8 @@ const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
   return file
 }
 
+const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
+
 const saveConfig = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
@@ -209,7 +211,7 @@ const saveConfig = (e: MouseEvent) => {
     }
     if (operateMode.value === "edit") {
       message.loading("正在保存配置文件")
-      await IndexDBInstance.config.put(form.value)
+      await IndexDBInstance.config.put(toRaw(form.value), form.value.id)
       await nextTick()
       message.destroyAll()
       message.success("配置文件保存成功")
@@ -225,8 +227,6 @@ const saveConfig = (e: MouseEvent) => {
     }
   })
 }
-
-const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
 </script>
 
 <template>

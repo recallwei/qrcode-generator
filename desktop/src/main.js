@@ -4,7 +4,7 @@ const path = require("path")
 function showNotification() {
   new Notification({
     title: "二维码生成器",
-    body: "当前处于内测版本，出现 Bug 请反馈给管理员。",
+    body: "当前处于 v1.0.0-alpha.1 内测版本，出现 Bug 请反馈给管理员。",
     silent: false
   }).show()
 }
@@ -35,8 +35,8 @@ const createWindow = () => {
     horizontal: true,
     vertical: true
   })
-  view.webContents.loadURL("http://localhost:4058")
-  // view.webContents.loadURL("https://qrcode.bruceworld.top")
+  // view.webContents.loadURL("http://localhost:4058")
+  view.webContents.loadURL("https://qrcode.bruceworld.top")
 }
 
 app

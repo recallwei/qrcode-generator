@@ -14,6 +14,7 @@
   "ignorePaths": [
     "site/public/*",
     "site/src/assets/*",
+    "desktop/out/*",
     "custom-words.txt",
     "dist",
     "node_modules",

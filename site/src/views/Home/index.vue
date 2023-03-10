@@ -1,11 +1,23 @@
 <script setup lang="ts">
+import { computed } from "vue"
 import { useRouter } from "vue-router"
+import { useEventListener, useToggle } from "@vueuse/core"
 import { NButton } from "naive-ui"
 import { siteMetaData } from "@/constants"
 
 const { AppName, Favicon, Version } = siteMetaData
 
 const router = useRouter()
+
+const [replayAnimationFlag, toggleReplayAnimationFlag] = useToggle(true)
+
+const replayAnimationFlagGetter = computed(() => replayAnimationFlag.value.toString())
+
+useEventListener(document, "visibilitychange", () => {
+  if (!document.hidden) {
+    toggleReplayAnimationFlag()
+  }
+})
 
 const navToQuick = () => router.push("/quick")
 </script>
@@ -14,6 +26,7 @@ const navToQuick = () => router.push("/quick")
   <main class="h-full w-full select-none">
     <div class="absolute inset-0 bottom-28 m-auto flex flex-col items-center justify-center gap-4">
       <img
+        :key="replayAnimationFlagGetter"
         class="img-animation"
         width="120"
         height="120"
@@ -39,40 +52,48 @@ const navToQuick = () => router.push("/quick")
 
 <style scoped lang="scss">
 .img-animation {
-  animation: fall 1.5s 0s 1 forwards;
+  animation: fall-bounce 2s 0s 1 forwards;
 }
 
 .pulse-animation {
   animation: pulse 2s linear infinite;
 }
 
-@keyframes fall {
+@keyframes fall-bounce {
   0% {
-    transform: translateY(-300px);
+    transform: translateY(-300px) rotate(0);
     animation-timing-function: ease-in;
+  }
+  15% {
+    transform: translateY(0) rotate(60deg);
+    animation-timing-function: ease-out;
   }
   30% {
-    transform: translateY(-200px);
+    transform: translateY(-200px) rotate(120deg);
     animation-timing-function: ease-in;
+  }
+  45% {
+    transform: translateY(0) rotate(180deg);
+    animation-timing-function: ease-out;
   }
   60% {
-    transform: translateY(-100px);
+    transform: translateY(-100px) rotate(240deg);
     animation-timing-function: ease-in;
+  }
+  70% {
+    transform: translateY(0) rotate(300deg);
+    animation-timing-function: ease-out;
   }
   80% {
-    transform: translateY(-40px);
+    transform: translateY(-40px) rotate(320deg);
     animation-timing-function: ease-in;
   }
-  96% {
-    transform: translateY(5px);
-    animation-timing-function: ease-in;
+  90% {
+    transform: translateY(0) rotate(340deg);
+    animation-timing-function: ease-out;
   }
-  15%,
-  45%,
-  70%,
-  88%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(360deg);
     animation-timing-function: ease-out;
   }
 }

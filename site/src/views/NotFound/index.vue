@@ -20,7 +20,7 @@ const navToHome = () => router.push("/")
       <template #footer>
         <n-button
           type="primary"
-          secondary
+          strong
           @click="navToHome"
         >
           {{ NotFoundInfo.btnText }}

@@ -317,7 +317,7 @@ const handleReset = () => {
       <!-- QRCode Preview Section -->
       <div class="w-[300px]">
         <n-card
-          class="h-full w-full"
+          class="w-full"
           embedded
           hoverable
         >

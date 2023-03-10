@@ -28,7 +28,7 @@ const createWindow = () => {
 
   const view = new BrowserView()
   win.setBrowserView(view)
-  view.setBounds({ x: 0, y: 0, width: 1600, height: 900 })
+  view.setBounds({ x: 10, y: 10, width: 1590, height: 840 })
   view.setAutoResize({
     width: true,
     height: true,

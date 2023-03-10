@@ -1,5 +1,6 @@
 {
   "name": "desktop",
+  "productName":"二维码生成器",
   "private": true,
   "version": "1.0.0",
   "author": "Bruce Song <recall4056@gmail.com>",
@@ -25,7 +26,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "icon": "/src/images/qrcode-favicon.png"
+        "icon": "/src/images/favicon.ico"
       },
       "makers": [
         {

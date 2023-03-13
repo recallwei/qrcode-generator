@@ -34,7 +34,7 @@ import {
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import type { CustomField, Config } from "@/types"
-import { IndexDBInstance } from "@/database"
+import { IndexedDBInstance } from "@/database"
 import { valueTypeCandidates } from "@/constants"
 import { downloadFile } from "@/utils"
 
@@ -53,7 +53,7 @@ const rules: FormRules = {
 
 const message = useMessage()
 
-const configList = useObservable(liveQuery(() => IndexDBInstance.config.toArray()) as any) as Ref<
+const configList = useObservable(liveQuery(() => IndexedDBInstance.config.toArray()) as any) as Ref<
   Config[]
 >
 
@@ -83,7 +83,7 @@ const selectConfig = async (id: number) => {
       operateMode.value = "noAction"
       return
     }
-    const json = await IndexDBInstance.config.get(id)
+    const json = await IndexedDBInstance.config.get(id)
     form.value = { ...form.value, ...json }
     operateMode.value = "readOnly"
   } catch {
@@ -112,7 +112,7 @@ const deleteConfig = async (id: number) => {
       }
     }
     operateMode.value = "noAction"
-    await IndexDBInstance.config.delete(id)
+    await IndexedDBInstance.config.delete(id)
     message.success("删除成功")
   } catch {
     message.error("删除失败")
@@ -178,7 +178,8 @@ const clearAllCustomProperties = (customField: CustomField) =>
 const uploadFileValidation = async ({ file }: { file: UploadFileInfo }) => {
   const fileNameWithoutSuffix = file.name.split(".")[0]
   if (
-    (await IndexDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) > 0
+    (await IndexedDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) >
+    0
   ) {
     message.error("无法导入重名文件，若要替换配置文件，请尝试删除旧文件")
     return false
@@ -192,7 +193,7 @@ const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
     try {
       const json = JSON.parse(fileReader.result as string)
       message.success("导入配置文件成功")
-      await IndexDBInstance.config.add(json)
+      await IndexedDBInstance.config.add(json)
     } catch {
       message.error("导入配置文件失败，文件内容格式存在问题")
     }
@@ -211,7 +212,7 @@ const saveConfig = (e: MouseEvent) => {
     }
     if (operateMode.value === "edit") {
       message.loading("正在保存配置文件")
-      await IndexDBInstance.config.put(toRaw(form.value), form.value.id)
+      await IndexedDBInstance.config.put(toRaw(form.value), form.value.id)
       await nextTick()
       message.destroyAll()
       message.success("配置文件保存成功")
@@ -223,7 +224,7 @@ const saveConfig = (e: MouseEvent) => {
       await nextTick()
       message.destroyAll()
       message.success("配置文件下载成功")
-      IndexDBInstance.config.add(form.value)
+      IndexedDBInstance.config.add(form.value)
     }
   })
 }

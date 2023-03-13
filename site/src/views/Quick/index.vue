@@ -29,7 +29,7 @@ import {
   formatTime
 } from "@/utils"
 import { useValidationStatus, useLoading } from "@/hooks"
-import { IndexDBInstance } from "@/database"
+import { IndexedDBInstance } from "@/database"
 import type { History } from "@/types"
 
 type Config = {
@@ -47,7 +47,7 @@ const config = ref<Config>({
 })
 
 const historyList = useObservable(
-  liveQuery(() => IndexDBInstance.history.reverse().toArray()) as any
+  liveQuery(() => IndexedDBInstance.history.reverse().toArray()) as any
 ) as Ref<History[]>
 
 const userInput = ref({
@@ -77,10 +77,10 @@ const handleGenerateQRCode = useDebounceFn(async () => {
     if (userInput.value.title) {
       historyModel.title = userInput.value.title
     }
-    if ((await IndexDBInstance.history.count()) >= 400) {
+    if ((await IndexedDBInstance.history.count()) >= 400) {
       throw new Error("可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试")
     }
-    await IndexDBInstance.history.add(historyModel)
+    await IndexedDBInstance.history.add(historyModel)
     message.success("生成二维码成功")
   } catch (error: any) {
     userInputStatusDispatcher.setError()
@@ -122,7 +122,7 @@ const handleDeleteHistoryRecord = async (id?: number) => {
     if (!id) {
       throw new Error("删除失败，没有找到对应的历史记录")
     }
-    await IndexDBInstance.history.delete(id)
+    await IndexedDBInstance.history.delete(id)
     message.success("删除成功")
   } catch (error: any) {
     message.error(error.message || "删除失败")
@@ -155,7 +155,7 @@ const clearFocusedHistoryRecord = () => {
 }
 
 const clearAllHistoryRecord = async () => {
-  await IndexDBInstance.history.clear()
+  await IndexedDBInstance.history.clear()
   message.success("已清空历史数据")
 }
 </script>

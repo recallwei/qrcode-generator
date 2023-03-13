@@ -12,6 +12,6 @@ noopenner
 noreferrer
 hoverable
 dexie
-indexdb
+indexeddb
 rxjs
 popconfirm

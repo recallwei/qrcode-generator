@@ -27,14 +27,14 @@ import {
 } from "@vicons/material"
 import QRCodeManager from "@package/qrcode-manager"
 import type { Config, CustomField, SelectorOption, WithNull, History } from "@/types"
-import { IndexDBInstance } from "@/database"
+import { IndexedDBInstance } from "@/database"
 import { formatCurrentTime, downloadFile, setClipBoardText } from "@/utils"
 import type { TemplateForm } from "./private/types"
 
-// Dynamically get templates from IndexDB.
+// Dynamically get templates from IndexedDB.
 const configOptions = useObservable(
   liveQuery(() =>
-    IndexDBInstance.config.toArray((array) =>
+    IndexedDBInstance.config.toArray((array) =>
       array.map((item) => ({ label: item.name, value: item.id, data: item }))
     )
   ) as any
@@ -86,7 +86,7 @@ const deleteConfig = async () => {
     templateOptions.value = []
     clearTemplateForm()
     clearUserInputRelated()
-    await IndexDBInstance.config.delete(currentId)
+    await IndexedDBInstance.config.delete(currentId)
     message.success("删除成功")
   } catch {
     message.error("删除失败")
@@ -131,7 +131,8 @@ const clearSelectedTemplate = () => {
 const uploadConfigValidation = async ({ file }: { file: UploadFileInfo }) => {
   const fileNameWithoutSuffix = file.name.split(".")[0]
   const repeated =
-    (await IndexDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) > 0
+    (await IndexedDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) >
+    0
   if (repeated) {
     message.error("无法导入重名文件，若要替换配置文件，请尝试删除旧文件")
     return false
@@ -145,7 +146,7 @@ const uploadConfig = ({ file }: { file: UploadFileInfo }) => {
     try {
       const json = JSON.parse(fileReader.result as string)
       message.success("导入配置文件成功")
-      await IndexDBInstance.config.add(json)
+      await IndexedDBInstance.config.add(json)
     } catch {
       message.error("导入配置文件失败，文件内容格式存在问题")
     }
@@ -179,10 +180,10 @@ const generateQRCode = () => {
         if (userInput.value.title) {
           historyModel.title = userInput.value.title
         }
-        if ((await IndexDBInstance.history.count()) >= 400) {
+        if ((await IndexedDBInstance.history.count()) >= 400) {
           throw new Error("可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试")
         }
-        await IndexDBInstance.history.add(historyModel)
+        await IndexedDBInstance.history.add(historyModel)
         message.success("生成二维码成功")
       } catch (error: any) {
         message.error(error.message)

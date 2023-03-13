@@ -22,6 +22,6 @@ export class DexieWithTables extends Dexie {
   }
 }
 
-const IndexDBInstance = new DexieWithTables()
+const IndexedDBInstance = new DexieWithTables()
 
-export { IndexDBInstance }
+export { IndexedDBInstance }

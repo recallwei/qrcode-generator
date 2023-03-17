@@ -29,4 +29,5 @@ coverage
 *.sw?
 *.zip
 
-out/
+# Electron build files
+desktop/out/*

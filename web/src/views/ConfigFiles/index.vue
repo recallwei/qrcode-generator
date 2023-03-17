@@ -284,9 +284,12 @@ const saveConfig = (e: MouseEvent) => {
                 :class="{ 'bg-[#F3F3F5]': form.id === config.id }"
                 @click="() => selectConfig(config.id as number)"
               >
-                <div class="flex items-center justify-between gap-2">
-                  <div class="flex items-center justify-center gap-2">
-                    <n-icon size="20">
+                <div class="flex items-center justify-between">
+                  <div class="mb-2 flex items-center justify-center">
+                    <n-icon
+                      size="20"
+                      class="mr-2"
+                    >
                       <folder-icon />
                     </n-icon>
 
@@ -294,7 +297,10 @@ const saveConfig = (e: MouseEvent) => {
                       {{ config.name }}
                     </n-text>
 
-                    <n-divider vertical />
+                    <n-divider
+                      vertical
+                      class="mx-2"
+                    />
 
                     <n-tooltip trigger="hover">
                       <template #trigger>
@@ -308,7 +314,7 @@ const saveConfig = (e: MouseEvent) => {
                     </n-tooltip>
                   </div>
 
-                  <div class="flex items-center gap-4">
+                  <div class="flex items-center">
                     <n-icon
                       size="20"
                       :depth="2"
@@ -321,7 +327,7 @@ const saveConfig = (e: MouseEvent) => {
                     <n-icon
                       size="20"
                       :depth="2"
-                      class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                      class="ml-4 rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                       @click.stop="() => downloadConfig(config)"
                     >
                       <download-icon />
@@ -331,7 +337,7 @@ const saveConfig = (e: MouseEvent) => {
                       size="20"
                       :depth="2"
                       color="red"
-                      class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
+                      class="ml-4 rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                       @click.stop="() => deleteConfig(config.id as number)"
                     >
                       <close-icon />
@@ -353,10 +359,11 @@ const saveConfig = (e: MouseEvent) => {
         label-placement="left"
         require-mark-placement="right-hanging"
       >
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col">
           <n-card
             embedded
             hoverable
+            class="mb-4"
           >
             <n-form-item
               label="名称"

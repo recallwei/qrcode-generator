@@ -24,21 +24,21 @@ const navToQuick = () => router.push("/quick")
 
 <template>
   <main class="h-full w-full select-none">
-    <div class="absolute inset-0 bottom-28 m-auto flex flex-col items-center justify-center gap-4">
+    <div class="absolute inset-0 bottom-28 m-auto flex flex-col items-center justify-center">
       <img
         :key="replayAnimationFlagGetter"
-        class="img-animation"
+        class="img-animation mb-4"
         width="120"
         height="120"
         :src="Favicon"
         :alt="AppName"
       />
       <span
-        class="pulse-animation bg-gradient-to-r from-[#50c878] to-[#c4b5fd] bg-clip-text text-5xl font-medium text-transparent"
+        class="pulse-animation mb-4 bg-gradient-to-r from-[#50c878] to-[#c4b5fd] bg-clip-text text-5xl font-medium text-transparent"
       >
         {{ AppName }}
       </span>
-      <span class="text-lg">{{ Version }}</span>
+      <span class="mb-4 text-lg">{{ Version }}</span>
       <n-button
         type="primary"
         strong

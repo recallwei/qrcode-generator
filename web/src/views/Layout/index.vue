@@ -19,14 +19,15 @@ const navToHome = () => router.push("/")
       embedded
     >
       <n-layout-header
-        class="flex h-16 items-center gap-2 py-2 px-4"
+        class="flex h-16 items-center py-2 px-4"
         bordered
       >
         <div
-          class="flex select-none items-center gap-2 hover:cursor-pointer"
+          class="flex select-none items-center hover:cursor-pointer"
           @click="navToHome"
         >
           <img
+            class="mr-2"
             width="36"
             height="36"
             :src="Favicon"

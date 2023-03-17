@@ -20,24 +20,12 @@
   - We will not store your personal information
   - Data are only saved locally within your browser
   - Open source on GitHub
-  - No user tracking, No ADs
-```
-
-## Project Structure
-
-```text
-
-├── desktop
-├── packages
-├── web
-│   ├── public
-│   └── src
-└── README.md
-
+  - No user tracking, no ads
 ```
 
 ## Stacks
 
+```markdown
 - Vue
 - TypeScript
 - Vite
@@ -45,6 +33,18 @@
 - Naive UI
 - TailwindCSS
 - QRCode.js
+```
+
+## Project Structure
+
+```text
+├── desktop
+├── packages
+├── web
+│   ├── public
+│   └── src
+└── README.md
+```
 
 ## License
 

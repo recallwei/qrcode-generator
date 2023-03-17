@@ -12,8 +12,8 @@
     }
   ],
   "ignorePaths": [
-    "site/public/*",
-    "site/src/assets/*",
+    "web/public/*",
+    "web/src/assets/*",
     "desktop/out/*",
     "custom-words.txt",
     "dist",

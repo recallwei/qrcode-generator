@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from "vue"
+import { ref, nextTick, type Ref } from "vue"
 import { useObservable } from "@vueuse/rxjs"
 import { liveQuery } from "dexie"
 import {
@@ -154,6 +154,26 @@ const uploadConfig = ({ file }: { file: UploadFileInfo }) => {
   fileReader.readAsText(file.file as any)
   return file
 }
+const downloadConfig = async () => {
+  if (!selectedConfigId.value) {
+    message.error("请先选择配置文件")
+    return
+  }
+  const config = await IndexedDBInstance.config.get(selectedConfigId.value)
+  if (!config) {
+    message.error("配置文件不存在")
+    return
+  }
+  const { name, description, customFields } = config
+  const configData = { name, description, customFields }
+  message.loading("正在下载配置文件")
+  const jsonString = JSON.stringify(configData)
+  const jsonDataURL = `data:,${jsonString}`
+  downloadFile(jsonDataURL, `${configData.name}.json`)
+  await nextTick()
+  message.destroyAll()
+  message.success("配置文件下载成功")
+}
 
 const generateQRCode = () => {
   templateFormRef.value?.validate(async (errors) => {
@@ -265,6 +285,7 @@ const handleReset = () => {
               <n-button
                 size="small"
                 type="primary"
+                strong
                 secondary
               >
                 导入配置
@@ -274,7 +295,17 @@ const handleReset = () => {
             <template v-if="selectedConfigId">
               <n-button
                 size="small"
+                strong
+                secondary
+                @click="() => downloadConfig()"
+              >
+                导出配置
+              </n-button>
+
+              <n-button
+                size="small"
                 type="error"
+                strong
                 secondary
                 @click="() => deleteConfig()"
               >
@@ -424,8 +455,8 @@ const handleReset = () => {
                     style="width: 38.5%"
                     type="text"
                     :maxlength="
-                      customProperty.enableValueLengthLimit
-                        ? customProperty.valueLengthLimit
+                      customProperty.stringOptions?.enableLengthLimit
+                        ? customProperty.stringOptions.lengthLimit
                         : undefined
                     "
                     clearable
@@ -437,10 +468,14 @@ const handleReset = () => {
                   <n-input-number
                     v-model:value="customProperty.value"
                     style="width: 38.5%"
-                    :min="0"
+                    :min="
+                      customProperty.numberOptions?.enableRangeLimit
+                        ? customProperty.numberOptions?.min
+                        : 0
+                    "
                     :max="
-                      customProperty.enableValueLengthLimit
-                        ? customProperty.valueLengthLimit
+                      customProperty.numberOptions?.enableRangeLimit
+                        ? customProperty.numberOptions?.max
                         : undefined
                     "
                     clearable

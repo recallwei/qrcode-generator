@@ -12,7 +12,8 @@
   "keywords": [
     "qrcode",
     "qrcode-generator",
-    "vue"
+    "vue",
+    "typescript"
   ],
   "bugs": {
     "url": "https://github.com/recallwei/qrcode-generator/issues"
@@ -28,8 +29,10 @@
     "desktop:package": "pnpm --filter=desktop package",
     "desktop:make": "pnpm --filter=desktop make",
     "check:type": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
-    "check:spell": "npx cspell '**'",
+    "check:spell": "npx cspell **",
     "check:eslint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "check:stylelint": "npx stylelint **/*.{html,vue,css,sass,scss}",
+    "format:prettier": "npx prettier --write . --ignore-path ",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -45,7 +48,12 @@
     "eslint-plugin-vue": "^9.9.0",
     "jsonc-eslint-parser": "^2.2.0",
     "prettier": "^2.8.4",
-    "prettier-plugin-tailwindcss": "^0.2.4"
+    "prettier-plugin-tailwindcss": "^0.2.4",
+    "stylelint": "^15.3.0",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-standard": "^31.0.0",
+    "stylelint-config-standard-scss": "^7.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",

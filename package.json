@@ -32,22 +32,29 @@
     "check:eslint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "prepare": "husky install"
   },
-  "devDependencies": {
-    "@commitlint/cli": "^17.4.4",
-    "@commitlint/config-conventional": "^17.4.4",
+  "dependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@typescript-eslint/parser": "^5.55.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.2",
-    "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-define-config": "^1.16.0",
     "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsonc": "^2.7.0",
+    "eslint-plugin-markdown": "^3.0.0",
     "eslint-plugin-vue": "^9.9.0",
+    "jsonc-eslint-parser": "^2.2.0",
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "eslint": "^8.36.0",
+    "eslint-plugin-html": "^7.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "pnpm": "^7.29.3",
-    "prettier": "^2.8.4",
-    "prettier-plugin-tailwindcss": "^0.2.4",
     "tsup": "^6.6.3",
     "typescript": "~5.0.2"
   }

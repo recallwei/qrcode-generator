@@ -259,7 +259,7 @@ const saveConfig = (e: MouseEvent) => {
         </n-space>
 
         <div
-          v-if="configList.length > 0"
+          v-if="Array.isArray(configList) && configList.length > 0"
           class="mt-2"
         >
           <n-list
@@ -276,12 +276,9 @@ const saveConfig = (e: MouseEvent) => {
                 :class="{ 'bg-[#F3F3F5]': form.id === config.id }"
                 @click="() => selectConfig(config.id as number)"
               >
-                <div class="flex items-center justify-between">
-                  <div class="mb-2 flex items-center justify-center">
-                    <n-icon
-                      size="20"
-                      class="mr-2"
-                    >
+                <div class="flex items-center justify-between space-y-2">
+                  <div class="flex items-center justify-center space-x-2">
+                    <n-icon size="20">
                       <folder-icon />
                     </n-icon>
 
@@ -289,10 +286,7 @@ const saveConfig = (e: MouseEvent) => {
                       {{ config.name }}
                     </n-text>
 
-                    <n-divider
-                      vertical
-                      class="mx-2"
-                    />
+                    <n-divider vertical />
 
                     <n-tooltip trigger="hover">
                       <template #trigger>
@@ -349,11 +343,10 @@ const saveConfig = (e: MouseEvent) => {
         label-placement="left"
         require-mark-placement="right-hanging"
       >
-        <div class="flex flex-col">
+        <div class="flex flex-col space-y-4">
           <n-card
             embedded
             hoverable
-            class="mb-4"
           >
             <n-form-item
               label="名称"

@@ -23,11 +23,10 @@ const navToHome = () => router.push('/')
         bordered
       >
         <div
-          class="flex select-none items-center hover:cursor-pointer"
+          class="flex select-none items-center space-x-2 hover:cursor-pointer"
           @click="navToHome"
         >
           <img
-            class="mr-2"
             width="36"
             height="36"
             :src="Favicon"

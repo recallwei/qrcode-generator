@@ -243,8 +243,8 @@ const handleReset = () => {
 </script>
 
 <template>
-  <main class="flex flex-col">
-    <section class="mb-4">
+  <main class="flex flex-col space-y-4">
+    <section>
       <n-card
         embedded
         hoverable
@@ -346,10 +346,10 @@ const handleReset = () => {
 
     <div
       v-if="templateForm"
-      class="mb-4 flex"
+      class="flex space-x-4"
     >
       <!-- QRCode Preview Section -->
-      <div class="mr-4 w-[300px]">
+      <div class="w-[300px]">
         <n-card
           class="w-full"
           embedded
@@ -364,20 +364,20 @@ const handleReset = () => {
               <reset-icon />
             </n-icon>
           </div>
-          <div class="flex h-full flex-col items-center justify-center">
+          <div class="flex h-full flex-col items-center justify-center space-y-4">
             <transition
               name="img"
               mode="out-in"
             >
               <n-image
                 v-if="imgURL"
-                class="h-200[px] mb-2 w-[200px] p-2 shadow-md"
+                class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
                 :src="imgURL"
               />
               <div
                 v-else
-                class="mb-2 flex h-[200px] w-[200px] select-none items-center justify-center p-2 shadow-md"
+                class="flex h-[200px] w-[200px] select-none items-center justify-center p-2 shadow-md"
               >
                 此处预览生成的二维码
               </div>

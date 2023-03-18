@@ -146,9 +146,9 @@ const clearAllHistoryRecord = async () => {
 
 <template>
   <main>
-    <div class="mb-4 flex">
+    <div class="mb-4 flex space-x-4">
       <!-- QRCode Preview Section -->
-      <div class="mr-4 w-[300px]">
+      <div class="w-[300px]">
         <n-card
           class="h-full w-full"
           embedded
@@ -163,20 +163,20 @@ const clearAllHistoryRecord = async () => {
               <reset-icon />
             </n-icon>
           </div>
-          <div class="flex h-full flex-col items-center justify-center">
+          <div class="flex h-full flex-col items-center justify-center space-y-4">
             <transition
               name="img"
               mode="out-in"
             >
               <n-image
                 v-if="imgURL"
-                class="h-200[px] mb-4 w-[200px] p-2 shadow-md"
+                class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
                 :src="imgURL"
               />
               <div
                 v-else
-                class="mb-4 flex h-[200px] w-[200px] select-none items-center justify-center p-2 shadow-md"
+                class="flex h-[200px] w-[200px] select-none items-center justify-center p-2 shadow-md"
               >
                 此处预览生成的二维码
               </div>
@@ -204,10 +204,9 @@ const clearAllHistoryRecord = async () => {
         hoverable
         content-style="padding: 12px 16px"
       >
-        <div class="flex flex-col">
+        <div class="flex flex-col space-y-3">
           <n-input
             v-model:value="userInput.title"
-            class="mb-3"
             type="text"
             :maxlength="config.titleMaxLength"
             clearable
@@ -216,11 +215,10 @@ const clearAllHistoryRecord = async () => {
           />
           <n-input
             v-model:value="userInput.content"
-            class="mb-3"
             type="textarea"
             :autosize="{
-              minRows: 10,
-              maxRows: 10
+              minRows: 8,
+              maxRows: 8
             }"
             :maxlength="config.contentMaxLength"
             :status="userInputStatus"
@@ -230,17 +228,15 @@ const clearAllHistoryRecord = async () => {
             placeholder="请输入文字内容"
             @input="onUserInput"
           />
-          <div class="flex items-center justify-center">
-            <div class="mr-4">
-              <n-button
-                type="primary"
-                strong
-                secondary
-                @click="() => handleCopyContent()"
-              >
-                复制文字
-              </n-button>
-            </div>
+          <div class="flex items-center justify-center space-x-4">
+            <n-button
+              type="primary"
+              strong
+              secondary
+              @click="() => handleCopyContent()"
+            >
+              复制文字
+            </n-button>
             <n-button
               type="primary"
               strong
@@ -271,57 +267,56 @@ const clearAllHistoryRecord = async () => {
         </div>
       </div>
       <div class="flex">
-        <div class="flex w-full flex-col items-start justify-center">
+        <div class="flex w-full flex-col items-start justify-center space-y-4">
           <transition-group name="history-list">
             <n-card
               v-for="item in historyList"
               :key="item.id"
-              class="mb-4"
               embedded
               hoverable
               @mouseenter.passive="() => changeFocusedHistoryRecord(item)"
               @mouseleave.passive="() => clearFocusedHistoryRecord()"
             >
-              <div class="flex">
-                <div class="mr-4 flex w-[120px] shrink-0 flex-col items-center justify-center">
+              <div class="flex space-x-4">
+                <div class="flex w-[120px] shrink-0 flex-col items-center justify-center space-y-2">
                   <n-image
-                    class="h-120[px] mb-1 w-full bg-white p-2 shadow-md"
+                    class="h-120[px] w-full bg-white p-2 shadow-md"
                     show-toolbar-tooltip
                     :src="item.src"
                   />
-                  <n-tooltip
-                    placement="bottom"
-                    trigger="hover"
-                  >
-                    <template #trigger>
-                      <n-text
-                        class="cursor-pointer text-center"
-                        @click="() => handleCopyByHistoryRecord(item, 'title')"
-                      >
-                        {{ item.title }}
-                      </n-text>
-                    </template>
-                    {{ item.title }}
-                  </n-tooltip>
-                </div>
-                <div class="flex grow flex-col justify-between">
-                  <div class="mb-1">
+                  <template v-if="item.title">
                     <n-tooltip
                       placement="bottom"
                       trigger="hover"
-                      style="max-width: 800px"
                     >
                       <template #trigger>
                         <n-text
-                          class="hover:cursor-pointer"
-                          @click="() => handleCopyByHistoryRecord(item, 'content')"
+                          class="cursor-pointer text-center"
+                          @click="() => handleCopyByHistoryRecord(item, 'title')"
                         >
-                          {{ item.content }}
+                          {{ item.title }}
                         </n-text>
                       </template>
-                      {{ item.content }}
+                      {{ item.title }}
                     </n-tooltip>
-                  </div>
+                  </template>
+                </div>
+                <div class="flex grow flex-col justify-between space-y-1">
+                  <n-tooltip
+                    placement="bottom"
+                    trigger="hover"
+                    style="max-width: 800px"
+                  >
+                    <template #trigger>
+                      <n-text
+                        class="hover:cursor-pointer"
+                        @click="() => handleCopyByHistoryRecord(item, 'content')"
+                      >
+                        {{ item.content }}
+                      </n-text>
+                    </template>
+                    {{ item.content }}
+                  </n-tooltip>
                   <div class="text-xs">
                     <n-text class="select-none"> 生成时间：</n-text>
                     <n-tooltip
@@ -338,35 +333,31 @@ const clearAllHistoryRecord = async () => {
                   </div>
                   <transition name="operation">
                     <template v-if="focusedHistoryItemIndex === item.id">
-                      <div class="absolute right-4 bottom-4 flex items-center">
-                        <div class="mr-4">
-                          <n-button
-                            size="small"
-                            tertiary
-                            @click="() => handleCopyByHistoryRecord(item, 'content')"
-                          >
-                            <template #icon>
-                              <n-icon size="14">
-                                <copy-icon />
-                              </n-icon>
-                            </template>
-                            复制
-                          </n-button>
-                        </div>
-                        <div class="mr-4">
-                          <n-button
-                            size="small"
-                            tertiary
-                            @click="() => handleDownloadByHistoryRecord(item)"
-                          >
-                            <template #icon>
-                              <n-icon size="14">
-                                <download-icon />
-                              </n-icon>
-                            </template>
-                            下载
-                          </n-button>
-                        </div>
+                      <div class="absolute right-4 bottom-4 flex items-center space-x-4">
+                        <n-button
+                          size="small"
+                          tertiary
+                          @click="() => handleCopyByHistoryRecord(item, 'content')"
+                        >
+                          <template #icon>
+                            <n-icon size="14">
+                              <copy-icon />
+                            </n-icon>
+                          </template>
+                          复制
+                        </n-button>
+                        <n-button
+                          size="small"
+                          tertiary
+                          @click="() => handleDownloadByHistoryRecord(item)"
+                        >
+                          <template #icon>
+                            <n-icon size="14">
+                              <download-icon />
+                            </n-icon>
+                          </template>
+                          下载
+                        </n-button>
                         <n-button
                           size="small"
                           type="error"

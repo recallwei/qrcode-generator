@@ -4,3 +4,5 @@ dist
 build
 public
 desktop/out/*
+.gitignore
+.gitattributes

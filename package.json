@@ -29,10 +29,10 @@
     "desktop:package": "pnpm --filter=desktop package",
     "desktop:make": "pnpm --filter=desktop make",
     "check:type": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
-    "check:spell": "npx cspell **",
-    "check:eslint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "check:stylelint": "npx stylelint **/*.{html,vue,css,sass,scss}",
-    "format:prettier": "npx prettier --write . --ignore-path ",
+    "check:spell": "npx cspell '**'",
+    "check:eslint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "check:stylelint": "npx stylelint '**/*.{html,vue,css,sass,scss}'",
+    "format:prettier": "npx prettier --write '**/*.{vue,js,jsx,cjs,mjs,ts,tsx,md,html,css}' --ignore-path",
     "prepare": "husky install"
   },
   "dependencies": {

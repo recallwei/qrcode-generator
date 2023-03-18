@@ -68,5 +68,3 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
     </n-card>
   </main>
 </template>
-
-<style scoped lang="scss"></style>

@@ -29,5 +29,3 @@ const navToHome = () => router.push('/')
     </n-result>
   </main>
 </template>
-
-<style scoped lang="scss"></style>

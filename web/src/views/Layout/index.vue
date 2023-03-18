@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterView, useRouter } from "vue-router"
-import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from "naive-ui"
-import { useSideMenuStore } from "@/store"
-import { siteMetaData, sideMenuOptions } from "@/constants"
+import { RouterView, useRouter } from 'vue-router'
+import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from 'naive-ui'
+import { useSideMenuStore } from '@/store'
+import { siteMetaData, sideMenuOptions } from '@/constants'
 
 const { AppName, Favicon } = siteMetaData
 
 const router = useRouter()
 const sideMenuStore = useSideMenuStore()
 
-const navToHome = () => router.push("/")
+const navToHome = () => router.push('/')
 </script>
 
 <template>

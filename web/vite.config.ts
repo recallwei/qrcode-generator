@@ -1,21 +1,20 @@
-import { fileURLToPath, URL } from "node:url"
+import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from "vite"
-import vue from "@vitejs/plugin-vue"
-import vueJsx from "@vitejs/plugin-vue-jsx"
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  base: "/",
+  base: '/',
   plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     },
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"]
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
   },
   esbuild: {
-    drop: ["console", "debugger"]
+    drop: ['console', 'debugger']
   },
   server: {
     host: true,
@@ -23,10 +22,10 @@ export default defineConfig({
     strictPort: true,
     open: false,
     proxy: {
-      "/api-prefix": {
-        target: "localhost:5173",
+      '/api-prefix': {
+        target: 'localhost:5173',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-prefix/, "")
+        rewrite: (path) => path.replace(/^\/api-prefix/, '')
       }
     }
   }

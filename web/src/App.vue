@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router"
+import { RouterView } from 'vue-router'
 import {
   NConfigProvider,
   NGlobalStyle,
@@ -9,7 +9,7 @@ import {
   dateZhCN,
   lightTheme
   // darkTheme
-} from "naive-ui"
+} from 'naive-ui'
 </script>
 
 <template>

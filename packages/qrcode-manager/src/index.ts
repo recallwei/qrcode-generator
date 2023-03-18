@@ -1,9 +1,9 @@
-import QRCode from "qrcode"
+import QRCode from 'qrcode'
 
 const generateQRCode = (data: string | object): Promise<string> => {
   return new Promise((resolve, reject) => {
     let content
-    if (typeof data === "object") {
+    if (typeof data === 'object') {
       content = JSON.stringify(data)
     } else {
       content = data
@@ -13,11 +13,11 @@ const generateQRCode = (data: string | object): Promise<string> => {
       {
         margin: 0,
         width: 200,
-        errorCorrectionLevel: "low"
+        errorCorrectionLevel: 'low'
       },
       (err, url) => {
         if (err) {
-          reject(new Error("生成二维码失败"))
+          reject(new Error('生成二维码失败'))
         }
         resolve(url)
       }

@@ -1,2 +1,2 @@
-export * from "./faviconLoader"
-export * from "./naiveUILoader"
+export * from './faviconLoader'
+export * from './naiveUILoader'

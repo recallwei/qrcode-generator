@@ -1,4 +1,4 @@
-import type { UploadFileInfo } from "naive-ui"
+import type { UploadFileInfo } from 'naive-ui'
 
 export type UploadFileType = {
   file: UploadFileInfo

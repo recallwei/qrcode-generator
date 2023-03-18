@@ -1,5 +1,5 @@
-import { ref, type Ref } from "vue"
-import type { ValidationStatus, WithUndefined } from "@/types"
+import { ref, type Ref } from 'vue'
+import type { ValidationStatus, WithUndefined } from '@/types'
 
 type ValidationStatusDispatcher = {
   clear: () => void
@@ -18,13 +18,13 @@ const useValidationStatus = (
       status.value = undefined
     },
     setSuccess: () => {
-      status.value = "success"
+      status.value = 'success'
     },
     setError: () => {
-      status.value = "error"
+      status.value = 'error'
     },
     setWarning: () => {
-      status.value = "warning"
+      status.value = 'warning'
     }
   }
 

@@ -1,7 +1,7 @@
 /**
  * @description Corresponding to naiveUI Type `FormValidationStatus`
  */
-export type ValidationStatus = "success" | "error" | "warning"
+export type ValidationStatus = 'success' | 'error' | 'warning'
 
 /**
  * @description NSelect option type

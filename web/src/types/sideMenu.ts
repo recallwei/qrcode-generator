@@ -1,4 +1,4 @@
-export type SideMenuActiveKey = "home" | "crystal" | "slice"
+export type SideMenuActiveKey = 'home' | 'crystal' | 'slice'
 
 export type SideMenuItem = {
   path?: string

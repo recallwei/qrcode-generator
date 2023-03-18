@@ -1,4 +1,4 @@
-import type { CustomProperty } from "@/types"
+import type { CustomProperty } from '@/types'
 
 export interface TemplateForm extends CustomProperty {
   value: any

@@ -1,6 +1,6 @@
-import { h, type Component } from "vue"
-import { NIcon } from "naive-ui"
-import { RouterLink } from "vue-router"
+import { h, type Component } from 'vue'
+import { NIcon } from 'naive-ui'
+import { RouterLink } from 'vue-router'
 
 /**
  * Render icon.
@@ -13,8 +13,7 @@ const renderIcon = (icon: Component) => () => h(NIcon, null, { default: () => h(
  * @param href Link
  * @param text Menu text
  */
-const getRouterLinkNode = (href: string, text: string) => () =>
-  h(RouterLink, { to: href }, { default: () => text })
+const getRouterLinkNode = (href: string, text: string) => () => h(RouterLink, { to: href }, { default: () => text })
 
 /**
  * Get outside link node.
@@ -22,6 +21,6 @@ const getRouterLinkNode = (href: string, text: string) => () =>
  * @param text Menu text
  */
 const getOutsideLinkNode = (href: string, text: string) => () =>
-  h("a", { href, target: "_blank", rel: "noopenner noreferrer" }, text)
+  h('a', { href, target: '_blank', rel: 'noopenner noreferrer' }, text)
 
 export default { renderIcon, getOutsideLinkNode, getRouterLinkNode }

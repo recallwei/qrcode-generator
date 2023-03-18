@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue"
-import { useRouter } from "vue-router"
-import { useEventListener, useToggle } from "@vueuse/core"
-import { NButton } from "naive-ui"
-import { siteMetaData } from "@/constants"
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useEventListener, useToggle } from '@vueuse/core'
+import { NButton } from 'naive-ui'
+import { siteMetaData } from '@/constants'
 
 const { AppName, Favicon, Version } = siteMetaData
 
@@ -13,13 +13,13 @@ const [replayAnimationFlag, toggleReplayAnimationFlag] = useToggle(true)
 
 const replayAnimationFlagGetter = computed(() => replayAnimationFlag.value.toString())
 
-useEventListener(document, "visibilitychange", () => {
+useEventListener(document, 'visibilitychange', () => {
   if (!document.hidden) {
     toggleReplayAnimationFlag()
   }
 })
 
-const navToQuick = () => router.push("/quick")
+const navToQuick = () => router.push('/quick')
 </script>
 
 <template>

@@ -1,10 +1,10 @@
-const { app, BrowserView, BrowserWindow, Notification } = require("electron")
-const path = require("path")
+const { app, BrowserView, BrowserWindow, Notification } = require('electron')
+const path = require('path')
 
 function showNotification() {
   new Notification({
-    title: "二维码生成器",
-    body: "当前处于 v1.0.0-alpha.1 内测版本，出现 Bug 请反馈给管理员。",
+    title: '二维码生成器',
+    body: '当前处于 v1.0.0-alpha.1 内测版本，出现 Bug 请反馈给管理员。',
     silent: false
   }).show()
 }
@@ -17,14 +17,14 @@ const createWindow = () => {
     height: 900,
     minWidth: 800,
     minHeight: 600,
-    icon: path.join(__dirname, "./images/favicon.ico")
+    icon: path.join(__dirname, './images/favicon.ico')
     // frame: false
   })
 
-  win.once("ready-to-show", () => {
+  win.once('ready-to-show', () => {
     win.show()
   })
-  win.setAppDetails({ relaunchDisplayName: "二维码生成器" })
+  win.setAppDetails({ relaunchDisplayName: '二维码生成器' })
 
   const view = new BrowserView()
   win.setBrowserView(view)
@@ -36,7 +36,7 @@ const createWindow = () => {
     vertical: true
   })
   // view.webContents.loadURL("http://localhost:4058")
-  view.webContents.loadURL("https://qrcode.bruceworld.top")
+  view.webContents.loadURL('https://qrcode.bruceworld.top')
 }
 
 app
@@ -44,7 +44,7 @@ app
   .then(() => {
     createWindow()
 
-    app.on("activate", () => {
+    app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) {
         createWindow()
       }
@@ -52,8 +52,8 @@ app
   })
   .then(showNotification)
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit()
   }
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, toRaw, type Ref } from "vue"
+import { ref, computed, nextTick, toRaw, type Ref } from 'vue'
 import {
   NForm,
   NFormItem,
@@ -24,81 +24,77 @@ import {
   type FormRules,
   type UploadCustomRequestOptions,
   type UploadFileInfo
-} from "naive-ui"
+} from 'naive-ui'
 import {
   FolderOpenOutlined as FolderIcon,
   CloseOutlined as CloseIcon,
   EditNoteOutlined as EditIcon,
   FileDownloadOutlined as DownloadIcon
-} from "@vicons/material"
-import { useObservable } from "@vueuse/rxjs"
-import { liveQuery } from "dexie"
-import type { CustomField, Config } from "@/types"
-import { IndexedDBInstance } from "@/database"
-import { valueTypeCandidates } from "@/constants"
-import { downloadFile } from "@/utils"
+} from '@vicons/material'
+import { useObservable } from '@vueuse/rxjs'
+import { liveQuery } from 'dexie'
+import type { CustomField, Config } from '@/types'
+import { IndexedDBInstance } from '@/database'
+import { valueTypeCandidates } from '@/constants'
+import { downloadFile } from '@/utils'
 
-type OperateMode = "noAction" | "create" | "edit" | "readOnly"
+type OperateMode = 'noAction' | 'create' | 'edit' | 'readOnly'
 
 const DEFAULT_MAX_LENGTH_LIMIT = 16
 const rules: FormRules = {
   name: [
     {
       required: true,
-      message: "请输入配置文件名称",
-      trigger: ["input", "blur"]
+      message: '请输入配置文件名称',
+      trigger: ['input', 'blur']
     }
   ]
 }
 
 const message = useMessage()
 
-const configList = useObservable(liveQuery(() => IndexedDBInstance.config.toArray()) as any) as Ref<
-  Config[]
->
+const configList = useObservable(liveQuery(() => IndexedDBInstance.config.toArray()) as any) as Ref<Config[]>
 
 const formRef = ref<FormInst | null>(null)
 const form = ref<Config>({
   id: undefined,
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   customFields: []
 })
 
-const operateMode = ref<OperateMode>("noAction")
+const operateMode = ref<OperateMode>('noAction')
 
-const showEditableArea = computed(
-  () => operateMode.value === "create" || operateMode.value === "edit"
-)
+const showEditableArea = computed(() => operateMode.value === 'create' || operateMode.value === 'edit')
 
 const selectConfig = async (id: number) => {
   try {
     if (form.value.id === id) {
       form.value = {
         id: undefined,
-        name: "",
-        description: "",
+        name: '',
+        description: '',
         customFields: []
       }
-      operateMode.value = "noAction"
+      operateMode.value = 'noAction'
       return
     }
     const json = await IndexedDBInstance.config.get(id)
     form.value = { ...form.value, ...json }
-    operateMode.value = "readOnly"
+    operateMode.value = 'readOnly'
   } catch {
-    message.error("获取配置文件失败")
+    message.error('获取配置文件失败')
   }
 }
 
 const addConfig = () => {
   form.value = {
     id: undefined,
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     customFields: []
   }
-  operateMode.value = "create"
+  operateMode.value = 'create'
 }
 
 const deleteConfig = async (id: number) => {
@@ -106,44 +102,44 @@ const deleteConfig = async (id: number) => {
     if (form.value.id === id) {
       form.value = {
         id: undefined,
-        name: "",
-        description: "",
+        name: '',
+        description: '',
         customFields: []
       }
     }
-    operateMode.value = "noAction"
+    operateMode.value = 'noAction'
     await IndexedDBInstance.config.delete(id)
-    message.success("删除成功")
+    message.success('删除成功')
   } catch {
-    message.error("删除失败")
+    message.error('删除失败')
   }
 }
 
 const editConfig = (config: Config) => {
-  operateMode.value = "edit"
+  operateMode.value = 'edit'
   form.value = config
 }
 
 const downloadConfig = async (config: Config) => {
   const { name, description, customFields } = config
   const configData = { name, description, customFields }
-  message.loading("正在下载配置文件")
+  message.loading('正在下载配置文件')
   const jsonString = JSON.stringify(configData)
   const jsonDataURL = `data:,${jsonString}`
   downloadFile(jsonDataURL, `${configData.name}.json`)
   await nextTick()
   message.destroyAll()
-  message.success("配置文件下载成功")
+  message.success('配置文件下载成功')
 }
 
 const addCustomField = () => {
   const customField: CustomField = {
-    name: "",
+    name: '',
     customProperties: [
       {
-        keyName: "",
-        keyCode: "",
-        valueType: "string",
+        keyName: '',
+        keyCode: '',
+        valueType: 'string',
         require: true,
         enableValueLengthLimit: true,
         valueLengthLimit: DEFAULT_MAX_LENGTH_LIMIT
@@ -161,27 +157,23 @@ const clearAllCustomFields = () => {
 
 const addCustomProperty = (customField: CustomField) =>
   customField.customProperties.push({
-    keyName: "",
-    keyCode: "",
-    valueType: "string",
+    keyName: '',
+    keyCode: '',
+    valueType: 'string',
     require: true,
     enableValueLengthLimit: true,
     valueLengthLimit: DEFAULT_MAX_LENGTH_LIMIT
   })
 
-const deleteCustomProperty = (index: number, customField: CustomField) =>
-  customField.customProperties.splice(index, 1)
+const deleteCustomProperty = (index: number, customField: CustomField) => customField.customProperties.splice(index, 1)
 
 const clearAllCustomProperties = (customField: CustomField) =>
   customField.customProperties.splice(0, customField.customProperties.length)
 
 const uploadFileValidation = async ({ file }: { file: UploadFileInfo }) => {
-  const fileNameWithoutSuffix = file.name.split(".")[0]
-  if (
-    (await IndexedDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) >
-    0
-  ) {
-    message.error("无法导入重名文件，若要替换配置文件，请尝试删除旧文件")
+  const fileNameWithoutSuffix = file.name.split('.')[0]
+  if ((await IndexedDBInstance.config.where('name').equalsIgnoreCase(fileNameWithoutSuffix).count()) > 0) {
+    message.error('无法导入重名文件，若要替换配置文件，请尝试删除旧文件')
     return false
   }
   return true
@@ -192,10 +184,10 @@ const uploadFileToList = ({ file }: { file: UploadFileInfo }) => {
   fileReader.onload = async () => {
     try {
       const json = JSON.parse(fileReader.result as string)
-      message.success("导入配置文件成功")
+      message.success('导入配置文件成功')
       await IndexedDBInstance.config.add(json)
     } catch {
-      message.error("导入配置文件失败，文件内容格式存在问题")
+      message.error('导入配置文件失败，文件内容格式存在问题')
     }
   }
   fileReader.readAsText(file.file as any)
@@ -208,22 +200,22 @@ const saveConfig = (e: MouseEvent) => {
   e.preventDefault()
   formRef.value?.validate(async (errors) => {
     if (errors) {
-      message.error("内容填写不完整")
+      message.error('内容填写不完整')
     }
-    if (operateMode.value === "edit") {
-      message.loading("正在保存配置文件")
+    if (operateMode.value === 'edit') {
+      message.loading('正在保存配置文件')
       await IndexedDBInstance.config.put(toRaw(form.value), form.value.id)
       await nextTick()
       message.destroyAll()
-      message.success("配置文件保存成功")
-    } else if (operateMode.value === "create") {
-      message.loading("正在导出配置文件")
+      message.success('配置文件保存成功')
+    } else if (operateMode.value === 'create') {
+      message.loading('正在导出配置文件')
       const jsonString = JSON.stringify(form.value)
       const jsonDataURL = `data:,${jsonString}`
       downloadFile(jsonDataURL, `${form.value.name}.json`)
       await nextTick()
       message.destroyAll()
-      message.success("配置文件下载成功")
+      message.success('配置文件下载成功')
       IndexedDBInstance.config.add(form.value)
     }
   })
@@ -304,9 +296,7 @@ const saveConfig = (e: MouseEvent) => {
 
                     <n-tooltip trigger="hover">
                       <template #trigger>
-                        <n-text
-                          class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap"
-                        >
+                        <n-text class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
                           {{ config.description }}
                         </n-text>
                       </template>
@@ -472,9 +462,7 @@ const saveConfig = (e: MouseEvent) => {
             </n-space>
 
             <n-space
-              v-for="(
-                customFieldProperty, customFieldPropertyIndex
-              ) in customField.customProperties"
+              v-for="(customFieldProperty, customFieldPropertyIndex) in customField.customProperties"
               :key="customFieldPropertyIndex"
             >
               <n-grid :x-gap="12">

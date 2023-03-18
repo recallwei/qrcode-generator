@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NCard, NUpload, NUploadDragger, NIcon, NText, NP, useMessage } from "naive-ui"
-import type { UploadCustomRequestOptions } from "naive-ui"
-import { CloudUploadOutlined as UploadIcon } from "@vicons/material"
-import type { UploadFileType, HandleFinishUpload } from "./interface"
+import { NCard, NUpload, NUploadDragger, NIcon, NText, NP, useMessage } from 'naive-ui'
+import type { UploadCustomRequestOptions } from 'naive-ui'
+import { CloudUploadOutlined as UploadIcon } from '@vicons/material'
+import type { UploadFileType, HandleFinishUpload } from './interface'
 
-const supportedFileTypes = ["image/png", "image/jpg", "image/jpeg"]
+const supportedFileTypes = ['image/png', 'image/jpg', 'image/jpeg']
 
 const message = useMessage()
 
@@ -13,8 +13,8 @@ const message = useMessage()
  * @param data Upload file info.
  */
 const handleBeforeUpload = async (data: UploadFileType): Promise<boolean> => {
-  if (!supportedFileTypes.includes(data.file.file?.type ?? "")) {
-    message.error("只能上传 png、jpg、jpeg 格式的图片文件，请重新上传！")
+  if (!supportedFileTypes.includes(data.file.file?.type ?? '')) {
+    message.error('只能上传 png、jpg、jpeg 格式的图片文件，请重新上传！')
     return false
   }
   return true
@@ -26,7 +26,7 @@ const handleUpload = (params: UploadCustomRequestOptions) => params.onFinish()
  * @description Handle finish upload.
  */
 const handleFinishUpload = ({ file }: HandleFinishUpload) => {
-  message.success("上传成功！")
+  message.success('上传成功！')
   const fileRef = file
   fileRef.name = `${file.name} - result`
   return file

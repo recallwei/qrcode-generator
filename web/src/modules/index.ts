@@ -1,1 +1,1 @@
-export { default as Naive } from "./naive"
+export { default as Naive } from './naive'

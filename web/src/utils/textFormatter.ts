@@ -1,4 +1,3 @@
-const DEFAULT_PLACEHOLDER = "--"
+const DEFAULT_PLACEHOLDER = '--'
 
-export const withPlaceholder = (text: string | undefined, placeholder = DEFAULT_PLACEHOLDER) =>
-  text ?? placeholder
+export const withPlaceholder = (text: string | undefined, placeholder = DEFAULT_PLACEHOLDER) => text ?? placeholder

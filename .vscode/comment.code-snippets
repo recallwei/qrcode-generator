@@ -1,13 +1,7 @@
 {
   "comment by bruce song": {
     "prefix": "bsc",
-    "body": [
-      "/**",
-      "  * 2023/$1/$2 Bruce Song <recall4056@gmail.com>",
-      "  * NOTE:",
-      "  * $3",
-      "  */"
-    ],
+    "body": ["/**", "  * 2023/$1/$2 Bruce Song <recall4056@gmail.com>", "  * NOTE:", "  * $3", "  */"],
     "description": "comment by bruce song"
   }
 }

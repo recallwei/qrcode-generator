@@ -1,36 +1,20 @@
 <script setup lang="ts">
-import { ref, type Ref } from "vue"
-import {
-  NInput,
-  NImage,
-  NCard,
-  NButton,
-  NIcon,
-  NText,
-  NTooltip,
-  NPopconfirm,
-  useMessage
-} from "naive-ui"
+import { ref, type Ref } from 'vue'
+import { NInput, NImage, NCard, NButton, NIcon, NText, NTooltip, NPopconfirm, useMessage } from 'naive-ui'
 import {
   FileDownloadOutlined as DownloadIcon,
   RefreshFilled as ResetIcon,
   DeleteForeverOutlined as DeleteIcon,
   ContentCopyOutlined as CopyIcon
-} from "@vicons/material"
-import { useDebounceFn } from "@vueuse/core"
-import { useObservable } from "@vueuse/rxjs"
-import { liveQuery } from "dexie"
-import QRCodeManager from "@package/qrcode-manager"
-import {
-  setClipBoardText,
-  downloadFile,
-  formatCurrentTime,
-  withPlaceholder,
-  formatTime
-} from "@/utils"
-import { useValidationStatus, useLoading } from "@/hooks"
-import { IndexedDBInstance } from "@/database"
-import type { History } from "@/types"
+} from '@vicons/material'
+import { useDebounceFn } from '@vueuse/core'
+import { useObservable } from '@vueuse/rxjs'
+import { liveQuery } from 'dexie'
+import QRCodeManager from '@package/qrcode-manager'
+import { setClipBoardText, downloadFile, formatCurrentTime, withPlaceholder, formatTime } from '@/utils'
+import { useValidationStatus, useLoading } from '@/hooks'
+import { IndexedDBInstance } from '@/database'
+import type { History } from '@/types'
 
 type Config = {
   titleMaxLength: number
@@ -46,15 +30,15 @@ const config = ref<Config>({
   contentMaxLength: 400
 })
 
-const historyList = useObservable(
-  liveQuery(() => IndexedDBInstance.history.reverse().toArray()) as any
-) as Ref<History[]>
+const historyList = useObservable(liveQuery(() => IndexedDBInstance.history.reverse().toArray()) as any) as Ref<
+  History[]
+>
 
 const userInput = ref({
-  title: "",
-  content: ""
+  title: '',
+  content: ''
 })
-const imgURL = ref("")
+const imgURL = ref('')
 
 const focusedHistoryItemIndex = ref<number | null | undefined>(null)
 
@@ -62,10 +46,10 @@ const onUserInput = () => userInputStatusDispatcher.clear()
 
 const handleGenerateQRCode = useDebounceFn(async () => {
   generateQRCodeLoadingDispatcher.loading()
-  imgURL.value = ""
+  imgURL.value = ''
   try {
     if (!userInput.value.content) {
-      throw new Error("文字内容不能为空")
+      throw new Error('文字内容不能为空')
     }
     const qrcodeURL = await QRCodeManager.generateQRCode(userInput.value.content)
     imgURL.value = qrcodeURL
@@ -78,14 +62,14 @@ const handleGenerateQRCode = useDebounceFn(async () => {
       historyModel.title = userInput.value.title
     }
     if ((await IndexedDBInstance.history.count()) >= 400) {
-      throw new Error("可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试")
+      throw new Error('可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试')
     }
     await IndexedDBInstance.history.add(historyModel)
-    message.success("生成二维码成功")
+    message.success('生成二维码成功')
   } catch (error: any) {
     userInputStatusDispatcher.setError()
     message.error(error.message)
-    imgURL.value = ""
+    imgURL.value = ''
   }
   generateQRCodeLoadingDispatcher.loaded()
 }, 300)
@@ -93,57 +77,57 @@ const handleGenerateQRCode = useDebounceFn(async () => {
 const handleCopyContent = () => {
   if (!userInput.value.content) {
     userInputStatusDispatcher.setError()
-    message.error("复制失败，没有输入文字内容")
+    message.error('复制失败，没有输入文字内容')
     return
   }
   setClipBoardText(userInput.value.content)
-  message.success("复制成功")
+  message.success('复制成功')
 }
 
 const handleDownloadQRCode = () => {
   if (!imgURL.value) {
-    message.error("没有生成二维码，无法下载")
+    message.error('没有生成二维码，无法下载')
     userInputStatusDispatcher.setError()
     return
   }
-  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : "qrcode.png")
+  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : 'qrcode.png')
 }
 
 const handleReset = () => {
-  userInput.value.title = ""
-  userInput.value.content = ""
+  userInput.value.title = ''
+  userInput.value.content = ''
   userInputStatusDispatcher.clear()
-  imgURL.value = ""
-  message.success("重置成功")
+  imgURL.value = ''
+  message.success('重置成功')
 }
 
 const handleDeleteHistoryRecord = async (id?: number) => {
   try {
     if (!id) {
-      throw new Error("删除失败，没有找到对应的历史记录")
+      throw new Error('删除失败，没有找到对应的历史记录')
     }
     await IndexedDBInstance.history.delete(id)
-    message.success("删除成功")
+    message.success('删除成功')
   } catch (error: any) {
-    message.error(error.message || "删除失败")
+    message.error(error.message || '删除失败')
   }
 }
 
 const handleCopyByHistoryRecord = (item: History, key: keyof History) => {
   if (!item[key]) {
-    message.error("复制失败")
+    message.error('复制失败')
     return
   }
   setClipBoardText(item[key] as string)
-  message.success("复制成功")
+  message.success('复制成功')
 }
 
 const handleDownloadByHistoryRecord = (item: History) => {
   if (!item.src) {
-    message.error("下载失败")
+    message.error('下载失败')
     return
   }
-  downloadFile(item.src, item.title ? `${item.title}.png` : "qrcode.png")
+  downloadFile(item.src, item.title ? `${item.title}.png` : 'qrcode.png')
 }
 
 const changeFocusedHistoryRecord = (item: History) => {
@@ -156,7 +140,7 @@ const clearFocusedHistoryRecord = () => {
 
 const clearAllHistoryRecord = async () => {
   await IndexedDBInstance.history.clear()
-  message.success("已清空历史数据")
+  message.success('已清空历史数据')
 }
 </script>
 
@@ -346,7 +330,7 @@ const clearAllHistoryRecord = async () => {
                     >
                       <template #trigger>
                         <n-text class="cursor-pointer">
-                          {{ withPlaceholder(formatTime(item.createAt as string, "MM-DD hh:mm")) }}
+                          {{ withPlaceholder(formatTime(item.createAt as string, 'MM-DD hh:mm')) }}
                         </n-text>
                       </template>
                       {{ withPlaceholder(item.createAt as string) }}

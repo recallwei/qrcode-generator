@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, nextTick, type Ref } from "vue"
-import { useObservable } from "@vueuse/rxjs"
-import { liveQuery } from "dexie"
+import { ref, nextTick, type Ref } from 'vue'
+import { useObservable } from '@vueuse/rxjs'
+import { liveQuery } from 'dexie'
 import {
   NCard,
   NSelect,
@@ -18,24 +18,28 @@ import {
   useMessage,
   type UploadFileInfo,
   type FormInst
-} from "naive-ui"
+} from 'naive-ui'
 import {
   SearchOutlined as SearchIcon,
   FileDownloadOutlined as DownloadIcon,
   RefreshFilled as ResetIcon,
   QuestionMarkOutlined as TipIcon
-} from "@vicons/material"
-import QRCodeManager from "@package/qrcode-manager"
-import type { Config, CustomField, SelectorOption, WithNull, History } from "@/types"
-import { IndexedDBInstance } from "@/database"
-import { formatCurrentTime, downloadFile, setClipBoardText } from "@/utils"
-import type { TemplateForm } from "./private/types"
+} from '@vicons/material'
+import QRCodeManager from '@package/qrcode-manager'
+import type { Config, CustomField, SelectorOption, WithNull, History } from '@/types'
+import { IndexedDBInstance } from '@/database'
+import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
+import type { TemplateForm } from './private/types'
 
 // Dynamically get templates from IndexedDB.
 const configOptions = useObservable(
   liveQuery(() =>
     IndexedDBInstance.config.toArray((array) =>
-      array.map((item) => ({ label: item.name, value: item.id, data: item }))
+      array.map((item) => ({
+        label: item.name,
+        value: item.id,
+        data: item
+      }))
     )
   ) as any
 ) as Ref<SelectorOption<Config>[]>
@@ -54,10 +58,10 @@ const selectedTemplateName = ref(null)
 const templateForm = ref<WithNull<TemplateForm[]>>(null)
 const templateFormRef = ref<FormInst | null>(null)
 
-const imgURL = ref("")
+const imgURL = ref('')
 const userInput = ref({
-  title: "",
-  content: ""
+  title: '',
+  content: ''
 })
 
 const showSignal = ref({
@@ -70,9 +74,9 @@ const clearTemplateForm = () => {
 }
 
 const clearUserInputRelated = () => {
-  userInput.value.title = ""
-  userInput.value.content = ""
-  imgURL.value = ""
+  userInput.value.title = ''
+  userInput.value.content = ''
+  imgURL.value = ''
 }
 
 const deleteConfig = async () => {
@@ -87,9 +91,9 @@ const deleteConfig = async () => {
     clearTemplateForm()
     clearUserInputRelated()
     await IndexedDBInstance.config.delete(currentId)
-    message.success("删除成功")
+    message.success('删除成功')
   } catch {
-    message.error("删除失败")
+    message.error('删除失败')
   }
 }
 
@@ -118,7 +122,7 @@ const selectTemplate = (_: any, option: SelectorOption<CustomField>) => {
   const { data } = option
   templateForm.value = data.customProperties.map((customProperty) => ({
     ...customProperty,
-    value: customProperty.valueType === "number" ? 0 : ""
+    value: customProperty.valueType === 'number' ? 0 : ''
   }))
 }
 
@@ -129,12 +133,10 @@ const clearSelectedTemplate = () => {
 }
 
 const uploadConfigValidation = async ({ file }: { file: UploadFileInfo }) => {
-  const fileNameWithoutSuffix = file.name.split(".")[0]
-  const repeated =
-    (await IndexedDBInstance.config.where("name").equalsIgnoreCase(fileNameWithoutSuffix).count()) >
-    0
+  const fileNameWithoutSuffix = file.name.split('.')[0]
+  const repeated = (await IndexedDBInstance.config.where('name').equalsIgnoreCase(fileNameWithoutSuffix).count()) > 0
   if (repeated) {
-    message.error("无法导入重名文件，若要替换配置文件，请尝试删除旧文件")
+    message.error('无法导入重名文件，若要替换配置文件，请尝试删除旧文件')
     return false
   }
   return true
@@ -145,10 +147,10 @@ const uploadConfig = ({ file }: { file: UploadFileInfo }) => {
   fileReader.onload = async () => {
     try {
       const json = JSON.parse(fileReader.result as string)
-      message.success("导入配置文件成功")
+      message.success('导入配置文件成功')
       await IndexedDBInstance.config.add(json)
     } catch {
-      message.error("导入配置文件失败，文件内容格式存在问题")
+      message.error('导入配置文件失败，文件内容格式存在问题')
     }
   }
   fileReader.readAsText(file.file as any)
@@ -156,29 +158,29 @@ const uploadConfig = ({ file }: { file: UploadFileInfo }) => {
 }
 const downloadConfig = async () => {
   if (!selectedConfigId.value) {
-    message.error("请先选择配置文件")
+    message.error('请先选择配置文件')
     return
   }
   const config = await IndexedDBInstance.config.get(selectedConfigId.value)
   if (!config) {
-    message.error("配置文件不存在")
+    message.error('配置文件不存在')
     return
   }
   const { name, description, customFields } = config
   const configData = { name, description, customFields }
-  message.loading("正在下载配置文件")
+  message.loading('正在下载配置文件')
   const jsonString = JSON.stringify(configData)
   const jsonDataURL = `data:,${jsonString}`
   downloadFile(jsonDataURL, `${configData.name}.json`)
   await nextTick()
   message.destroyAll()
-  message.success("配置文件下载成功")
+  message.success('配置文件下载成功')
 }
 
 const generateQRCode = () => {
   templateFormRef.value?.validate(async (errors) => {
     if (errors) {
-      message.error("内容填写不完整")
+      message.error('内容填写不完整')
     } else {
       const jsonContent: Record<string, any> = {}
       templateForm.value?.forEach((customProperty) => {
@@ -201,10 +203,10 @@ const generateQRCode = () => {
           historyModel.title = userInput.value.title
         }
         if ((await IndexedDBInstance.history.count()) >= 400) {
-          throw new Error("可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试")
+          throw new Error('可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试')
         }
         await IndexedDBInstance.history.add(historyModel)
-        message.success("生成二维码成功")
+        message.success('生成二维码成功')
       } catch (error: any) {
         message.error(error.message)
       }
@@ -213,30 +215,30 @@ const generateQRCode = () => {
 }
 const downloadQRCode = () => {
   if (!imgURL.value) {
-    message.error("没有生成二维码，无法下载")
+    message.error('没有生成二维码，无法下载')
     return
   }
-  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : "qrcode.png")
+  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : 'qrcode.png')
 }
 
 const copyContent = () => {
   if (!userInput.value.content) {
-    message.error("复制失败，请先生成二维码")
+    message.error('复制失败，请先生成二维码')
     return
   }
   setClipBoardText(userInput.value.content)
-  message.success("复制成功")
+  message.success('复制成功')
 }
 
 const handleReset = () => {
-  userInput.value.title = ""
-  imgURL.value = ""
+  userInput.value.title = ''
+  imgURL.value = ''
   templateForm.value =
     templateForm.value?.map((customProperty) => ({
       ...customProperty,
-      value: customProperty.valueType === "number" ? 0 : ""
+      value: customProperty.valueType === 'number' ? 0 : ''
     })) ?? null
-  message.success("重置成功")
+  message.success('重置成功')
 }
 </script>
 
@@ -468,15 +470,9 @@ const handleReset = () => {
                   <n-input-number
                     v-model:value="customProperty.value"
                     style="width: 38.5%"
-                    :min="
-                      customProperty.numberOptions?.enableRangeLimit
-                        ? customProperty.numberOptions?.min
-                        : 0
-                    "
+                    :min="customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.min : 0"
                     :max="
-                      customProperty.numberOptions?.enableRangeLimit
-                        ? customProperty.numberOptions?.max
-                        : undefined
+                      customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.max : undefined
                     "
                     clearable
                     show-count

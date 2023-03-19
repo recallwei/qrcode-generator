@@ -10,7 +10,7 @@
   "description": "Generate qrcode by your peference.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/recallwei/qrcode-generator.git"
+    "url": "https://github.com/recallwei/qrcode-generator.git"
   },
   "keywords": [
     "qrcode",

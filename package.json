@@ -2,8 +2,11 @@
   "name": "qrcode-generator",
   "private": true,
   "version": "0.0.1",
-  "author": "Bruce Song <recall4056@gmail.com>",
-  "license": "MIT",
+  "author": {
+    "name": "recallwei",
+    "email": "recall4056@gmail.com",
+    "url": "https://github.com/recallwei"
+  },
   "description": "Generate qrcode by your peference.",
   "repository": {
     "type": "git",
@@ -65,5 +68,6 @@
     "pnpm": "^7.29.3",
     "tsup": "^6.6.3",
     "typescript": "~5.0.2"
-  }
+  },
+  "license": "MIT"
 }

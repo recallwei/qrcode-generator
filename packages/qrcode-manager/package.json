@@ -2,8 +2,11 @@
   "name": "@package/qrcode-manager",
   "private": true,
   "version": "0.0.1",
-  "author": "Bruce Song <recall4056@gmail.com>",
-  "license": "MIT",
+  "author": {
+    "name": "recallwei",
+    "email": "recall4056@gmail.com",
+    "url": "https://github.com/recallwei"
+  },
   "description": "Function for generate qrcode.",
   "files": [
     "dist"
@@ -24,5 +27,6 @@
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.0"
-  }
+  },
+  "license": "MIT"
 }

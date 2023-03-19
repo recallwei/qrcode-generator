@@ -2,8 +2,11 @@
   "name": "@package/local-storage-manager",
   "private": true,
   "version": "0.0.1",
-  "author": "Bruce Song <recall4056@gmail.com>",
-  "license": "MIT",
+  "author": {
+    "name": "recallwei",
+    "email": "recall4056@gmail.com",
+    "url": "https://github.com/recallwei"
+  },
   "description": "Function for manage local storage.",
   "files": [
     "dist"
@@ -20,5 +23,6 @@
     "build:pkg:fast": "tsup src/index.ts --format cjs,esm"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "license": "MIT"
 }

@@ -3,9 +3,12 @@
   "productName": "二维码生成器",
   "private": true,
   "version": "1.0.0",
-  "author": "Bruce Song <recall4056@gmail.com>",
+  "author": {
+    "name": "recallwei",
+    "email": "recall4056@gmail.com",
+    "url": "https://github.com/recallwei"
+  },
   "description": "Desktop App for the QRCode Generator.",
-  "license": "MIT",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -51,5 +54,6 @@
         }
       ]
     }
-  }
+  },
+  "license": "MIT"
 }

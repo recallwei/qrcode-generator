@@ -2,9 +2,12 @@
   "name": "web",
   "private": true,
   "version": "1.0.0",
-  "author": "Bruce Song <recall4056@gmail.com>",
+  "author": {
+    "name": "recallwei",
+    "email": "recall4056@gmail.com",
+    "url": "https://github.com/recallwei"
+  },
   "description": "Website for the QRCode Generator.",
-  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "run-p check:type build:fast",
@@ -48,5 +51,6 @@
     "vite": "^4.2.0",
     "vitest": "^0.29.3",
     "vue-tsc": "^1.2.0"
-  }
+  },
+  "license": "MIT"
 }

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEventListener, useToggle } from '@vueuse/core'
-import { NButton } from 'naive-ui'
+import { NButton, NAlert } from 'naive-ui'
 import { siteMetaData } from '@/constants'
 
 const { AppName, Favicon, Version } = siteMetaData
@@ -24,7 +24,12 @@ const navToQuick = () => router.push('/quick')
 
 <template>
   <main class="h-full w-full select-none">
-    <div class="absolute inset-0 bottom-28 m-auto flex flex-col items-center justify-center space-y-4">
+    <!--
+      2023/3/25 Bruce Song <recall4056@gmail.com>
+      NOTE:
+      如果没有 Alert，该区域需要 class 属性 bottom-28
+    -->
+    <div class="absolute inset-0 m-auto flex flex-col items-center justify-center space-y-4">
       <img
         :key="replayAnimationFlagGetter"
         class="img-animation"
@@ -46,6 +51,12 @@ const navToQuick = () => router.push('/quick')
       >
         开始
       </n-button>
+      <n-alert
+        title="注意："
+        type="warning"
+      >
+        当前仍处于内测版本，版本升级可能会造成已生成的历史二维码丢失。
+      </n-alert>
     </div>
   </main>
 </template>

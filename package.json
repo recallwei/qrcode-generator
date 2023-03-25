@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/recallwei/qrcode-generator/issues"
   },
-  "homepage": "https://github.com/recallwesi/qrcode-generator#readme",
+  "homepage": "https://github.com/recallwei/qrcode-generator#readme",
   "scripts": {
     "dev": "pnpm --filter=web dev",
     "build": "pnpm --filter=web build",

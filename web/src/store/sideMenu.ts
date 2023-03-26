@@ -1,4 +1,3 @@
-import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { SideMenuActiveKey } from '@/types'
 

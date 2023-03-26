@@ -23,6 +23,15 @@ export default defineConfig({
         'vue',
         'vue-router',
         {
+          '@vueuse/core': ['useToggle', 'useEventListener', 'useDebounceFn']
+        },
+        {
+          '@vueuse/rxjs': ['useObservable']
+        },
+        {
+          dexie: ['liveQuery']
+        },
+        {
           'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
         },
         {

@@ -5,8 +5,6 @@ import {
   EditNoteOutlined as EditIcon,
   FileDownloadOutlined as DownloadIcon
 } from '@vicons/material'
-import { useObservable } from '@vueuse/rxjs'
-import { liveQuery } from 'dexie'
 import type { CustomField, Config } from '@/types'
 import { IndexedDBInstance } from '@/database'
 import { valueTypeCandidates } from '@/constants'

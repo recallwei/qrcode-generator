@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { UploadCustomRequestOptions } from 'naive-ui'
 import { CloudUploadOutlined as UploadIcon } from '@vicons/material'
 import type { UploadFileType, HandleFinishUpload } from './interface'
 

@@ -5,9 +5,6 @@ import {
   DeleteForeverOutlined as DeleteIcon,
   ContentCopyOutlined as CopyIcon
 } from '@vicons/material'
-import { useDebounceFn } from '@vueuse/core'
-import { useObservable } from '@vueuse/rxjs'
-import { liveQuery } from 'dexie'
 import QRCodeManager from '@package/qrcode-manager'
 import { setClipBoardText, downloadFile, formatCurrentTime, withPlaceholder, formatTime } from '@/utils'
 import { useValidationStatus, useLoading } from '@/hooks'

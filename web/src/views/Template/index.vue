@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useObservable } from '@vueuse/rxjs'
-import { liveQuery } from 'dexie'
 import {
   SearchOutlined as SearchIcon,
   FileDownloadOutlined as DownloadIcon,
@@ -13,7 +11,6 @@ import { IndexedDBInstance } from '@/database'
 import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
 import type { TemplateForm } from './private/types'
 
-// Dynamically get templates from IndexedDB.
 const configOptions = useObservable(
   liveQuery(() =>
     IndexedDBInstance.config.toArray((array) =>
@@ -262,7 +259,7 @@ const handleReset = () => {
             <n-upload
               accept="application/json"
               :show-file-list="false"
-              :custom-request="(params:any) => params.onFinish()"
+              :custom-request="(params) => params.onFinish()"
               @before-upload="uploadConfigValidation"
               @finish="uploadConfig"
             >

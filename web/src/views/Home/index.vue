@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useEventListener, useToggle } from '@vueuse/core'
 import { siteMetaData } from '@/constants'
 
 const { AppName, Favicon, Version } = siteMetaData

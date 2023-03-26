@@ -10,7 +10,8 @@ module.exports = defineConfig({
     'plugin:vue/vue3-recommended',
     '@vue/eslint-config-typescript',
     'airbnb-base',
-    '@vue/eslint-config-prettier'
+    '@vue/eslint-config-prettier',
+    './web/.eslintrc-auto-import.json'
   ],
   plugins: ['html'],
   parserOptions: {

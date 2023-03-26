@@ -7,8 +7,8 @@ import {
   NMessageProvider,
   zhCN,
   dateZhCN,
-  lightTheme
-  // darkTheme
+  lightTheme,
+  darkTheme
 } from 'naive-ui'
 </script>
 

@@ -2,14 +2,13 @@
 import {
   SearchOutlined as SearchIcon,
   FileDownloadOutlined as DownloadIcon,
-  RefreshFilled as ResetIcon,
-  QuestionMarkOutlined as TipIcon
+  RefreshFilled as ResetIcon
 } from '@vicons/material'
 import QRCodeManager from '@package/qrcode-manager'
 import type { Config, CustomField, SelectorOption, WithNull, History } from '@/types'
 import { IndexedDBInstance } from '@/database'
 import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
-import type { TemplateForm } from './private/types'
+import type { TemplateForm, UserInput } from './private/types'
 
 const configOptions = useObservable(
   liveQuery(() =>
@@ -38,9 +37,11 @@ const templateForm = ref<WithNull<TemplateForm[]>>(null)
 const templateFormRef = ref<FormInst | null>(null)
 
 const imgURL = ref('')
-const userInput = ref({
+const userInputTitle = ref('')
+const userInputResult = ref<UserInput>({
   title: '',
-  content: ''
+  content: '',
+  jsonContent: null
 })
 
 const showSignal = ref({
@@ -53,8 +54,10 @@ const clearTemplateForm = () => {
 }
 
 const clearUserInputRelated = () => {
-  userInput.value.title = ''
-  userInput.value.content = ''
+  userInputTitle.value = ''
+  userInputResult.value.title = ''
+  userInputResult.value.content = ''
+  userInputResult.value.jsonContent = null
   imgURL.value = ''
 }
 
@@ -135,6 +138,7 @@ const uploadConfig = ({ file }: { file: UploadFileInfo }) => {
   fileReader.readAsText(file.file as any)
   return file
 }
+
 const downloadConfig = async () => {
   if (!selectedConfigId.value) {
     message.error('请先选择配置文件')
@@ -168,7 +172,9 @@ const generateQRCode = () => {
         }
       })
       const stringifiedJSON = JSON.stringify(jsonContent)
-      userInput.value.content = stringifiedJSON
+      userInputResult.value.title = userInputTitle.value
+      userInputResult.value.content = stringifiedJSON
+      userInputResult.value.jsonContent = jsonContent
       try {
         const qrcodeURL = await QRCodeManager.generateQRCode(stringifiedJSON)
         imgURL.value = qrcodeURL
@@ -178,8 +184,8 @@ const generateQRCode = () => {
           jsonContent,
           createAt: formatCurrentTime()
         }
-        if (userInput.value.title) {
-          historyModel.title = userInput.value.title
+        if (userInputResult.value.title) {
+          historyModel.title = userInputResult.value.title
         }
         if ((await IndexedDBInstance.history.count()) >= 400) {
           throw new Error('可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试')
@@ -192,26 +198,26 @@ const generateQRCode = () => {
     }
   })
 }
+
 const downloadQRCode = () => {
   if (!imgURL.value) {
     message.error('没有生成二维码，无法下载')
     return
   }
-  downloadFile(imgURL.value, userInput.value.title ? `${userInput.value.title}.png` : 'qrcode.png')
+  downloadFile(imgURL.value, userInputResult.value.title ? `${userInputResult.value.title}.png` : 'qrcode.png')
 }
 
 const copyContent = () => {
-  if (!userInput.value.content) {
+  if (!userInputResult.value.content) {
     message.error('复制失败，请先生成二维码')
     return
   }
-  setClipBoardText(userInput.value.content)
+  setClipBoardText(userInputResult.value.content)
   message.success('复制成功')
 }
 
 const handleReset = () => {
-  userInput.value.title = ''
-  imgURL.value = ''
+  clearUserInputRelated()
   templateForm.value =
     templateForm.value?.map((customProperty) => ({
       ...customProperty,
@@ -325,12 +331,11 @@ const handleReset = () => {
 
     <div
       v-if="templateForm"
-      class="flex space-x-4"
+      class="flex w-full space-x-4"
     >
       <!-- QRCode Preview Section -->
-      <div class="w-[300px]">
+      <div>
         <n-card
-          class="w-full"
           embedded
           hoverable
         >
@@ -343,7 +348,7 @@ const handleReset = () => {
               <reset-icon />
             </n-icon>
           </div>
-          <div class="flex h-full flex-col items-center justify-center space-y-4">
+          <div class="flex h-fit w-fit flex-col items-center justify-center space-y-4">
             <transition
               name="img"
               mode="out-in"
@@ -379,110 +384,123 @@ const handleReset = () => {
       </div>
 
       <!-- Template Form Section -->
-      <n-card
-        embedded
-        hoverable
-      >
-        <div class="flex h-full flex-col justify-between">
-          <n-form
-            ref="templateFormRef"
-            :model="templateForm"
-            label-width="80"
-            label-align="left"
-            label-placement="left"
-            require-mark-placement="right-hanging"
-          >
-            <n-form-item label="标题">
-              <n-input
-                v-model:value="userInput.title"
-                style="width: 38.5%"
-                type="text"
-                :maxlength="16"
-                clearable
-                show-count
-                placeholder="请输入标题【可选】"
-              />
-              <n-tooltip trigger="hover">
-                <template #trigger>
-                  <n-icon
-                    class="ml-2 hover:cursor-pointer"
-                    size="16"
-                    depth="2"
-                  >
-                    <tip-icon />
-                  </n-icon>
-                </template>
-                标题可用于检索生成的二维码或作为下载的文件名。
-              </n-tooltip>
-            </n-form-item>
-
-            <template
-              v-for="(customProperty, customPropertyIndex) in templateForm"
-              :key="customPropertyIndex"
+      <div>
+        <n-card
+          embedded
+          hoverable
+          class="h-full"
+        >
+          <div class="flex h-full min-w-[400px] flex-col justify-between">
+            <n-form
+              ref="templateFormRef"
+              :model="templateForm"
+              label-width="auto"
+              label-align="left"
+              label-placement="left"
+              require-mark-placement="right-hanging"
             >
-              <n-form-item
-                :label="customProperty.keyName"
-                :path="`[${customPropertyIndex}].value`"
-                :rule="{
-                  required: customProperty.require,
-                  message: '请输入' + customProperty.keyName,
-                  trigger: ['input', 'blur'],
-                  type: customProperty.valueType
-                }"
-              >
-                <template v-if="customProperty.valueType === 'string'">
-                  <n-input
-                    v-model:value="customProperty.value"
-                    style="width: 38.5%"
-                    type="text"
-                    :maxlength="
-                      customProperty.stringOptions?.enableLengthLimit
-                        ? customProperty.stringOptions.lengthLimit
-                        : undefined
-                    "
-                    clearable
-                    show-count
-                    placeholder="请输入内容"
-                  />
-                </template>
-                <template v-if="customProperty.valueType === 'number'">
-                  <n-input-number
-                    v-model:value="customProperty.value"
-                    style="width: 38.5%"
-                    :min="customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.min : 0"
-                    :max="
-                      customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.max : undefined
-                    "
-                    clearable
-                    show-count
-                    placeholder="请输入内容"
-                  />
-                </template>
+              <n-form-item label="标题">
+                <n-input
+                  v-model:value="userInputTitle"
+                  type="text"
+                  :maxlength="16"
+                  clearable
+                  show-count
+                  placeholder="请输入标题【可选】"
+                />
               </n-form-item>
-            </template>
-          </n-form>
 
-          <n-space align="center">
-            <n-button
-              size="small"
-              type="primary"
-              strong
-              secondary
-              @click="() => copyContent()"
-            >
-              复制内容
-            </n-button>
-            <n-button
-              size="small"
-              type="primary"
-              strong
-              @click="() => generateQRCode()"
-            >
-              生成二维码
-            </n-button>
-          </n-space>
-        </div>
-      </n-card>
+              <template
+                v-for="(customProperty, customPropertyIndex) in templateForm"
+                :key="customPropertyIndex"
+              >
+                <n-form-item
+                  :label="customProperty.keyName"
+                  :path="`[${customPropertyIndex}].value`"
+                  :rule="{
+                    required: customProperty.require,
+                    message: '请输入' + customProperty.keyName,
+                    trigger: ['input', 'blur'],
+                    type: customProperty.valueType
+                  }"
+                >
+                  <template v-if="customProperty.valueType === 'string'">
+                    <n-input
+                      v-model:value="customProperty.value"
+                      type="text"
+                      :maxlength="
+                        customProperty.stringOptions?.enableLengthLimit
+                          ? customProperty.stringOptions.lengthLimit
+                          : undefined
+                      "
+                      clearable
+                      show-count
+                      placeholder="请输入内容"
+                    />
+                  </template>
+                  <template v-if="customProperty.valueType === 'number'">
+                    <n-input-number
+                      v-model:value="customProperty.value"
+                      :min="customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.min : 0"
+                      :max="
+                        customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.max : undefined
+                      "
+                      clearable
+                      show-count
+                      placeholder="请输入内容"
+                    />
+                  </template>
+                </n-form-item>
+              </template>
+            </n-form>
+
+            <n-space align="center">
+              <n-button
+                size="small"
+                type="primary"
+                strong
+                secondary
+                @click="() => copyContent()"
+              >
+                复制内容
+              </n-button>
+              <n-button
+                size="small"
+                type="primary"
+                strong
+                @click="() => generateQRCode()"
+              >
+                生成二维码
+              </n-button>
+            </n-space>
+          </div>
+        </n-card>
+      </div>
+
+      <!-- Content Section -->
+      <template v-if="userInputResult.content">
+        <n-card
+          embedded
+          hoverable
+          class="overflow-hidden"
+        >
+          <div class="flex flex-col space-y-2">
+            <template v-if="userInputResult.title">
+              <div class="font-semibold">标题：{{ userInputResult.title }}</div>
+            </template>
+            <div class="whitespace-pre rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2">
+              <n-scrollbar
+                x-scrollable
+                class="pb-2"
+              >
+                {{ userInputResult.jsonContent }}
+              </n-scrollbar>
+            </div>
+          </div>
+        </n-card>
+      </template>
     </div>
+
+    <div class="mt-4 whitespace-pre">{{ templateForm }}</div>
   </main>
 </template>

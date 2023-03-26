@@ -10,8 +10,7 @@ module.exports = defineConfig({
     'plugin:vue/vue3-recommended',
     '@vue/eslint-config-typescript',
     'airbnb-base',
-    '@vue/eslint-config-prettier',
-    './web/.eslintrc-auto-import.json'
+    '@vue/eslint-config-prettier'
   ],
   plugins: ['html'],
   parserOptions: {
@@ -32,10 +31,11 @@ module.exports = defineConfig({
     'import/extensions': 'off',
     'import/prefer-default-export': 'off',
     'import/newline-after-import': 'off',
-    'import/no-absolute-path': 'off', // for import ./public
+    'import/no-absolute-path': 'off', // For import ./public.
     'import/no-unresolved': 'off',
-    'no-unused-vars': 'off', // use @typescript-eslint/no-unused-vars to check.
-    'no-shadow': 'off', // use @typescript-eslint/no-shadow to check.
+    'no-unused-vars': 'off', // Use @typescript-eslint/no-unused-vars to check.
+    'no-shadow': 'off', // Use @typescript-eslint/no-shadow to check.
+    'no-undef': 'off', // TypeScript already checked it.
     '@typescript-eslint/no-shadow': 'error'
   }
 })

@@ -39,10 +39,7 @@ export default defineConfig({
           imports: ['FormInst', 'FormRules', 'UploadFileInfo', 'UploadCustomRequestOptions'],
           type: true
         }
-      ],
-      eslintrc: {
-        enabled: true
-      }
+      ]
     }),
     Components({
       resolvers: [NaiveUiResolver()]

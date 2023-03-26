@@ -1,8 +1,5 @@
 import type { SiteMetaData } from '@/types'
 
-/**
- * @description Custom side meta data.
- */
 export const siteMetaData: SiteMetaData = {
   AppName: '二维码生成器',
   Favicon: 'qrcode-favicon.png',

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { RouterView, useRouter } from 'vue-router'
-import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent, NMenu } from 'naive-ui'
 import { useSideMenuStore } from '@/store'
 import { siteMetaData, sideMenuOptions } from '@/constants'
 

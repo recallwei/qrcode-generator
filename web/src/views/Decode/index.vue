@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NCard, NUpload, NUploadDragger, NIcon, NText, NP, useMessage } from 'naive-ui'
 import type { UploadCustomRequestOptions } from 'naive-ui'
 import { CloudUploadOutlined as UploadIcon } from '@vicons/material'
 import type { UploadFileType, HandleFinishUpload } from './interface'

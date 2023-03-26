@@ -15,3 +15,5 @@ dexie
 indexeddb
 rxjs
 popconfirm
+unplugin
+nocheck

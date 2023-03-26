@@ -1,24 +1,6 @@
 <script setup lang="ts">
-import { ref, nextTick, type Ref } from 'vue'
 import { useObservable } from '@vueuse/rxjs'
 import { liveQuery } from 'dexie'
-import {
-  NCard,
-  NSelect,
-  NSpace,
-  NButton,
-  NUpload,
-  NInput,
-  NInputNumber,
-  NIcon,
-  NImage,
-  NTooltip,
-  NForm,
-  NFormItem,
-  useMessage,
-  type UploadFileInfo,
-  type FormInst
-} from 'naive-ui'
 import {
   SearchOutlined as SearchIcon,
   FileDownloadOutlined as DownloadIcon,
@@ -280,7 +262,7 @@ const handleReset = () => {
             <n-upload
               accept="application/json"
               :show-file-list="false"
-              :custom-request="(params) => params.onFinish()"
+              :custom-request="(params:any) => params.onFinish()"
               @before-upload="uploadConfigValidation"
               @finish="uploadConfig"
             >

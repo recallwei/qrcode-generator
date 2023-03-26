@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useEventListener, useToggle } from '@vueuse/core'
-import { NButton, NAlert } from 'naive-ui'
 import { siteMetaData } from '@/constants'
 
 const { AppName, Favicon, Version } = siteMetaData

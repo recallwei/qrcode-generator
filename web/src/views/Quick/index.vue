@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { NInput, NImage, NCard, NButton, NIcon, NText, NTooltip, NPopconfirm, useMessage } from 'naive-ui'
 import {
   FileDownloadOutlined as DownloadIcon,
   RefreshFilled as ResetIcon,

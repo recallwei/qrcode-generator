@@ -1,30 +1,4 @@
-<script setup lang="ts">
-import { ref, computed, nextTick, toRaw, type Ref } from 'vue'
-import {
-  NForm,
-  NFormItem,
-  NFormItemGridItem,
-  NGrid,
-  NCard,
-  NButton,
-  NInput,
-  NInputNumber,
-  NSwitch,
-  NSelect,
-  NSpace,
-  NIcon,
-  NUpload,
-  NList,
-  NListItem,
-  NText,
-  NTooltip,
-  NDivider,
-  useMessage,
-  type FormInst,
-  type FormRules,
-  type UploadCustomRequestOptions,
-  type UploadFileInfo
-} from 'naive-ui'
+<!-- <script setup lang="ts">
 import {
   FolderOpenOutlined as FolderIcon,
   CloseOutlined as CloseIcon,
@@ -574,4 +548,8 @@ const saveConfig = (e: MouseEvent) => {
       </n-form>
     </template>
   </main>
+</template> -->
+
+<template>
+  <div></div>
 </template>

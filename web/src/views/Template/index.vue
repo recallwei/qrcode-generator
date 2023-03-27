@@ -5,6 +5,7 @@ import {
   RefreshFilled as ResetIcon
 } from '@vicons/material'
 import QRCodeManager from '@package/qrcode-manager'
+import { ContentPreviewCard } from '@/components'
 import type { Config, CustomField, SelectorOption, WithNull, History } from '@/types'
 import { IndexedDBInstance } from '@/database'
 import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
@@ -478,29 +479,25 @@ const handleReset = () => {
       </div>
 
       <!-- Content Section -->
-      <template v-if="userInputResult.content">
-        <n-card
-          embedded
-          hoverable
-          class="overflow-hidden"
-        >
-          <div class="flex flex-col space-y-2">
-            <template v-if="userInputResult.title">
-              <div class="font-semibold">标题：{{ userInputResult.title }}</div>
-            </template>
-            <div class="whitespace-pre rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2">
-              <n-scrollbar
-                x-scrollable
-                class="pb-2"
-              >
-                {{ userInputResult.jsonContent }}
-              </n-scrollbar>
-            </div>
-          </div>
-        </n-card>
-      </template>
+      <transition name="content-preview-card">
+        <template v-if="userInputResult.content">
+          <ContentPreviewCard :data="userInputResult" />
+        </template>
+      </transition>
     </div>
 
     <div class="mt-4 whitespace-pre">{{ templateForm }}</div>
   </main>
 </template>
+
+<style scoped lang="scss">
+.content-preview-card-enter-active,
+.content-preview-card-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.content-preview-card-enter-from,
+.content-preview-card-leave-to {
+  opacity: 0;
+}
+</style>

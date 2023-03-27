@@ -12,6 +12,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "declaration": false
+    "declaration": false,
+    "ignoreDeprecations": "5.0"
   }
 }

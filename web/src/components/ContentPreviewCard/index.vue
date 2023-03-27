@@ -23,7 +23,7 @@ watch(
 </script>
 
 <template>
-  <n-card
+  <NCard
     embedded
     hoverable
     class="overflow-hidden"
@@ -36,13 +36,13 @@ watch(
         class="whitespace-pre rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2"
         :style="{ opacity: hackOpacity }"
       >
-        <n-scrollbar
+        <NScrollbar
           x-scrollable
           class="pb-2"
         >
           {{ props.data.jsonContent }}
-        </n-scrollbar>
+        </NScrollbar>
       </div>
     </div>
-  </n-card>
+  </NCard>
 </template>

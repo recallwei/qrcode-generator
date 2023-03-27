@@ -144,26 +144,26 @@ const clearAllHistoryRecord = async () => {
     <div class="mb-4 flex space-x-4">
       <!-- QRCode Preview Section -->
       <div class="w-[300px]">
-        <n-card
+        <NCard
           class="h-full w-full"
           embedded
           hoverable
         >
           <div class="absolute right-1 top-1">
-            <n-icon
+            <NIcon
               class="rounded-full hover:cursor-pointer hover:bg-slate-300 hover:shadow-md active:bg-slate-200"
               size="20"
               @click="() => handleReset()"
             >
-              <reset-icon />
-            </n-icon>
+              <ResetIcon />
+            </NIcon>
           </div>
           <div class="flex h-full flex-col items-center justify-center space-y-4">
-            <transition
+            <Transition
               name="img"
               mode="out-in"
             >
-              <n-image
+              <NImage
                 v-if="imgURL"
                 class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
@@ -175,32 +175,32 @@ const clearAllHistoryRecord = async () => {
               >
                 此处预览生成的二维码
               </div>
-            </transition>
-            <n-button
+            </Transition>
+            <NButton
               type="primary"
               strong
               secondary
               @click="() => handleDownloadQRCode()"
             >
               <template #icon>
-                <n-icon size="20">
-                  <download-icon />
-                </n-icon>
+                <NIcon size="20">
+                  <DownloadIcon />
+                </NIcon>
               </template>
               下载
-            </n-button>
+            </NButton>
           </div>
-        </n-card>
+        </NCard>
       </div>
 
       <!-- User Input Section -->
-      <n-card
+      <NCard
         embedded
         hoverable
         content-style="padding: 12px 16px"
       >
         <div class="flex flex-col space-y-3">
-          <n-input
+          <NInput
             v-model:value="userInput.title"
             type="text"
             :maxlength="config.titleMaxLength"
@@ -208,7 +208,7 @@ const clearAllHistoryRecord = async () => {
             show-count
             placeholder="请输入标题【可选】，可用于检索生成的二维码或作为下载的文件名"
           />
-          <n-input
+          <NInput
             v-model:value="userInput.content"
             type="textarea"
             :autosize="{
@@ -224,47 +224,47 @@ const clearAllHistoryRecord = async () => {
             @input="onUserInput"
           />
           <div class="flex items-center justify-center space-x-4">
-            <n-button
+            <NButton
               type="primary"
               strong
               secondary
               @click="() => handleCopyContent()"
             >
               复制文字
-            </n-button>
-            <n-button
+            </NButton>
+            <NButton
               type="primary"
               strong
               @click="() => handleGenerateQRCode()"
             >
               生成二维码
-            </n-button>
+            </NButton>
           </div>
         </div>
-      </n-card>
+      </NCard>
     </div>
 
     <!-- History Section -->
     <template v-if="historyList?.length > 0">
       <div class="relative flex items-center justify-center py-4 text-sm">
-        <n-text type="primary"> 历史建码 </n-text>
+        <NText type="primary"> 历史建码 </NText>
         <div class="absolute right-0 bottom-0 top-0 m-auto flex items-center">
-          <n-popconfirm
+          <NPopconfirm
             :positive-button-props="{ size: 'small' }"
             :negative-button-props="{ size: 'small' }"
             @positive-click="clearAllHistoryRecord"
           >
             <template #trigger>
-              <n-button size="small">清空</n-button>
+              <NButton size="small">清空</NButton>
             </template>
             确认清空所有历史记录？
-          </n-popconfirm>
+          </NPopconfirm>
         </div>
       </div>
       <div class="flex">
         <div class="flex w-full flex-col items-start justify-center space-y-4">
-          <transition-group name="history-list">
-            <n-card
+          <TransitionGroup name="history-list">
+            <NCard
               v-for="item in historyList"
               :key="item.id"
               embedded
@@ -274,105 +274,105 @@ const clearAllHistoryRecord = async () => {
             >
               <div class="flex space-x-4">
                 <div class="flex w-[120px] shrink-0 flex-col items-center justify-center space-y-2">
-                  <n-image
+                  <NImage
                     class="h-120[px] w-full bg-white p-2 shadow-md"
                     show-toolbar-tooltip
                     :src="item.src"
                   />
                   <template v-if="item.title">
-                    <n-tooltip
+                    <NTooltip
                       placement="bottom"
                       trigger="hover"
                     >
                       <template #trigger>
-                        <n-text
+                        <NText
                           class="cursor-pointer text-center"
                           @click="() => handleCopyByHistoryRecord(item, 'title')"
                         >
                           {{ item.title }}
-                        </n-text>
+                        </NText>
                       </template>
                       {{ item.title }}
-                    </n-tooltip>
+                    </NTooltip>
                   </template>
                 </div>
                 <div class="flex grow flex-col justify-between space-y-1">
-                  <n-tooltip
+                  <NTooltip
                     placement="bottom"
                     trigger="hover"
                     style="max-width: 800px"
                   >
                     <template #trigger>
-                      <n-text
+                      <NText
                         class="hover:cursor-pointer"
                         @click="() => handleCopyByHistoryRecord(item, 'content')"
                       >
                         {{ item.content }}
-                      </n-text>
+                      </NText>
                     </template>
                     {{ item.content }}
-                  </n-tooltip>
+                  </NTooltip>
                   <div class="text-xs">
-                    <n-text class="select-none"> 生成时间：</n-text>
-                    <n-tooltip
+                    <NText class="select-none"> 生成时间：</NText>
+                    <NTooltip
                       placement="bottom"
                       trigger="hover"
                     >
                       <template #trigger>
-                        <n-text class="cursor-pointer">
+                        <NText class="cursor-pointer">
                           {{ withPlaceholder(formatTime(item.createAt as string, 'MM-DD hh:mm')) }}
-                        </n-text>
+                        </NText>
                       </template>
                       {{ withPlaceholder(item.createAt as string) }}
-                    </n-tooltip>
+                    </NTooltip>
                   </div>
-                  <transition name="operation">
+                  <Transition name="operation">
                     <template v-if="focusedHistoryItemIndex === item.id">
                       <div class="absolute right-4 bottom-4 flex items-center space-x-4">
-                        <n-button
+                        <NButton
                           size="small"
                           tertiary
                           @click="() => handleCopyByHistoryRecord(item, 'content')"
                         >
                           <template #icon>
-                            <n-icon size="14">
-                              <copy-icon />
-                            </n-icon>
+                            <NIcon size="14">
+                              <CopyIcon />
+                            </NIcon>
                           </template>
                           复制
-                        </n-button>
-                        <n-button
+                        </NButton>
+                        <NButton
                           size="small"
                           tertiary
                           @click="() => handleDownloadByHistoryRecord(item)"
                         >
                           <template #icon>
-                            <n-icon size="14">
-                              <download-icon />
-                            </n-icon>
+                            <NIcon size="14">
+                              <DownloadIcon />
+                            </NIcon>
                           </template>
                           下载
-                        </n-button>
-                        <n-button
+                        </NButton>
+                        <NButton
                           size="small"
                           type="error"
                           tertiary
                           @click="() => handleDeleteHistoryRecord(item.id)"
                         >
                           <template #icon>
-                            <n-icon size="20">
-                              <delete-icon />
-                            </n-icon>
+                            <NIcon size="20">
+                              <DeleteIcon />
+                            </NIcon>
                           </template>
                           删除
-                        </n-button>
+                        </NButton>
                       </div>
                     </template>
-                  </transition>
+                  </Transition>
                 </div>
               </div>
-            </n-card>
-          </transition-group>
+            </NCard>
+          </TransitionGroup>
         </div>
       </div>
     </template>

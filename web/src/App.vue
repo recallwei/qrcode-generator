@@ -3,27 +3,27 @@ import { zhCN, dateZhCN, lightTheme, darkTheme } from 'naive-ui'
 </script>
 
 <template>
-  <n-config-provider
+  <NConfigProvider
     :locale="zhCN"
     :date-locale="dateZhCN"
     :theme="lightTheme"
   >
-    <n-loading-bar-provider>
-      <n-message-provider>
-        <router-view v-slot="{ Component }">
-          <transition
+    <NLoadingBarProvider>
+      <NMessageProvider>
+        <RouterView v-slot="{ Component }">
+          <Transition
             name="router"
             mode="out-in"
           >
-            <keep-alive>
+            <KeepAlive>
               <component :is="Component" />
-            </keep-alive>
-          </transition>
-        </router-view>
-      </n-message-provider>
-    </n-loading-bar-provider>
-    <n-global-style />
-  </n-config-provider>
+            </KeepAlive>
+          </Transition>
+        </RouterView>
+      </NMessageProvider>
+    </NLoadingBarProvider>
+    <NGlobalStyle />
+  </NConfigProvider>
 </template>
 
 <style scoped lang="scss">

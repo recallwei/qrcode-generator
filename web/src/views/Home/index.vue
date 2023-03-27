@@ -40,19 +40,19 @@ const navToQuick = () => router.push('/quick')
         {{ AppName }}
       </span>
       <span class="text-lg">{{ Version }}</span>
-      <n-button
+      <NButton
         type="primary"
         strong
         @click="navToQuick"
       >
         开始
-      </n-button>
-      <n-alert
+      </NButton>
+      <NAlert
         title="注意："
         type="warning"
       >
         当前仍处于内测版本，版本升级可能会造成已生成的历史二维码丢失。
-      </n-alert>
+      </NAlert>
     </div>
   </main>
 </template>

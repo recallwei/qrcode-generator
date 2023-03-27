@@ -5,11 +5,10 @@ import {
   RefreshFilled as ResetIcon
 } from '@vicons/material'
 import QRCodeManager from '@package/qrcode-manager'
-import { ContentPreviewCard } from '@/components'
-import type { Config, CustomField, SelectorOption, WithNull, History } from '@/types'
+import type { Config, CustomField, SelectorOption, WithNull, History, GeneratedQRCodeResult } from '@/types'
 import { IndexedDBInstance } from '@/database'
 import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
-import type { TemplateForm, UserInput } from './private/types'
+import type { TemplateForm } from './private/types'
 
 const configOptions = useObservable(
   liveQuery(() =>
@@ -39,7 +38,7 @@ const templateFormRef = ref<FormInst | null>(null)
 
 const imgURL = ref('')
 const userInputTitle = ref('')
-const userInputResult = ref<UserInput>({
+const userInputResult = ref<GeneratedQRCodeResult>({
   title: '',
   content: '',
   jsonContent: null
@@ -231,20 +230,20 @@ const handleReset = () => {
 <template>
   <main class="flex flex-col space-y-4">
     <section>
-      <n-card
+      <NCard
         embedded
         hoverable
       >
-        <n-space
+        <NSpace
           vertical
           size="large"
         >
-          <n-space
+          <NSpace
             align="center"
             size="large"
           >
             配置
-            <n-select
+            <NSelect
               v-model:value="selectedConfigId"
               v-model:show="showSignal.configSelector"
               filterable
@@ -258,39 +257,39 @@ const handleReset = () => {
                 v-if="showSignal.configSelector"
                 #arrow
               >
-                <search-icon />
+                <SearchIcon />
               </template>
               <template #empty> 请先导入配置 </template>
-            </n-select>
+            </NSelect>
 
-            <n-upload
+            <NUpload
               accept="application/json"
               :show-file-list="false"
               :custom-request="(params) => params.onFinish()"
               @before-upload="uploadConfigValidation"
               @finish="uploadConfig"
             >
-              <n-button
+              <NButton
                 size="small"
                 type="primary"
                 strong
                 secondary
               >
                 导入配置
-              </n-button>
-            </n-upload>
+              </NButton>
+            </NUpload>
 
             <template v-if="selectedConfigId">
-              <n-button
+              <NButton
                 size="small"
                 strong
                 secondary
                 @click="() => downloadConfig()"
               >
                 导出配置
-              </n-button>
+              </NButton>
 
-              <n-button
+              <NButton
                 size="small"
                 type="error"
                 strong
@@ -298,16 +297,16 @@ const handleReset = () => {
                 @click="() => deleteConfig()"
               >
                 删除配置
-              </n-button>
+              </NButton>
             </template>
-          </n-space>
+          </NSpace>
 
-          <n-space
+          <NSpace
             align="center"
             size="large"
           >
             模板
-            <n-select
+            <NSelect
               v-model:value="selectedTemplateName"
               v-model:show="showSignal.templateSelector"
               filterable
@@ -321,13 +320,13 @@ const handleReset = () => {
                 v-if="showSignal.templateSelector"
                 #arrow
               >
-                <search-icon />
+                <SearchIcon />
               </template>
               <template #empty> 请先选择配置 </template>
-            </n-select>
-          </n-space>
-        </n-space>
-      </n-card>
+            </NSelect>
+          </NSpace>
+        </NSpace>
+      </NCard>
     </section>
 
     <div
@@ -336,25 +335,25 @@ const handleReset = () => {
     >
       <!-- QRCode Preview Section -->
       <div>
-        <n-card
+        <NCard
           embedded
           hoverable
         >
           <div class="absolute right-1 top-1">
-            <n-icon
+            <NIcon
               class="rounded-full hover:cursor-pointer hover:bg-slate-300 hover:shadow-md active:bg-slate-200"
               size="20"
               @click="() => handleReset()"
             >
-              <reset-icon />
-            </n-icon>
+              <ResetIcon />
+            </NIcon>
           </div>
           <div class="flex h-fit w-fit flex-col items-center justify-center space-y-4">
             <transition
               name="img"
               mode="out-in"
             >
-              <n-image
+              <NImage
                 v-if="imgURL"
                 class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
@@ -367,32 +366,32 @@ const handleReset = () => {
                 此处预览生成的二维码
               </div>
             </transition>
-            <n-button
+            <NButton
               type="primary"
               strong
               secondary
               @click="() => downloadQRCode()"
             >
               <template #icon>
-                <n-icon size="20">
-                  <download-icon />
-                </n-icon>
+                <NIcon size="20">
+                  <DownloadIcon />
+                </NIcon>
               </template>
               下载
-            </n-button>
+            </NButton>
           </div>
-        </n-card>
+        </NCard>
       </div>
 
       <!-- Template Form Section -->
       <div>
-        <n-card
+        <NCard
           embedded
           hoverable
           class="h-full"
         >
           <div class="flex h-full min-w-[400px] flex-col justify-between">
-            <n-form
+            <NForm
               ref="templateFormRef"
               :model="templateForm"
               label-width="auto"
@@ -400,8 +399,8 @@ const handleReset = () => {
               label-placement="left"
               require-mark-placement="right-hanging"
             >
-              <n-form-item label="标题">
-                <n-input
+              <NFormItem label="标题">
+                <NInput
                   v-model:value="userInputTitle"
                   type="text"
                   :maxlength="16"
@@ -409,13 +408,13 @@ const handleReset = () => {
                   show-count
                   placeholder="请输入标题【可选】"
                 />
-              </n-form-item>
+              </NFormItem>
 
               <template
                 v-for="(customProperty, customPropertyIndex) in templateForm"
                 :key="customPropertyIndex"
               >
-                <n-form-item
+                <NFormItem
                   :label="customProperty.keyName"
                   :path="`[${customPropertyIndex}].value`"
                   :rule="{
@@ -426,7 +425,7 @@ const handleReset = () => {
                   }"
                 >
                   <template v-if="customProperty.valueType === 'string'">
-                    <n-input
+                    <NInput
                       v-model:value="customProperty.value"
                       type="text"
                       :maxlength="
@@ -440,7 +439,7 @@ const handleReset = () => {
                     />
                   </template>
                   <template v-if="customProperty.valueType === 'number'">
-                    <n-input-number
+                    <NInput-number
                       v-model:value="customProperty.value"
                       :min="customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.min : 0"
                       :max="
@@ -451,12 +450,12 @@ const handleReset = () => {
                       placeholder="请输入内容"
                     />
                   </template>
-                </n-form-item>
+                </NFormItem>
               </template>
-            </n-form>
+            </NForm>
 
-            <n-space align="center">
-              <n-button
+            <NSpace align="center">
+              <NButton
                 size="small"
                 type="primary"
                 strong
@@ -464,18 +463,18 @@ const handleReset = () => {
                 @click="() => copyContent()"
               >
                 复制内容
-              </n-button>
-              <n-button
+              </NButton>
+              <NButton
                 size="small"
                 type="primary"
                 strong
                 @click="() => generateQRCode()"
               >
                 生成二维码
-              </n-button>
-            </n-space>
+              </NButton>
+            </NSpace>
           </div>
-        </n-card>
+        </NCard>
       </div>
 
       <!-- Content Section -->

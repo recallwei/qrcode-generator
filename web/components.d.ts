@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     NText: typeof import('naive-ui')['NText']
     NTooltip: typeof import('naive-ui')['NTooltip']
     NUpload: typeof import('naive-ui')['NUpload']
+    QRCodePreviewCard: typeof import('./src/components/QRCodePreviewCard/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

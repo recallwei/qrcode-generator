@@ -197,44 +197,44 @@ const saveConfig = (e: MouseEvent) => {
 <template>
   <main>
     <div class="mb-4">
-      <n-card
+      <NCard
         embedded
         hoverable
       >
-        <n-space
+        <NSpace
           justify="space-between"
           align="center"
         >
           配置列表
 
-          <n-space
+          <NSpace
             align="center"
             justify="space-between"
           >
-            <n-button
+            <NButton
               size="small"
               @click="() => addConfig()"
             >
               新建
-            </n-button>
+            </NButton>
 
-            <n-upload
+            <NUpload
               accept="application/json"
               :show-file-list="false"
               :custom-request="handleUpload"
               @before-upload="uploadFileValidation"
               @finish="uploadFileToList"
             >
-              <n-button size="small"> 导入配置 </n-button>
-            </n-upload>
-          </n-space>
-        </n-space>
+              <NButton size="small"> 导入配置 </NButton>
+            </NUpload>
+          </NSpace>
+        </NSpace>
 
         <div
           v-if="Array.isArray(configList) && configList.length > 0"
           class="mt-2"
         >
-          <n-list
+          <NList
             hoverable
             clickable
             show-divider
@@ -244,71 +244,71 @@ const saveConfig = (e: MouseEvent) => {
               v-for="config in configList"
               :key="config.id"
             >
-              <n-list-item
+              <NListItem
                 :class="{ 'bg-[#F3F3F5]': form.id === config.id }"
                 @click="() => selectConfig(config.id as number)"
               >
                 <div class="flex items-center justify-between space-y-2">
                   <div class="flex items-center justify-center space-x-2">
-                    <n-icon size="20">
-                      <folder-icon />
-                    </n-icon>
+                    <NIcon size="20">
+                      <FolderIcon />
+                    </NIcon>
 
-                    <n-text class="w-24 overflow-hidden text-ellipsis whitespace-nowrap">
+                    <NText class="w-24 overflow-hidden text-ellipsis whitespace-nowrap">
                       {{ config.name }}
-                    </n-text>
+                    </NText>
 
-                    <n-divider vertical />
+                    <NDivider vertical />
 
-                    <n-tooltip trigger="hover">
+                    <NTooltip trigger="hover">
                       <template #trigger>
-                        <n-text class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
+                        <NText class="max-w-[300px] overflow-hidden text-ellipsis whitespace-nowrap">
                           {{ config.description }}
-                        </n-text>
+                        </NText>
                       </template>
                       {{ config.description }}
-                    </n-tooltip>
+                    </NTooltip>
                   </div>
 
                   <div class="flex items-center">
-                    <n-icon
+                    <NIcon
                       size="20"
                       :depth="2"
                       class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                       @click.stop="() => editConfig(config)"
                     >
-                      <edit-icon />
-                    </n-icon>
+                      <EditIcon />
+                    </NIcon>
 
-                    <n-icon
+                    <NIcon
                       size="20"
                       :depth="2"
                       class="ml-4 rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                       @click.stop="() => downloadConfig(config)"
                     >
-                      <download-icon />
-                    </n-icon>
+                      <DownloadIcon />
+                    </NIcon>
 
-                    <n-icon
+                    <NIcon
                       size="20"
                       :depth="2"
                       color="red"
                       class="ml-4 rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                       @click.stop="() => deleteConfig(config.id as number)"
                     >
-                      <close-icon />
-                    </n-icon>
+                      <CloseIcon />
+                    </NIcon>
                   </div>
                 </div>
-              </n-list-item>
+              </NListItem>
             </template>
-          </n-list>
+          </NList>
         </div>
-      </n-card>
+      </NCard>
     </div>
 
     <template v-if="showEditableArea">
-      <n-form
+      <NForm
         ref="formRef"
         :model="form"
         :rules="rules"
@@ -316,15 +316,15 @@ const saveConfig = (e: MouseEvent) => {
         require-mark-placement="right-hanging"
       >
         <div class="flex flex-col space-y-4">
-          <n-card
+          <NCard
             embedded
             hoverable
           >
-            <n-form-item
+            <NFormItem
               label="名称"
               path="name"
             >
-              <n-input
+              <NInput
                 v-model:value="form.name"
                 type="text"
                 :maxlength="16"
@@ -332,13 +332,13 @@ const saveConfig = (e: MouseEvent) => {
                 show-count
                 placeholder="请输入配置文件名称"
               />
-            </n-form-item>
+            </NFormItem>
 
-            <n-form-item
+            <NFormItem
               label="描述"
               path="description"
             >
-              <n-input
+              <NInput
                 v-model:value="form.description"
                 type="textarea"
                 :autosize="{
@@ -350,39 +350,39 @@ const saveConfig = (e: MouseEvent) => {
                 show-count
                 placeholder="请输入配置文件描述"
               />
-            </n-form-item>
+            </NFormItem>
 
-            <n-space
+            <NSpace
               justify="space-between"
               align="center"
             >
-              <n-space align="center">
-                <n-button
+              <NSpace align="center">
+                <NButton
                   size="small"
                   @click="() => addCustomField()"
                 >
                   添加字段
-                </n-button>
+                </NButton>
 
-                <n-button
+                <NButton
                   size="small"
                   @click="() => clearAllCustomFields()"
                 >
                   清空字段
-                </n-button>
-              </n-space>
+                </NButton>
+              </NSpace>
 
-              <n-button
+              <NButton
                 size="small"
                 type="primary"
                 @click="($event) => saveConfig($event)"
               >
                 保存配置
-              </n-button>
-            </n-space>
-          </n-card>
+              </NButton>
+            </NSpace>
+          </NCard>
 
-          <n-card
+          <NCard
             v-for="(customField, customFieldIndex) in form.customFields"
             :key="customFieldIndex"
             embedded
@@ -390,7 +390,7 @@ const saveConfig = (e: MouseEvent) => {
             closable
             @close="() => deleteCustomField(customFieldIndex)"
           >
-            <n-form-item
+            <NFormItem
               label="字段名称"
               :path="`customFields[${customFieldIndex}].name`"
               :rule="{
@@ -399,39 +399,39 @@ const saveConfig = (e: MouseEvent) => {
                 trigger: ['input', 'blur']
               }"
             >
-              <n-input
+              <NInput
                 v-model:value="customField.name"
                 type="text"
                 placeholder="请输入字段名称"
                 clearable
               />
-            </n-form-item>
+            </NFormItem>
 
-            <n-space
+            <NSpace
               align="center"
               class="mb-4"
             >
-              <n-button
+              <NButton
                 size="small"
                 @click="() => addCustomProperty(customField)"
               >
                 添加属性
-              </n-button>
+              </NButton>
 
-              <n-button
+              <NButton
                 size="small"
                 @click="() => clearAllCustomProperties(customField)"
               >
                 清空属性
-              </n-button>
-            </n-space>
+              </NButton>
+            </NSpace>
 
-            <n-space
+            <NSpace
               v-for="(customFieldProperty, customFieldPropertyIndex) in customField.customProperties"
               :key="customFieldPropertyIndex"
             >
-              <n-grid :x-gap="12">
-                <n-form-item-grid-item
+              <NGrid :x-gap="12">
+                <NFormItemGridItem
                   label="属性名称"
                   :span="6"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyName`"
@@ -441,15 +441,15 @@ const saveConfig = (e: MouseEvent) => {
                     trigger: ['input', 'blur']
                   }"
                 >
-                  <n-input
+                  <NInput
                     v-model:value="customFieldProperty.keyName"
                     type="text"
                     placeholder="请输入内容"
                     clearable
                   />
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   label="属性编码"
                   :span="6"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].keyCode`"
@@ -459,15 +459,15 @@ const saveConfig = (e: MouseEvent) => {
                     trigger: ['input', 'blur']
                   }"
                 >
-                  <n-input
+                  <NInput
                     v-model:value="customFieldProperty.keyCode"
                     type="text"
                     placeholder="请输入内容"
                     clearable
                   />
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   label="数值类型"
                   :span="5"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueType`"
@@ -477,13 +477,13 @@ const saveConfig = (e: MouseEvent) => {
                     trigger: ['input', 'blur']
                   }"
                 >
-                  <n-select
+                  <NSelect
                     v-model:value="customFieldProperty.valueType"
                     :options="valueTypeCandidates"
                   />
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   label="必填项"
                   :span="3"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].require`"
@@ -492,9 +492,9 @@ const saveConfig = (e: MouseEvent) => {
                     <template #checked> 是 </template>
                     <template #unchecked> 否 </template>
                   </n-switch>
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   label="启用长度限制"
                   :span="4"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].enableValueLengthLimit`"
@@ -503,9 +503,9 @@ const saveConfig = (e: MouseEvent) => {
                     <template #checked> 是 </template>
                     <template #unchecked> 否 </template>
                   </n-switch>
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   v-if="customFieldProperty.enableValueLengthLimit"
                   :span="4"
                   :path="`customFields[${customFieldIndex}].customProperties[${customFieldPropertyIndex}].valueLengthLimit`"
@@ -516,34 +516,34 @@ const saveConfig = (e: MouseEvent) => {
                     type: 'number'
                   }"
                 >
-                  <n-input-number
+                  <NInputNumber
                     v-model:value="customFieldProperty.valueLengthLimit"
                     placeholder="请输入最大值"
                     clearable
                     :min="1"
                     :max="60"
                   />
-                </n-form-item-grid-item>
+                </NFormItemGridItem>
 
-                <n-form-item-grid-item
+                <NFormItemGridItem
                   :span="customFieldProperty.enableValueLengthLimit ? 2 : 6"
                   class="flex cursor-pointer items-center justify-end"
                 >
-                  <n-icon
+                  <NIcon
                     size="20"
                     :depth="2"
                     color="red"
                     class="rounded-sm transition-all hover:bg-[#E3E3E5] active:bg-[#cacacf]"
                     @click="() => deleteCustomProperty(customFieldPropertyIndex, customField)"
                   >
-                    <close-icon />
-                  </n-icon>
-                </n-form-item-grid-item>
-              </n-grid>
-            </n-space>
-          </n-card>
+                    <CloseIcon />
+                  </NIcon>
+                </NFormItemGridItem>
+              </NGrid>
+            </NSpace>
+          </NCard>
         </div>
-      </n-form>
+      </NForm>
     </template>
   </main>
 </template> -->

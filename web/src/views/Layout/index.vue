@@ -12,11 +12,11 @@ const navToHome = () => router.push('/')
 
 <template>
   <div class="h-screen w-screen">
-    <n-layout
+    <NLayout
       class="h-full w-full"
       embedded
     >
-      <n-layout-header
+      <NLayoutHeader
         class="flex h-16 items-center py-2 px-4"
         bordered
       >
@@ -38,12 +38,12 @@ const navToHome = () => router.push('/')
             {{ AppName }}
           </div>
         </div>
-      </n-layout-header>
-      <n-layout
+      </NLayoutHeader>
+      <NLayout
         class="flex h-[calc(100%-64px)] w-full"
         has-sider
       >
-        <n-layout-sider
+        <NLayoutSider
           class="flex h-full w-44 flex-col items-center justify-start"
           show-trigger="arrow-circle"
           bordered
@@ -52,7 +52,7 @@ const navToHome = () => router.push('/')
           :native-scrollbar="false"
           @update:collapsed="(value) => sideMenuStore.changeCollapsed(value)"
         >
-          <n-menu
+          <NMenu
             v-model:value="sideMenuStore.activeKey"
             class="tracking-[0.0625rem]"
             :collapsed-width="64"
@@ -60,25 +60,25 @@ const navToHome = () => router.push('/')
             :options="sideMenuOptions"
             :collapsed="sideMenuStore.collapsed"
           />
-        </n-layout-sider>
-        <n-layout-content
+        </NLayoutSider>
+        <NLayoutContent
           class="grow"
           :content-style="{ minHeight: '100%', position: 'relative', padding: '24px' }"
           :native-scrollbar="false"
         >
-          <router-view v-slot="{ Component }">
-            <transition
+          <RouterView v-slot="{ Component }">
+            <Transition
               name="content"
               mode="out-in"
             >
-              <keep-alive>
+              <KeepAlive>
                 <component :is="Component" />
-              </keep-alive>
-            </transition>
-          </router-view>
-        </n-layout-content>
-      </n-layout>
-    </n-layout>
+              </KeepAlive>
+            </Transition>
+          </RouterView>
+        </NLayoutContent>
+      </NLayout>
+    </NLayout>
   </div>
 </template>
 

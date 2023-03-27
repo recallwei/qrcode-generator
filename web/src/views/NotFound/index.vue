@@ -10,20 +10,20 @@ const navToHome = () => router.push('/')
 
 <template>
   <main class="absolute inset-0 bottom-28 m-auto flex items-center justify-center">
-    <n-result
+    <NResult
       status="404"
       :title="NotFoundInfo.title"
       :description="NotFoundInfo.description"
     >
       <template #footer>
-        <n-button
+        <NButton
           type="primary"
           strong
           @click="navToHome"
         >
           {{ NotFoundInfo.btnText }}
-        </n-button>
+        </NButton>
       </template>
-    </n-result>
+    </NResult>
   </main>
 </template>

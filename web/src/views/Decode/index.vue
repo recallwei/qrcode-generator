@@ -33,11 +33,11 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
 
 <template>
   <main>
-    <n-card
+    <NCard
       hoverable
       embedded
     >
-      <n-upload
+      <NUpload
         list-type="image"
         multiple
         :max="10"
@@ -45,24 +45,24 @@ const handleFinishUpload = ({ file }: HandleFinishUpload) => {
         @before-upload="handleBeforeUpload"
         @finish="handleFinishUpload"
       >
-        <n-upload-dragger>
+        <NUploadDragger>
           <div class="mb-0">
-            <n-icon
+            <NIcon
               size="48"
               :depth="3"
             >
-              <upload-icon />
-            </n-icon>
+              <UploadIcon />
+            </NIcon>
           </div>
-          <n-text style="font-size: 18px"> 点击或者拖动图片到该区域来上传 </n-text>
-          <n-p
+          <NText style="font-size: 18px"> 点击或者拖动图片到该区域来上传 </NText>
+          <NP
             depth="3"
             style="margin-top: 8px"
           >
             支持 png、jpg、jpeg 格式图片，至多上传 10 张，无法解析非二维码图片
-          </n-p>
-        </n-upload-dragger>
-      </n-upload>
-    </n-card>
+          </NP>
+        </NUploadDragger>
+      </NUpload>
+    </NCard>
   </main>
 </template>

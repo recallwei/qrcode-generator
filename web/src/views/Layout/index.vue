@@ -21,7 +21,8 @@ const navToHome = () => router.push('/')
         bordered
       >
         <div
-          class="flex select-none items-center space-x-2 hover:cursor-pointer"
+          class="flex select-none items-center space-x-2 transition-transform duration-300 hover:cursor-pointer"
+          :class="{ 'translate-x-[10px]': !sideMenuStore.collapsed }"
           @click="navToHome"
         >
           <img

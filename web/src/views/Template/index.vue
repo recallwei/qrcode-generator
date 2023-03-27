@@ -4,11 +4,16 @@ import {
   FileDownloadOutlined as DownloadIcon,
   RefreshFilled as ResetIcon
 } from '@vicons/material'
-import QRCodeManager from '@package/qrcode-manager'
-import type { Config, CustomField, SelectorOption, WithNull, History, GeneratedQRCodeResult } from '@/types'
+import type {
+  Config,
+  CustomField,
+  CustomPropertyFormItem,
+  SelectorOption,
+  WithNull,
+  GeneratedQRCodeResult
+} from '@/types'
 import { IndexedDBInstance } from '@/database'
-import { formatCurrentTime, downloadFile, setClipBoardText } from '@/utils'
-import type { TemplateForm } from './private/types'
+import { downloadFile } from '@/utils'
 
 const configOptions = useObservable(
   liveQuery(() =>
@@ -22,6 +27,8 @@ const configOptions = useObservable(
   ) as any
 ) as Ref<SelectorOption<Config>[]>
 
+const message = useMessage()
+
 /**
  * 2023/3/9 Bruce Song <recall4056@gmail.com>
  * NOTE:
@@ -29,16 +36,12 @@ const configOptions = useObservable(
  */
 const templateOptions = ref<SelectorOption<CustomField>[]>([])
 
-const message = useMessage()
-
 const selectedConfigId = ref(null)
 const selectedTemplateName = ref(null)
-const templateForm = ref<WithNull<TemplateForm[]>>(null)
-const templateFormRef = ref<FormInst | null>(null)
+const templateForm = ref<WithNull<CustomPropertyFormItem[]>>(null)
 
-const imgURL = ref('')
-const userInputTitle = ref('')
 const userInputResult = ref<GeneratedQRCodeResult>({
+  src: '',
   title: '',
   content: '',
   jsonContent: null
@@ -54,11 +57,11 @@ const clearTemplateForm = () => {
 }
 
 const clearUserInputRelated = () => {
-  userInputTitle.value = ''
+  // userInputTitle.value = ''
+  userInputResult.value.src = ''
   userInputResult.value.title = ''
   userInputResult.value.content = ''
   userInputResult.value.jsonContent = null
-  imgURL.value = ''
 }
 
 const deleteConfig = async () => {
@@ -160,64 +163,23 @@ const downloadConfig = async () => {
   message.success('配置文件下载成功')
 }
 
-const generateQRCode = () => {
-  templateFormRef.value?.validate(async (errors) => {
-    if (errors) {
-      message.error('内容填写不完整')
-    } else {
-      const jsonContent: Record<string, any> = {}
-      templateForm.value?.forEach((customProperty) => {
-        if (customProperty.value) {
-          jsonContent[customProperty.keyCode] = customProperty.value
-        }
-      })
-      const stringifiedJSON = JSON.stringify(jsonContent)
-      userInputResult.value.title = userInputTitle.value
-      userInputResult.value.content = stringifiedJSON
-      userInputResult.value.jsonContent = jsonContent
-      try {
-        const qrcodeURL = await QRCodeManager.generateQRCode(stringifiedJSON)
-        imgURL.value = qrcodeURL
-        const historyModel: History = {
-          src: qrcodeURL,
-          content: stringifiedJSON,
-          jsonContent,
-          createAt: formatCurrentTime()
-        }
-        if (userInputResult.value.title) {
-          historyModel.title = userInputResult.value.title
-        }
-        if ((await IndexedDBInstance.history.count()) >= 400) {
-          throw new Error('可生成的二维码数量达到上限，无法继续生成，请删除历史记录后再试')
-        }
-        await IndexedDBInstance.history.add(historyModel)
-        message.success('生成二维码成功')
-      } catch (error: any) {
-        message.error(error.message)
-      }
-    }
-  })
-}
-
 const downloadQRCode = () => {
-  if (!imgURL.value) {
+  if (!userInputResult.value.src) {
     message.error('没有生成二维码，无法下载')
     return
   }
-  downloadFile(imgURL.value, userInputResult.value.title ? `${userInputResult.value.title}.png` : 'qrcode.png')
+  downloadFile(
+    userInputResult.value.src,
+    userInputResult.value.title ? `${userInputResult.value.title}.png` : 'qrcode.png'
+  )
 }
 
-const copyContent = () => {
-  if (!userInputResult.value.content) {
-    message.error('复制失败，请先生成二维码')
-    return
-  }
-  setClipBoardText(userInputResult.value.content)
-  message.success('复制成功')
+const onGenerateQRCode = (event: GeneratedQRCodeResult) => {
+  userInputResult.value = event
 }
 
-const handleReset = () => {
-  clearUserInputRelated()
+const onReset = (event: GeneratedQRCodeResult) => {
+  userInputResult.value = event
   templateForm.value =
     templateForm.value?.map((customProperty) => ({
       ...customProperty,
@@ -339,25 +301,16 @@ const handleReset = () => {
           embedded
           hoverable
         >
-          <div class="absolute right-1 top-1">
-            <NIcon
-              class="rounded-full hover:cursor-pointer hover:bg-slate-300 hover:shadow-md active:bg-slate-200"
-              size="20"
-              @click="() => handleReset()"
-            >
-              <ResetIcon />
-            </NIcon>
-          </div>
           <div class="flex h-fit w-fit flex-col items-center justify-center space-y-4">
             <transition
               name="img"
               mode="out-in"
             >
               <NImage
-                v-if="imgURL"
+                v-if="userInputResult.src"
                 class="h-200[px] w-[200px] p-2 shadow-md"
                 show-toolbar-tooltip
-                :src="imgURL"
+                :src="userInputResult.src"
               />
               <div
                 v-else
@@ -383,109 +336,23 @@ const handleReset = () => {
         </NCard>
       </div>
 
-      <!-- Template Form Section -->
-      <div>
-        <NCard
-          embedded
-          hoverable
-          class="h-full"
-        >
-          <div class="flex h-full min-w-[400px] flex-col justify-between">
-            <NForm
-              ref="templateFormRef"
-              :model="templateForm"
-              label-width="auto"
-              label-align="left"
-              label-placement="left"
-              require-mark-placement="right-hanging"
-            >
-              <NFormItem label="标题">
-                <NInput
-                  v-model:value="userInputTitle"
-                  type="text"
-                  :maxlength="16"
-                  clearable
-                  show-count
-                  placeholder="请输入标题【可选】"
-                />
-              </NFormItem>
+      <section class="min-w-[500px]">
+        <TemplateFormCard
+          :template-form="templateForm"
+          :user-input-result="userInputResult"
+          @generate="(event) => onGenerateQRCode(event)"
+          @reset="(event) => onReset(event)"
+        />
+      </section>
 
-              <template
-                v-for="(customProperty, customPropertyIndex) in templateForm"
-                :key="customPropertyIndex"
-              >
-                <NFormItem
-                  :label="customProperty.keyName"
-                  :path="`[${customPropertyIndex}].value`"
-                  :rule="{
-                    required: customProperty.require,
-                    message: '请输入' + customProperty.keyName,
-                    trigger: ['input', 'blur'],
-                    type: customProperty.valueType
-                  }"
-                >
-                  <template v-if="customProperty.valueType === 'string'">
-                    <NInput
-                      v-model:value="customProperty.value"
-                      type="text"
-                      :maxlength="
-                        customProperty.stringOptions?.enableLengthLimit
-                          ? customProperty.stringOptions.lengthLimit
-                          : undefined
-                      "
-                      clearable
-                      show-count
-                      placeholder="请输入内容"
-                    />
-                  </template>
-                  <template v-if="customProperty.valueType === 'number'">
-                    <NInput-number
-                      v-model:value="customProperty.value"
-                      :min="customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.min : 0"
-                      :max="
-                        customProperty.numberOptions?.enableRangeLimit ? customProperty.numberOptions?.max : undefined
-                      "
-                      clearable
-                      show-count
-                      placeholder="请输入内容"
-                    />
-                  </template>
-                </NFormItem>
-              </template>
-            </NForm>
-
-            <NSpace align="center">
-              <NButton
-                size="small"
-                type="primary"
-                strong
-                secondary
-                @click="() => copyContent()"
-              >
-                复制内容
-              </NButton>
-              <NButton
-                size="small"
-                type="primary"
-                strong
-                @click="() => generateQRCode()"
-              >
-                生成二维码
-              </NButton>
-            </NSpace>
-          </div>
-        </NCard>
-      </div>
-
-      <!-- Content Section -->
-      <transition name="content-preview-card">
-        <template v-if="userInputResult.content">
-          <ContentPreviewCard :data="userInputResult" />
-        </template>
-      </transition>
+      <section class="h-fit w-full">
+        <transition name="content-preview-card">
+          <template v-if="userInputResult.content">
+            <ContentPreviewCard :data="userInputResult" />
+          </template>
+        </transition>
+      </section>
     </div>
-
-    <div class="mt-4 whitespace-pre">{{ templateForm }}</div>
   </main>
 </template>
 

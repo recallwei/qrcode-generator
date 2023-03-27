@@ -38,5 +38,6 @@ declare module '@vue/runtime-core' {
     QRCodePreviewCard: typeof import('./src/components/QRCodePreviewCard/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TemplateFormCard: typeof import('./src/components/TemplateFormCard/index.vue')['default']
   }
 }

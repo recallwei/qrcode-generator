@@ -1,32 +1,37 @@
-export type ValueType = 'string' | 'number' | 'boolean' | 'object' | 'array'
+export type ValueType = 'string' | 'number' | 'boolean' | 'array'
 
-export type StringOptions = {
+export interface BaseOptions<T> {
+  disabled: boolean
+  enableDefaultValue: boolean
+  defaultValue?: T
+}
+
+export interface StringOptions extends BaseOptions<string> {
   enableLengthLimit: boolean
   lengthLimit?: number
 }
 
-export type NumberOptions = {
+export interface NumberOptions extends BaseOptions<number> {
   enableRangeLimit: boolean
   max?: number
   min?: number
 }
 
-export type BooleanOptions = {
-  label: string
-  trueValue: any
-  falseValue: any
+export interface BooleanOptions extends BaseOptions<boolean> {
+  enableCustomLabel: boolean
+  customLabel?: string
+  trueValue?: any
+  falseValue?: any
 }
 
-export type ObjectOptions = {}
-
-export type ArrayCandidates = {
+export type ArrayCandidate = {
   label: string
   value: any
 }
 
 export type ArrayOptions = {
-  candidates: ArrayCandidates[]
-  multiple?: boolean
+  candidates: ArrayCandidate[]
+  multiple: boolean
 }
 
 export interface CustomProperty {
@@ -37,11 +42,14 @@ export interface CustomProperty {
   stringOptions?: StringOptions
   numberOptions?: NumberOptions
   booleanOptions?: BooleanOptions
-  objectOptions?: ObjectOptions
   arrayOptions?: ArrayOptions
 }
 
 export interface CustomField {
   name: string
   customProperties: CustomProperty[]
+}
+
+export interface CustomPropertyFormItem extends CustomProperty {
+  value: any
 }

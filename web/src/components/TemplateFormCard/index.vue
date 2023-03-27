@@ -81,6 +81,10 @@ const handleReset = () => {
     jsonContent: null
   })
 }
+
+defineExpose({
+  handleReset
+})
 </script>
 
 <template>

@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  SearchOutlined as SearchIcon,
-  FileDownloadOutlined as DownloadIcon,
-  RefreshFilled as ResetIcon
-} from '@vicons/material'
+import { SearchOutlined as SearchIcon, FileDownloadOutlined as DownloadIcon } from '@vicons/material'
 import type {
   Config,
   CustomField,
@@ -35,10 +31,10 @@ const message = useMessage()
  * Get template options by selecting config. Maybe caused error due to the changes of config.
  */
 const templateOptions = ref<SelectorOption<CustomField>[]>([])
-
 const selectedConfigId = ref(null)
 const selectedTemplateName = ref(null)
 const templateForm = ref<WithNull<CustomPropertyFormItem[]>>(null)
+const templateFormCardRef = ref<any>(null)
 
 const userInputResult = ref<GeneratedQRCodeResult>({
   src: '',
@@ -56,14 +52,6 @@ const clearTemplateForm = () => {
   templateForm.value = null
 }
 
-const clearUserInputRelated = () => {
-  // userInputTitle.value = ''
-  userInputResult.value.src = ''
-  userInputResult.value.title = ''
-  userInputResult.value.content = ''
-  userInputResult.value.jsonContent = null
-}
-
 const deleteConfig = async () => {
   const currentId = selectedConfigId.value
   try {
@@ -74,7 +62,7 @@ const deleteConfig = async () => {
     selectedTemplateName.value = null
     templateOptions.value = []
     clearTemplateForm()
-    clearUserInputRelated()
+    templateFormCardRef.value?.handleReset()
     await IndexedDBInstance.config.delete(currentId)
     message.success('删除成功')
   } catch {
@@ -86,7 +74,7 @@ const selectConfig = (_: any, option: SelectorOption<Config>) => {
   const { data } = option
   selectedTemplateName.value = null
   clearTemplateForm()
-  clearUserInputRelated()
+  templateFormCardRef.value?.handleReset()
   templateOptions.value =
     data.customFields?.map((item: CustomField) => ({
       label: item.name,
@@ -100,7 +88,7 @@ const clearSelectedConfig = () => {
   selectedTemplateName.value = null
   templateOptions.value = []
   clearTemplateForm()
-  clearUserInputRelated()
+  templateFormCardRef.value?.handleReset()
 }
 
 const selectTemplate = (_: any, option: SelectorOption<CustomField>) => {
@@ -114,7 +102,7 @@ const selectTemplate = (_: any, option: SelectorOption<CustomField>) => {
 const clearSelectedTemplate = () => {
   selectedTemplateName.value = null
   clearTemplateForm()
-  clearUserInputRelated()
+  templateFormCardRef.value?.handleReset()
 }
 
 const uploadConfigValidation = async ({ file }: { file: UploadFileInfo }) => {
@@ -338,6 +326,7 @@ const onReset = (event: GeneratedQRCodeResult) => {
 
       <section class="min-w-[500px]">
         <TemplateFormCard
+          ref="templateFormCardRef"
           :template-form="templateForm"
           :user-input-result="userInputResult"
           @generate="(event) => onGenerateQRCode(event)"

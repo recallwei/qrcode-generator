@@ -1,25 +1,13 @@
 <script setup lang="ts">
 import type { GeneratedQRCodeResult } from '@/types'
+
 type Props = {
   data: GeneratedQRCodeResult
 }
+
 const props = defineProps<Props>()
 
 const TITLE_DISPLAY_TEXT = '标题：'
-
-const hackOpacity = ref(100)
-
-watch(
-  () => props.data,
-  (cur, pre) => {
-    console.log(cur, pre)
-    hackOpacity.value = 0
-    setTimeout(() => {
-      hackOpacity.value = 100
-    }, 300)
-  }
-  // { deep: true }
-)
 </script>
 
 <template>
@@ -29,20 +17,33 @@ watch(
     class="overflow-hidden"
   >
     <div class="flex flex-col space-y-2">
-      <template v-if="props.data.title">
-        <div class="font-semibold">{{ TITLE_DISPLAY_TEXT + props.data.title }}</div>
-      </template>
-      <div
-        class="whitespace-pre rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2"
-        :style="{ opacity: hackOpacity }"
-      >
+      <Transition name="content-preview-card-title-text">
+        <template v-if="props.data.title">
+          <NText class="font-semibold">{{ TITLE_DISPLAY_TEXT + props.data.title }}</NText>
+        </template>
+      </Transition>
+      <div class="rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2">
         <NScrollbar
           x-scrollable
           class="pb-2"
         >
-          {{ props.data.jsonContent }}
+          <NText class="whitespace-pre font-mono">
+            {{ props.data.jsonContent }}
+          </NText>
         </NScrollbar>
       </div>
     </div>
   </NCard>
 </template>
+
+<style scoped lang="scss">
+.content-preview-card-title-text-enter-active,
+.content-preview-card-title-text-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.content-preview-card-title-text-enter-from,
+.content-preview-card-title-text-leave-to {
+  opacity: 0;
+}
+</style>

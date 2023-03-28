@@ -3,7 +3,7 @@ import type { SiteMetaData } from '@/types'
 export const siteMetaData: SiteMetaData = {
   AppName: '二维码生成器',
   Favicon: 'qrcode-favicon.png',
-  Version: '🚀 v1.0.0 - alpha.2',
+  Version: '🚀v1.0.0-alpha.2',
   ErrorPage: {
     NotFoundInfo: {
       title: '404 页面不存在',

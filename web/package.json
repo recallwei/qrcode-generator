@@ -13,7 +13,7 @@
     "build": "run-p check:type build:fast",
     "build:fast": "vite build",
     "preview": "vite preview",
-    "check:type": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "check:type": "vue-tsc --noEmit -p tsconfig.json --composite false",
     "test:unit": "vitest --environment jsdom --root src/"
   },
   "dependencies": {

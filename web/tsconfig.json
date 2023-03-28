@@ -1,11 +1,26 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.config.json"
+  "extends": "../tsconfig.base.json",
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "site.config.ts",
+    "auto-imports.d.ts",
+    "components.d.ts",
+    "vite.config.*"
+  ],
+  "exclude": ["src/**/__tests__/*", "dist", "node_modules"],
+  "compilerOptions": {
+    "useDefineForClassFields": true,
+    "noImplicitThis": true,
+    "isolatedModules": true,
+    "types": ["node", "jsdom"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
     },
-    {
-      "path": "./tsconfig.app.json"
-    }
-  ]
+    "declaration": false
+  }
 }

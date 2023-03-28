@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "module": "ESNext",
+    "moduleResolution": "node",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["node"],
     "target": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "jsx": "preserve",
     "sourceMap": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true

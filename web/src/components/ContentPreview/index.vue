@@ -1,20 +1,31 @@
 <script setup lang="ts">
+import { setClipBoardText } from '@/utils'
 import type { GeneratedQRCodeResult } from '@/types'
 
 type Props = {
-  data: GeneratedQRCodeResult
+  userInputResult: GeneratedQRCodeResult
 }
 
 const props = defineProps<Props>()
 
-const TITLE_DISPLAY_TEXT = '标题：'
+const message = useMessage()
+
+const copyContent = () => {
+  const { content } = props.userInputResult
+  if (!content) {
+    message.error('复制失败，请先生成二维码')
+    return
+  }
+  setClipBoardText(content)
+  message.success('复制成功')
+}
 </script>
 
 <template>
   <div class="flex flex-col space-y-2">
     <Transition name="content-preview-card-title-text">
-      <template v-if="props.data.title">
-        <NText class="font-semibold">{{ TITLE_DISPLAY_TEXT + props.data.title }}</NText>
+      <template v-if="props.userInputResult.title">
+        <NText class="text-center font-semibold">{{ props.userInputResult.title }}</NText>
       </template>
     </Transition>
     <div class="rounded-lg border-2 border-dashed border-gray-300 px-2 pt-2">
@@ -23,9 +34,20 @@ const TITLE_DISPLAY_TEXT = '标题：'
         class="pb-2"
       >
         <NText class="whitespace-pre font-mono">
-          {{ props.data.jsonContent }}
+          {{ props.userInputResult.jsonContent }}
         </NText>
       </NScrollbar>
+    </div>
+    <div class="flex items-center justify-center pt-2">
+      <NButton
+        size="small"
+        type="primary"
+        strong
+        secondary
+        @click="() => copyContent()"
+      >
+        复制内容
+      </NButton>
     </div>
   </div>
 </template>

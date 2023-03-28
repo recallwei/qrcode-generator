@@ -1,4 +1,4 @@
-export type ValueType = 'string' | 'number' | 'boolean' | 'array'
+export type ValueType = 'string' | 'number' | 'boolean' | 'array' | 'date'
 
 export interface BaseOptions<T> {
   disabled: boolean
@@ -33,6 +33,8 @@ export type ArrayOptions = {
   candidates: ArrayCandidate[]
   multiple: boolean
 }
+
+export type DateOptions = {}
 
 export interface CustomProperty {
   keyName: string

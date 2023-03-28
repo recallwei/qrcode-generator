@@ -15,7 +15,7 @@ export class DexieWithTables extends Dexie {
      * Only declare properties you want to index
      */
     this.version(1).stores({
-      history: '++id, title, content, jsonContent, *tags, *categories, *groups, createAt, updateAt',
+      history: '++id, title, *tags, *categories, *groups, createAt, updateAt',
       config: '++id, name'
     })
   }

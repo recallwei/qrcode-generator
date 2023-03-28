@@ -8,7 +8,8 @@ export type GenerateQRCodeOptions = {
   correctLevel: CorrectLevel
 }
 
-export type TemplateOptions = {
+export type AppOptions = {
+  enableAddTitle: boolean
   showJsonContent: boolean
 }
 
@@ -16,5 +17,5 @@ export type UserSettings = {
   themeMode: ThemeMode
   encodeMode: EncodeMode
   generateQRCodeOptions: GenerateQRCodeOptions
-  templateOptions: TemplateOptions
+  appOptions: AppOptions
 }

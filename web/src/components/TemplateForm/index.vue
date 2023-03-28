@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import QRCodeManager from '@package/qrcode-manager'
 import { IndexedDBInstance } from '@/database'
-import { formatCurrentTime, setClipBoardText } from '@/utils'
+import { formatCurrentTime } from '@/utils'
 import type { CustomPropertyFormItem, GeneratedQRCodeResult, History } from '@/types'
 
 type Props = {
@@ -28,8 +28,17 @@ const generateQRCode = () => {
     } else {
       const jsonContent: Record<string, any> = {}
       props.templateForm?.forEach((customProperty) => {
-        if (customProperty.value) {
-          jsonContent[customProperty.keyCode] = customProperty.value
+        switch (customProperty.valueType) {
+          case 'string':
+            if (customProperty.value) {
+              jsonContent[customProperty.keyCode] = customProperty.value
+            }
+            break
+          case 'number':
+            jsonContent[customProperty.keyCode] = customProperty.value
+            break
+          default:
+            break
         }
       })
       const stringifiedJSON = JSON.stringify(jsonContent)
@@ -62,16 +71,6 @@ const generateQRCode = () => {
   })
 }
 
-const copyContent = () => {
-  const { content } = props.userInputResult
-  if (!content) {
-    message.error('复制失败，请先生成二维码')
-    return
-  }
-  setClipBoardText(content)
-  message.success('复制成功')
-}
-
 const handleReset = () => {
   userInputTitle.value = ''
   emit('reset', {
@@ -88,7 +87,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="flex h-full flex-col justify-between">
+  <div class="flex h-full flex-col space-y-2">
     <NForm
       ref="templateFormRef"
       :model="props.templateForm"
@@ -160,15 +159,6 @@ defineExpose({
         @click="() => handleReset()"
       >
         重置
-      </NButton>
-      <NButton
-        size="small"
-        type="primary"
-        strong
-        secondary
-        @click="() => copyContent()"
-      >
-        复制内容
       </NButton>
       <NButton
         size="small"

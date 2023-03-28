@@ -48,10 +48,6 @@ const showSignal = ref({
   templateSelector: false
 })
 
-const clearTemplateForm = () => {
-  templateForm.value = null
-}
-
 const deleteConfig = async () => {
   const currentId = selectedConfigId.value
   try {
@@ -60,8 +56,8 @@ const deleteConfig = async () => {
     }
     selectedConfigId.value = null
     selectedTemplateName.value = null
+    templateForm.value = null
     templateOptions.value = []
-    clearTemplateForm()
     templateFormCardRef.value?.handleReset()
     await IndexedDBInstance.config.delete(currentId)
     message.success('删除成功')
@@ -73,7 +69,7 @@ const deleteConfig = async () => {
 const selectConfig = (_: any, option: SelectorOption<Config>) => {
   const { data } = option
   selectedTemplateName.value = null
-  clearTemplateForm()
+  templateForm.value = null
   templateFormCardRef.value?.handleReset()
   templateOptions.value =
     data.customFields?.map((item: CustomField) => ({
@@ -86,22 +82,41 @@ const selectConfig = (_: any, option: SelectorOption<Config>) => {
 const clearSelectedConfig = () => {
   selectedConfigId.value = null
   selectedTemplateName.value = null
+  templateForm.value = null
   templateOptions.value = []
-  clearTemplateForm()
   templateFormCardRef.value?.handleReset()
 }
 
 const selectTemplate = (_: any, option: SelectorOption<CustomField>) => {
   const { data } = option
-  templateForm.value = data.customProperties.map((customProperty) => ({
-    ...customProperty,
-    value: customProperty.valueType === 'number' ? 0 : ''
-  }))
+  templateForm.value = data.customProperties.map((customProperty) => {
+    let defaultValue
+    switch (customProperty.valueType) {
+      case 'string':
+        defaultValue = ''
+        if (customProperty.stringOptions?.enableDefaultValue) {
+          defaultValue = customProperty.stringOptions.defaultValue
+        }
+        break
+      case 'number':
+        defaultValue = 0
+        if (customProperty.numberOptions?.enableDefaultValue) {
+          defaultValue = customProperty.numberOptions.defaultValue
+        }
+        break
+      default:
+        break
+    }
+    return {
+      ...customProperty,
+      value: defaultValue
+    }
+  })
 }
 
 const clearSelectedTemplate = () => {
   selectedTemplateName.value = null
-  clearTemplateForm()
+  templateForm.value = null
   templateFormCardRef.value?.handleReset()
 }
 
@@ -173,7 +188,7 @@ const onReset = (event: GeneratedQRCodeResult) => {
       ...customProperty,
       value: customProperty.valueType === 'number' ? 0 : ''
     })) ?? null
-  message.success('重置成功')
+  message.success('已重置录入数据')
 }
 </script>
 
@@ -272,7 +287,7 @@ const onReset = (event: GeneratedQRCodeResult) => {
               >
                 <SearchIcon />
               </template>
-              <template #empty> 请先选择配置 </template>
+              <template #empty>请先选择配置</template>
             </NSelect>
           </NSpace>
         </NSpace>
@@ -308,6 +323,7 @@ const onReset = (event: GeneratedQRCodeResult) => {
               </div>
             </transition>
             <NButton
+              size="small"
               type="primary"
               strong
               secondary
@@ -329,7 +345,6 @@ const onReset = (event: GeneratedQRCodeResult) => {
           <NCard
             embedded
             hoverable
-            class="h-full"
           >
             <TemplateForm
               ref="templateFormCardRef"
@@ -350,7 +365,7 @@ const onReset = (event: GeneratedQRCodeResult) => {
               hoverable
               class="overflow-hidden"
             >
-              <ContentPreview :data="userInputResult" />
+              <ContentPreview :user-input-result="userInputResult" />
             </NCard>
           </template>
         </transition>

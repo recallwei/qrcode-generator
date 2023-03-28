@@ -324,20 +324,34 @@ const onReset = (event: GeneratedQRCodeResult) => {
         </NCard>
       </div>
 
-      <section class="min-w-[500px]">
-        <TemplateFormCard
-          ref="templateFormCardRef"
-          :template-form="templateForm"
-          :user-input-result="userInputResult"
-          @generate="(event) => onGenerateQRCode(event)"
-          @reset="(event) => onReset(event)"
-        />
-      </section>
+      <template v-if="templateForm">
+        <section class="min-w-[500px]">
+          <NCard
+            embedded
+            hoverable
+            class="h-full"
+          >
+            <TemplateForm
+              ref="templateFormCardRef"
+              :template-form="templateForm"
+              :user-input-result="userInputResult"
+              @generate="(event) => onGenerateQRCode(event)"
+              @reset="(event) => onReset(event)"
+            />
+          </NCard>
+        </section>
+      </template>
 
       <section class="h-fit w-full">
         <transition name="content-preview-card">
           <template v-if="userInputResult.content">
-            <ContentPreviewCard :data="userInputResult" />
+            <NCard
+              embedded
+              hoverable
+              class="overflow-hidden"
+            >
+              <ContentPreview :data="userInputResult" />
+            </NCard>
           </template>
         </transition>
       </section>

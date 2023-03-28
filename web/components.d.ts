@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ContentPreviewCard: typeof import('./src/components/ContentPreviewCard/index.vue')['default']
+    ContentPreview: typeof import('./src/components/ContentPreview/index.vue')['default']
     NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
@@ -35,9 +35,9 @@ declare module '@vue/runtime-core' {
     NText: typeof import('naive-ui')['NText']
     NTooltip: typeof import('naive-ui')['NTooltip']
     NUpload: typeof import('naive-ui')['NUpload']
-    QRCodePreviewCard: typeof import('./src/components/QRCodePreviewCard/index.vue')['default']
+    QRCodePreview: typeof import('./src/components/QRCodePreview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TemplateFormCard: typeof import('./src/components/TemplateFormCard/index.vue')['default']
+    TemplateForm: typeof import('./src/components/TemplateForm/index.vue')['default']
   }
 }

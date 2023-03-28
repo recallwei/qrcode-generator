@@ -4,7 +4,7 @@ import {
   SettingsOutlined as ConfigIcon,
   ArticleOutlined as TemplateIcon
 } from '@vicons/material'
-import { siteMetaData } from '../../site.config'
+import { siteMetaData } from '../../app.config'
 
 const { AppName } = siteMetaData
 
@@ -45,8 +45,7 @@ export const routes = [
         meta: {
           title: '解码工具',
           icon: DecodeIcon,
-          disabled: true
-          // hidden: true
+          hidden: import.meta.env.PROD
         }
       },
       {

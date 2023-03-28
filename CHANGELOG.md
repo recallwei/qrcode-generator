@@ -3,7 +3,7 @@
 ## [1.0.0-alpha.2] - 2023-03-28
 
 - feat: Generate QRCodes by template
-- feat: Custom fields support add default value.
+- feat: Custom fields support adding a default value.
 - changed: Template structure
 
 ## [1.0.0-alpha.1] - 2023-03-01

@@ -17,6 +17,7 @@
 - [ ] 📚 Make QRCode template
 - [ ] 🌙 Dark Mode
 - [ ] 🌏 i18n
+- [ ] 💻 Support multi-terminal
 - [x] 🔒 Keep your data in your hands
   - We will not store your personal information
   - Data are only saved locally within your browser

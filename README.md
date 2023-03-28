@@ -11,7 +11,8 @@
 - [x] 💎 Support storage of up to 400 QRCodes
 - [ ] 🏷️ Add tags for QRCodes
 - [ ] 📁 Add groups for QRCodes
-- [ ] ⚙️ Generated QRCodes by custom config
+- [ ] 🌟 Generate QRCodes using different encodings
+- [ ] ⚙️ Generate QRCodes by custom config
 - [ ] 🔍 Search QRCodes by keywords
 - [ ] 📚 Make QRCode template
 - [ ] 🌙 Dark Mode

@@ -30,4 +30,7 @@ coverage
 *.zip
 
 # Electron build files
-desktop/out/*
+desktop/out
+
+# Tauri build files
+web/src-tauri/target

@@ -14,6 +14,11 @@
   "ignorePaths": [
     "web/public/*",
     "web/src/assets/*",
+    "web/src-tauri/icons/*",
+    "web/src-tauri/target/*",
+    "web/src-tauri/tauri.conf.json",
+    "web/src-tauri/Cargo.toml",
+    "web/src-tauri/Cargo.lock",
     "desktop/out/*",
     "custom-words.txt",
     "dist",

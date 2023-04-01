@@ -17,3 +17,5 @@ rxjs
 popconfirm
 unplugin
 nocheck
+tauri
+icns

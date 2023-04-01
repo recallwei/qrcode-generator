@@ -3,6 +3,7 @@ node_modules
 dist
 build
 public
+web/src-tauri/*
 desktop/out/*
 .gitignore
 .gitattributes

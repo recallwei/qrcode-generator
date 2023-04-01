@@ -1,0 +1,65 @@
+{
+  "build": {
+    "beforeBuildCommand": "pnpm build",
+    "beforeDevCommand": "pnpm dev",
+    "devPath": "http://localhost:4058",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "qrcode-generator",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+      "identifier": "com.manjaro.starter",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": "",
+        "webviewInstallMode": {
+          "type": "embedBootstrapper"
+        }
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "二维码生成器",
+        "center": true,
+        "width": 1000,
+        "height": 700,
+        "minWidth": 1000,
+        "minHeight": 700
+      }
+    ]
+  }
+}

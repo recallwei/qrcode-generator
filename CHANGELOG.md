@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.0-alpha.4] - Unreleased
+
+- fix: download should not open a new tab
+- fix: correct desktop App name
+
 ## [1.0.0-alpha.3] - 2023-04-02
 
 - feat: brand new desktop App based on Tauri

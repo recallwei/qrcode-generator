@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "qrcode-generator",
+    "productName": "二维码生成器",
     "version": "1.0.0"
   },
   "tauri": {
@@ -50,7 +50,7 @@
           "type": "embedBootstrapper"
         },
         "wix": {
-          "language": "zh-CN"
+          "language": ["en-US", "zh-CN"]
         }
       }
     },

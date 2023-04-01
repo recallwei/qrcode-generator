@@ -35,7 +35,7 @@
     "check:spell": "npx cspell '**'",
     "check:eslint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
     "check:stylelint": "npx stylelint '**/*.{html,vue,css,sass,scss}'",
-    "format:prettier": "npx prettier --write '**/*.{vue,js,jsx,cjs,mjs,ts,tsx,md,html,css}' --ignore-path",
+    "format:prettier": "npx prettier --write **/*.{vue,js,jsx,cjs,mjs,ts,tsx,md,html,css}",
     "prepare": "husky install"
   },
   "dependencies": {

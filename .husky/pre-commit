@@ -3,4 +3,4 @@
 
 npx lint-staged
 npx cspell '**'
-npx prettier --write '**/*.{vue,js,jsx,cjs,mjs,ts,tsx,md,html,css}' --ignore-path
+npx prettier --write '**/*.{vue,js,jsx,cjs,mjs,ts,tsx,md,html,css}'

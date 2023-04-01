@@ -17,7 +17,7 @@
 - [ ] 📚 Make QRCode template
 - [ ] 🌙 Dark Mode
 - [ ] 🌏 i18n
-- [ ] 💻 Support multi-terminal
+- [x] 💻 Support multi-terminal, now Web and PC
 - [x] 🔒 Keep your data in your hands
   - We will not store your personal information
   - Data are only saved locally within your browser
@@ -35,6 +35,8 @@
 - Naive UI
 - TailwindCSS
 - QRCode.js
+- Electron
+- Tauri
 ```
 
 ## Project Structure
@@ -44,7 +46,8 @@
 ├── packages
 ├── web
 │   ├── public
-│   └── src
+│   ├── src
+│   └── src-tauri
 └── README.md
 ```
 

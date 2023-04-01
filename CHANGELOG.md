@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.0.0-alpha.3] - 2023-04-02
+
+- feat: brand new desktop App based on Tauri
+- feat: download the desktop App package from the homepage
+
 ## [1.0.0-alpha.2] - 2023-03-28
 
 - feat: generate QRCodes by template

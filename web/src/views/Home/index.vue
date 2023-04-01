@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { siteMetaData } from '@/constants'
+import { getPCPackage } from '@/modules'
+import { openWindow } from '@/utils'
 
 const { AppName, Favicon, Version } = siteMetaData
 
@@ -14,8 +16,22 @@ useEventListener(document, 'visibilitychange', () => {
     toggleReplayAnimationFlag()
   }
 })
+const message = useMessage()
 
 const navToQuick = () => router.push('/quick')
+
+const downloadDesktopApp = () => {
+  getPCPackage()
+    .then((res: any) => {
+      const { assets } = res || {}
+      if (assets.length > 0) {
+        openWindow(assets[0].browser_download_url)
+      } else {
+        throw new Error()
+      }
+    })
+    .catch(() => message.error('获取桌面端应用失败，未找到最新版本的安装包'))
+}
 </script>
 
 <template>
@@ -40,13 +56,22 @@ const navToQuick = () => router.push('/quick')
         {{ AppName }}
       </span>
       <span class="text-lg">{{ Version }}</span>
-      <NButton
-        type="primary"
-        strong
-        @click="navToQuick"
-      >
-        开始
-      </NButton>
+      <div class="flex flex-col items-center justify-center space-y-2">
+        <NButton
+          type="primary"
+          strong
+          @click="navToQuick"
+        >
+          开始
+        </NButton>
+        <NButton
+          type="primary"
+          quaternary
+          @click="downloadDesktopApp"
+        >
+          获取桌面端应用
+        </NButton>
+      </div>
       <NAlert
         title="注意："
         type="warning"

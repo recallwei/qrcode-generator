@@ -6,12 +6,20 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "二维码生成器",
+    "productName": "qrcode-generator",
     "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": true,
+      "dialog": {
+        "all": true,
+        "open": true,
+        "save": true
+      },
+      "notification": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -40,6 +48,9 @@
         "timestampUrl": "",
         "webviewInstallMode": {
           "type": "embedBootstrapper"
+        },
+        "wix": {
+          "language": "zh-CN"
         }
       }
     },

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { siteMetaData } from '@/constants'
 import { getPCPackage } from '@/modules'
-import { openWindow } from '@/utils'
 
 const { AppName, Favicon, Version } = siteMetaData
 
@@ -25,7 +24,7 @@ const downloadDesktopApp = () => {
     .then((res: any) => {
       const { assets } = res || {}
       if (assets.length > 0) {
-        openWindow(assets[0].browser_download_url)
+        window.open(assets[0].browser_download_url)
       } else {
         throw new Error()
       }
